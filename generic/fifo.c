@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo.c,v 1.9 2002/04/24 05:42:14 andreas_kupries Exp $
+ * CVS: $Id: fifo.c,v 1.10 2002/04/25 06:29:48 andreas_kupries Exp $
  */
 
 
@@ -195,8 +195,8 @@ int*       errorCodePtr;	/* Location of error flag */
   chan = (ChannelInstance*) instanceData;
 
   if (chan->length == 0) {
-    *errorCodePtr = EWOULDBLOCK;
-    return -1;
+    /* Signal EOF to higher layer */
+    return 0;
   }
 
   toRead        = Buf_QueueRead (chan->queue, buf, toRead);

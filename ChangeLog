@@ -1,3 +1,10 @@
+2004-02-18  Andreas Kupries  <andreask@activestate.com>
+
+	* DESCRIPTION.txt: Updated to dinstinguish CVS from release.
+	* generic/fifo.c (Input):    Fixed bug in reporting when at
+	* generic/memchan.c (Input): the end of the buffer. Has to
+	                             be 0/no-error, not -1/wouldblock.
+
 2003-05-15  Andreas Kupries  <andreask@activestate.com>
 
 	* generic/memchanInt.h: forcing usage of 'sprintf' for the

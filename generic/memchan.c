@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.17 2002/08/20 20:43:53 andreas_kupries Exp $
+ * CVS: $Id: memchan.c,v 1.18 2003/02/05 03:25:09 andreas_kupries Exp $
  */
 
 
@@ -179,9 +179,8 @@ int*       errorCodePtr;	/* Location of error flag */
   chan = (ChannelInstance*) instanceData;
 
   if ((chan->used - chan->rwLoc) <= 0) {
-    /* At end, block request */
-    *errorCodePtr = EWOULDBLOCK;
-    return -1;
+    /* Signal EOF to higher layer */
+    return 0;
   }
 
   if ((chan->rwLoc + toRead) > chan->used) {
