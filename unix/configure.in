@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.1 1999/03/23 10:15:18 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.2 1999/03/23 15:00:37 aku Exp $)
 dnl
 AC_INIT(Makefile.in)
 
@@ -17,7 +17,28 @@ TCL_REQ_MINOR_VERSION=6
 dnl
 dnl use location of tclsh (wish?) as default for prefix, exec-prefix
 dnl
+
 AC_PREFIX_PROGRAM(tclsh)
+
+if test "x${prefix}" = "xNONE"
+then
+    prefix=/usr/local
+fi
+if test "x${exec_prefix}" = "xNONE"
+then
+    exec_prefix="${prefix}"
+fi
+
+# -------------------------------------------------------------------
+
+BUILD_DIR=`pwd`
+cd ${srcdir}
+TOP_DIR=`pwd`
+cd ${BUILD_DIR}
+
+AC_SUBST(TOP_DIR)
+AC_SUBST(BUILD_DIR)
+
 dnl
 dnl ----------------------------------------------------------------
 dnl let configure understand more options.  they allow the caller to
@@ -26,6 +47,7 @@ dnl
 dnl '--with-tcl=DIR' is a shorthand to
 dnl '-with-tcl-include-dir=DIR/include --with-tcl-lib-dir=DIR/lib'
 dnl
+
 AC_ARG_WITH(tcl,
 	[  --with-tcl=DIR		tcl.h resides in DIR/include, libtcl resides in DIR/lib],
 	[TCL_LIB_DIR=$withval/lib; TCL_INCLUDE_DIR=$withval/include],
@@ -50,6 +72,8 @@ dnl
 dnl Crossover between --with-tcl-include-dir and --with-tcl-lib-dir
 dnl Setting one, but not the other will cause automatic definition
 dnl of the missing part.
+
+echo "i=$TCL_INCLUDE_DIR, l=$TCL_LIB_DIR"
 
 if test "X" = "X$TCL_LIB_DIR" -a "X" != "X$TCL_INCLUDE_DIR"
 then
@@ -98,8 +122,10 @@ AC_CACHE_CHECK(for directory with tcl.h,
 	[memchan_cv_path_TCL_INCLUDE_DIR=""
 	 places="$TCL_INCLUDE_DIR \
 		../tcl8.1/generic \
-		../tcl8.1b*/generic \
-		../tcl8.1a*/generic \
+		../tcl8.1b2/generic \
+		../tcl8.1b1/generic \
+		../tcl8.1a2/generic \
+		../tcl8.1a1/generic \
 		../tcl8.0.5/generic \
 		../tcl8.0.4/generic \
 		../tcl8.0.3/generic \
@@ -234,12 +260,50 @@ DL_LIBS=$TCL_DL_LIBS
 LD_FLAGS=$TCL_LD_FLAGS
 MEMCHAN_LD_SEARCH_FLAGS=$TCL_LD_SEARCH_FLAGS
 
+TCL_BASE=`echo ${TCL_LIB_SPEC} |sed -e "s|^.*-l||"`
+TCL_STUB_BASE=`echo ${TCL_STUB_LIB_SPEC} |sed -e "s|^.*-l||"`
+
+
+TCL_LIB_SPEC="-L${TCL_LIB_DIR} -l${TCL_BASE}"
+TCL_STUB_LIB_SPEC="-L${TCL_LIB_DIR} -l${TCL_STUB_BASE}"
+VERSION=""
+eval "TCL_UNSHARED_LIB_FILE=lib${TCL_BASE}${TCL_UNSHARED_LIB_SUFFIX}"
+eval "TCL_SHARED_LIB_FILE=lib${TCL_BASE}${TCL_SHARED_LIB_SUFFIX}"
+
+
 #--------------------------------------------------------------------
 #	The statements below define a collection of symbols related to
 #	building libmemchan as a shared library instead of a static library.
 #--------------------------------------------------------------------
 
-if test "$ok" = "yes" -a "${SHLIB_SUFFIX}" != ""; then
+TCL_SHARED_LIBS=""
+#--------------------------------------------------------------------
+
+# Use stubs <=> (((major == 8) && (minor > 0)) || (major > 8)) && 'memchan as shared library'
+
+if test \( \( $TCL_MAJOR_VERSION -eq 8 -a $TCL_MINOR_VERSION -gt 0 \) -o $TCL_MAJOR_VERSION -gt 8 \) -a "x$ok" = "xyes"
+then
+    AC_MSG_CHECKING(using stub mechanism)
+    # Stubs
+    TCL_DEFS="$TCL_DEFS -DUSE_TCL_STUBS"
+    TCL_SHARED_LIBS="${TCL_STUB_LIB_SPEC}"
+else
+    #AC_MSG_CHECKING(no stubs)
+    # No stubs
+    case "$SHLIB_LD" in
+	*ldAix*)
+	TCL_SHARED_LIBS='${TCL_LIB_SPEC}'
+	;;
+    esac
+fi
+
+case "$SHLIB_LD" in
+    *ldAix*)
+    TCL_SHARED_LIBS="${TCL_SHARED_LIBS} \${TK_XLIBSW}"
+    ;;
+esac
+
+if test "x$ok" = "xyes" -a "x${SHLIB_SUFFIX}" != "x"; then
     MEMCHAN_SHLIB_CFLAGS="${SHLIB_CFLAGS}"
     eval "MEMCHAN_LIB_FILE=libmemchan${TCL_SHARED_LIB_SUFFIX}"
     MAKE_LIB="\${SHLIB_LD} -o ${MEMCHAN_LIB_FILE} \${OBJECTS} ${SHLIB_LD_LIBS}"
