@@ -4,7 +4,7 @@
 proc mc_ifneeded dir {
     rename mc_ifneeded {}
     regsub {\.} [info tclversion] {} version
-    package ifneeded Memchan @MEMCHAN_VERSION@ "package require Tk\nload [list [file join $dir @MEMCHAN_LIBFILE@$version.dll]] Memchan"
+    package ifneeded Memchan @MEMCHAN_VERSION@ "load [list [file join $dir @MEMCHAN_LIBFILE@$version.dll]] Memchan"
 }
 
 mc_ifneeded $dir
