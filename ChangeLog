@@ -1,0 +1,5 @@
+Fri Nov 15 22:45:04 1996  Andreas Kupries  <aku@bluepeak.westend.com>
+
+	* Extracted memory channel code from trans-patch and made it a
+	  separate library.
+
