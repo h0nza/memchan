@@ -1,4 +1,4 @@
-# -- CVS $Id: INSTALL,v 1.4 1997/05/29 09:53:27 aku Exp $
+# -- CVS $Id: INSTALL,v 1.1 1999/03/23 11:24:04 aku Exp $
 #
 
 Installation and compilation instructions
@@ -8,6 +8,11 @@ with regard to the Memchan extension to TCL
 This extension requires plain tcl, version 7.6 or higher.  If
 you don't have it installed, do this now.  The configure
 script (-> UNIX) will check the version of the installed tcl.
+
+Prerequisites:
+
+	Tcl, Tcllib
+	(The latter provides us with doctools and textutil::expander).
 
 
 1.)	Windows

@@ -1,3 +1,12 @@
+2003-01-24  Andreas Kupries  <andreask@activestate.com>
+
+	* Makefile.in:        Providing information about tclsh and its
+	                      environment to nroff_gen.
+	* tools/mpexpand.tcl: Copied from tcllib, portable doctools
+	                      processing.
+	* tools/nroff_gen:    Use mpexpand.tcl, use provided tclsh to
+	                      invoke it.
+
 2003-01-20  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* tools/mpexpand: Added new tool. Linux/ix86 starpack containing a

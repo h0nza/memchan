@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.12 2002/10/02 20:26:10 andreas_kupries Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.13 2002/10/03 16:30:41 andreas_kupries Exp $
 
 #========================================================================
 # Edit the following few lines when writing a new extension
@@ -219,7 +219,7 @@ doc:
 		rm -rf doc ; mkdir doc		; \
 		cp $(srcdir)/doc/*.man doc/	; \
 	fi
-	cd doc ; ../tools/nroff_regen
+	cd doc ; $(TCLSH_ENV) ../tools/nroff_regen "$(TCLSH_PROG)"
 
 #	Currently no documentation to create, the HTML is part of the
 #	distribution.
