@@ -1,7 +1,0 @@
-# -*- tcl -*-
-# up link from trf documentation into my site
-
-link tcltk Tcl/Tk ../../tcltk.html
-
-global westend
-set    westend 1
