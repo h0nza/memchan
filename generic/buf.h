@@ -28,8 +28,18 @@
  */
 
 
-#include <tcl.h>
 #include <errno.h>
+#include <tcl.h>
+
+/*
+ * Windows needs to know which symbols to export.  Unix does not.
+ * BUILD_Memchan should be undefined for Unix.
+ */
+
+#ifdef BUILD_Memchan
+#undef TCL_STORAGE_CLASS
+#define TCL_STORAGE_CLASS DLLEXPORT
+#endif /* BUILD_Memchan */
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,7 +48,7 @@ extern "C" {
 /*
  * The definitions in this header and the accompanying code define a
  * generic buffer object.
-
+ *
  * The code here is partially based upon the buffer structures used by
  * the tcl core and uponconcepts laid out in the STREAMS paper at
  * http://cm.bell-labs.com/cm/cs/who/dmr/st.html
@@ -46,19 +56,6 @@ extern "C" {
  * I hope that it can and will be used in a future reorganization of
  * the core I/O system.
  */
-
-/*
- * Definition of a macro to ease the platform independent definition
- * of vector procedures.
- */
-
-#ifdef MAC_TCL
-#define VECTOR(returns,name) typedef pascal returns *(name)
-#elif defined __WIN32__
-#define VECTOR(returns,name) typedef returns (name)
-#else
-#define VECTOR(returns,name) typedef returns (name)
-#endif
 
 /* Basis:
  *	Refcounted buffers. The structures actually holding
@@ -91,25 +88,25 @@ typedef struct Buf_BufferQueue_* Buf_BufferQueue;
  * Before that the interfaces of the procedures used by buffer types.
  */
 
-VECTOR (int,Buf_ReadProc) _ANSI_ARGS_ ((Buf_Buffer buf, ClientData clientData,
+typedef int (Buf_ReadProc) _ANSI_ARGS_ ((Buf_Buffer buf, ClientData clientData,
 					VOID* outbuf, int size));
 
-VECTOR (int,Buf_WriteProc) _ANSI_ARGS_ ((Buf_Buffer buf, ClientData clientData,
+typedef int (Buf_WriteProc) _ANSI_ARGS_ ((Buf_Buffer buf, ClientData clientData,
 					 CONST VOID* inbuf, int size));
 
-VECTOR (Buf_Buffer,Buf_DuplicateProc) _ANSI_ARGS_ ((Buf_Buffer buf,
+typedef Buf_Buffer (Buf_DuplicateProc) _ANSI_ARGS_ ((Buf_Buffer buf,
 						    ClientData clientData));
 
-VECTOR (void,Buf_FreeProc) _ANSI_ARGS_ ((Buf_Buffer buf,
+typedef void (Buf_FreeProc) _ANSI_ARGS_ ((Buf_Buffer buf,
 					 ClientData clientData));
 
-VECTOR (int,Buf_SizeProc) _ANSI_ARGS_ ((Buf_Buffer buf,
+typedef int (Buf_SizeProc) _ANSI_ARGS_ ((Buf_Buffer buf,
 					ClientData clientData));
 
-VECTOR (int,Buf_TellProc) _ANSI_ARGS_ ((Buf_Buffer buf,
+typedef int (Buf_TellProc) _ANSI_ARGS_ ((Buf_Buffer buf,
 					ClientData clientData));
 
-VECTOR (char*,Buf_DataProc) _ANSI_ARGS_ ((Buf_Buffer buf,
+typedef char* (Buf_DataProc) _ANSI_ARGS_ ((Buf_Buffer buf,
 					  ClientData clientData));
 
 typedef struct Buf_BufferType_ {
@@ -140,4 +137,8 @@ typedef struct Buf_BufferType_ {
 #ifdef __cplusplus
 }
 #endif /* C++ */
+
+#undef TCL_STORAGE_CLASS
+#define TCL_STORAGE_CLASS DLLIMPORT
+
 #endif /* BUF_H */

@@ -20,7 +20,7 @@ There are 2 sets of files for building memchan on Unix-like system.
 	Use this set when compiling memchan against a Tcl core less
 	than 8.2, but greater or equal to 8.0.
 
-	Version of tthe tcl core below version 8.0 of the core are not
+	Versions of tthe tcl core below version 8.0 of the core are not
 	supported.
 
 

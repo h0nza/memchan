@@ -1,3 +1,20 @@
+2002-08-21  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* Makefile.in:
+	* aclocal.m4:
+	* configure.in: New, from tcl/sampleextension, modified for
+	  Memchan. Essentially an update to the new TEA.
+
+	* tclconfig/: New. Configure definitions and other
+	  helpers. Straight out of tcl/sampleextension.
+
+	* tcl.m4:
+	* install-sh:
+	* pkgIndex.tcl:
+	* mkinstalldirs:
+	* mkIndex.tcl.in: Removed. Not required by the TEA II
+	  make/configure, or provided by tclconfig.
+
 2002-08-20  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* ANNOUNCE:

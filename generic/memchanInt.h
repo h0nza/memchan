@@ -24,61 +24,38 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.12 2002/04/24 05:42:14 andreas_kupries Exp $
+ * CVS: $Id: memchanInt.h,v 1.10 2001/11/20 03:48:39 andreas_kupries Exp $
  */
 
 
-#include <tcl.h>
 #include <errno.h>
+#define USE_NON_CONST
+#include <tcl.h>
+
+/*
+ * Make sure that both EAGAIN and EWOULDBLOCK are defined. This does not
+ * compile on systems where neither is defined. We want both defined so
+ * that we can test safely for both. In the code we still have to test for
+ * both because there may be systems on which both are defined and have
+ * different values.
+ *
+ * Taken from tcl/generic/tclIO.h
+ * Might be better if the 'tclPort' headers were public.
+ */
+
+#if ((!defined(EWOULDBLOCK)) && (defined(EAGAIN)))
+#   define EWOULDBLOCK EAGAIN
+#endif
+#if ((!defined(EAGAIN)) && (defined(EWOULDBLOCK)))
+#   define EAGAIN EWOULDBLOCK
+#endif
+#if ((!defined(EAGAIN)) && (!defined(EWOULDBLOCK)))
+error one of EWOULDBLOCK or EAGAIN must be defined
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/*
- * Definitions to enable the generation of a DLL under Windows.
- * Taken from 'ftp://ftp.sunlabs.com/pub/tcl/example.zip(example.c)'
- * ** This site is no longer valid **
- * See http://www.scriptics.com/
- */
-
-#if defined(__WIN32__)
-#   define WIN32_LEAN_AND_MEAN
-#   include <windows.h>
-#   undef WIN32_LEAN_AND_MEAN
-
-/*
- * VC++ has an alternate entry point called DllMain, so we need to rename
- * our entry point.
- */
-
-#ifdef TCL_STORAGE_CLASS
-# undef TCL_STORAGE_CLASS
-#endif
-#ifdef BUILD_Memchan
-# define TCL_STORAGE_CLASS DLLEXPORT
-#else
-# define TCL_STORAGE_CLASS DLLIMPORT
-#endif
-
-#ifndef STATIC_BUILD
-#   if defined(__WIN32__) && (defined(_MSC_VER) || (defined(__GNUC__) && defined(__declspec)))
-#       undef EXPORT
-#	define EXPORT(a,b) TCL_STORAGE_CLASS a b
-#   else
-#	if defined(__BORLANDC__)
-#	    define EXPORT(a,b) a _export b
-#	else
-#	    define EXPORT(a,b) a b
-#	endif
-#   endif
-#else
-#   define EXPORT(a,b) a b
-#endif
-#else
-#   define EXPORT(a,b) a b
-#endif
-
 
 /*
  * Number of bytes used to extend a storage area found to small.
@@ -134,11 +111,6 @@ extern "C" {
 #define CONST84
 #endif
 
-#ifndef EWOULDBLOCK
-#define EWOULDBLOCK EAGAIN
-#endif
-
-
 #if ! (GT81)
 /* Enable use of procedure internal to tcl. Necessary only
  * for versions of tcl below 8.1.
@@ -186,21 +158,30 @@ MemchanNullCmd _ANSI_ARGS_ ((ClientData notUsed,
  * enabled version of tcl.
  */
 
-Tcl_Obj*
+extern Tcl_Obj*
 MemchanGenHandle _ANSI_ARGS_ ((CONST char* prefix));
 
+/*
+ * Exported functionality.
+ */
+
+/*
+ * Windows needs to know which symbols to export.  Unix does not.
+ * BUILD_Memchan should be undefined for Unix.
+ */
+
 #ifdef BUILD_Memchan
-#undef  TCL_STORAGE_CLASS
+#undef TCL_STORAGE_CLASS
 #define TCL_STORAGE_CLASS DLLEXPORT
-#endif
+#endif /* BUILD_Memchan */
 
+
+EXTERN int Memchan_Init _ANSI_ARGS_ ((Tcl_Interp* interp));
 EXTERN int Memchan_SafeInit _ANSI_ARGS_ ((Tcl_Interp* interp));
-EXTERN int Memchan_Init     _ANSI_ARGS_ ((Tcl_Interp* interp));
 
 
-#undef  TCL_STORAGE_CLASS
+#undef TCL_STORAGE_CLASS
 #define TCL_STORAGE_CLASS DLLIMPORT
-
 
 #ifdef __cplusplus
 }
