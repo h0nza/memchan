@@ -34,6 +34,11 @@ node memchan_where {
 	    }
 	    table_row bgcolor=#ffffcc {
 		table_data {
+		    cgi_puts [link memchan_src_tbz]
+		}
+	    }
+	    table_row bgcolor=#ffffcc {
+		table_data {
 		    cgi_puts [link memchan_src_zip]
 		}
 	    }

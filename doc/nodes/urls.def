@@ -24,9 +24,14 @@ url memchan19 "version 1.9" http://www.oche.de/~akupries/soft/memchan1.9/
 
 set base http://www.oche.de/~akupries/soft/memchan/download
 
-link memchan_src_tgz  {Sources, Unix}                  ${base}/memchan@mFullVersion@.tar.gz
-link memchan_src_zip  {Sources, Win*}                  ${base}/memchan@mFullVersion@.zip
-link memchan_readme   README                           ${base}/memchan@mFullVersion@.README
+link memchan_src_tbz  {Sources, Unix, bzip2'ed Tar} \
+	${base}/memchan@mFullVersion@.tar.bz2
+
+link memchan_src_tgz  {Sources, Unix, gzipped Tar} \
+	${base}/memchan@mFullVersion@.tar.gz
+
+link memchan_src_zip  {Sources, Win*}   ${base}/memchan@mFullVersion@.zip
+link memchan_readme   README            ${base}/memchan@mFullVersion@.README
 
 #link memchan_win32    {Binary distribution, WinNT, Tcl 8.0} ${base}/mchan@mDosVersion@b.zip
 
