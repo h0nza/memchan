@@ -4,7 +4,7 @@
 # See the file "doc/license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# CVS:	$Id: makefile.vc5,v 1.5 1999/06/11 23:45:05 aku Exp $
+# CVS:	$Id: makefile.vc5,v 1.6 1999/06/12 21:54:53 aku Exp $
 # 
 # Does not depend on the presence of any environment variables in
 # order to compile tcl; all needed information is derived from 
@@ -169,7 +169,7 @@ GENERICDIR	= $(ROOT)\generic
 # ... and the compiler flags
 
 MC_INCLUDES	= -I$(WINDIR) -I$(GENERICDIR) -I$(ROOT) -I$(TCL_INCLUDES)
-MC_DEFINES	= -nologo -D__WIN32__ -DHAVE_STDLIB_H $(BINIO) -DMEMCHAN_VERSION=\"@mFullVersion@\" -DBUILD_memchan -DDLL_BUILD
+MC_DEFINES	= -nologo -D__WIN32__ -DHAVE_STDLIB_H $(BINIO) -DMEMCHAN_VERSION=\"@mFullVersion@\" -DBUILD_Memchan -DDLL_BUILD -DHAVE_LTOA
 
 
 

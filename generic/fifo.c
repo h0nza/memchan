@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo.c,v 1.4 1999/05/25 23:05:38 aku Exp $
+ * CVS: $Id: fifo.c,v 1.5 1999/07/27 21:25:17 aku Exp $
  */
 
 
@@ -409,7 +409,7 @@ Tcl_DString* dsPtr;		/* String to place the result into */
     Tcl_DStringAppendElement (dsPtr, "-length");
   }
 
-  sprintf (buffer, "%lu", chan->length);
+  LTOA (chan->length, buffer);
   Tcl_DStringAppendElement (dsPtr, buffer);
 
   return TCL_OK;

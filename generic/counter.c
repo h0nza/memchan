@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: counter.c,v 1.3 1999/05/25 19:10:40 aku Exp $
+ * CVS: $Id: counter.c,v 1.4 1999/07/27 21:25:17 aku Exp $
  */
 
 
@@ -61,7 +61,7 @@ CONST char* prefix;
 
   Tcl_MutexLock (&memchanCounterMutex);
   {
-    sprintf (channelName, "%lu", memCounter);
+    LTOA (memCounter, channelName);
     memCounter ++;
   }
   Tcl_MutexUnlock (&memchanCounterMutex);
@@ -76,7 +76,7 @@ CONST char* prefix;
   char     channelName [50];
   Tcl_Obj* res = Tcl_NewStringObj ((char*) prefix, -1);
 
-  sprintf (channelName, "%lu", memCounter);
+  LTOA (memCounter, channelName);
   memCounter ++;
 
   Tcl_AppendStringsToObj (res, channelName, (char*) NULL);

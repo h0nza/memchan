@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.5 1999/06/12 21:54:49 aku Exp $
+ * CVS: $Id: memchanInt.h,v 1.6 1999/07/27 21:25:17 aku Exp $
  */
 
 
@@ -55,14 +55,14 @@ extern "C" {
 #ifdef TCL_STORAGE_CLASS
 # undef TCL_STORAGE_CLASS
 #endif
-#ifdef BUILD_memchan
+#ifdef BUILD_Memchan
 # define TCL_STORAGE_CLASS DLLEXPORT
 #else
 # define TCL_STORAGE_CLASS DLLIMPORT
 #endif
 
 #ifndef STATIC_BUILD
-#   if defined(_MSC_VER)
+#   if defined(__WIN32__) && (defined(_MSC_VER) || (defined(__GNUC__) && defined(__declspec)))
 #       undef EXPORT
 #	define EXPORT(a,b) TCL_STORAGE_CLASS a b
 #   else
@@ -112,6 +112,12 @@ panic _ANSI_ARGS_ ((char* format, ...));
 
 #undef  Tcl_Panic
 #define Tcl_Panic panic
+#endif
+
+#ifdef HAVE_LTOA
+#define LTOA(x,str) ltoa (x, str, 10)
+#else
+#define LTOA(x,str) sprintf (str, "%lu", x)
 #endif
 
 

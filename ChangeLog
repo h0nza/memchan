@@ -1,3 +1,26 @@
+Tue Sep 14 00:42:11 1999  Andreas Kupries  <a.kupries@westend.com>
+
+	* generic/memchan.c, fifo.c, counter.c: Changed to use LTOA
+	  instead of 'sprintf'.
+
+	* generic/memchanInt.h (LTOA): Added definition of LTOA macro,
+	  its contents are dependent on the presence of 'ltoa'. The system
+	  uses 'sprintf' as its fallback.
+
+	* win/makefile.vc(5),.gnu, unix/configure/in, tea/configure.in:
+	  Added check for 'ltoa', Windows assumes that the function is
+	  present.
+
+	* generic/memchanInt.h: Added a fix sent by Jan to enable use with
+	  gcc-2.95 on Windows.
+
+	* BUILD_memchan changed to BUILD_Memchan, adapted the header and
+	  the other build directories. Have to use ./ to load the library
+	  for testing. This obsoletes LD_LIBRARY_PATH and consorts.
+
+	* Added 'tea' build directory the day before yesterday and asked
+	  for problem reports (Jan, Larry). These came in yesterday.
+
 Sun Aug  1 16:15:23 1999  Andreas Kupries  <a.kupries@westend.com>
 
 	* Added binary distribution for Windows, from Jan, excluded old

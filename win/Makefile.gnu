@@ -160,7 +160,7 @@ guilibs	   = $(libc) $(winlibs)
 
 guilibsdll = $(libcdll) $(winlibs)
 
-MEMCHAN_DEFINES	= -D__WIN32__ -DSTATIC_BUILD -DUSE_TCL_STUBS -DMEMCHAN_VERSION="\"${VERSION}\""
+MEMCHAN_DEFINES	= -D__WIN32__ -DSTATIC_BUILD -DUSE_TCL_STUBS -DMEMCHAN_VERSION="\"${VERSION}\"" -DHAVE_LTOA
 
 # $(TCL_CC_SWITCHES)
 INCLUDES	=	-I. -I$(srcdir) -I$(TCL_INC_DIR)

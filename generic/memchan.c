@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.8 1999/05/25 22:35:21 aku Exp $
+ * CVS: $Id: memchan.c,v 1.9 1999/07/27 21:25:17 aku Exp $
  */
 
 
@@ -374,7 +374,7 @@ Tcl_DString* dsPtr;		/* String to place the result into */
     Tcl_DStringAppendElement (dsPtr, "-length");
   }
 
-  sprintf (buffer, "%lu", chan->used);
+  LTOA (chan->used, buffer);
   Tcl_DStringAppendElement (dsPtr, buffer);
 
   return TCL_OK;

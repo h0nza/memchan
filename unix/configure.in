@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.9 1999/06/28 21:24:03 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.11 1999/07/27 21:25:18 aku Exp $)
 dnl
 AC_INIT(Makefile.in)
 
@@ -359,6 +359,8 @@ dnl
 dnl AC_CHECK_LIB(socket, main, [LIBS="$LIBS -lsocket"])
 dnl AC_CHECK_LIB(nsl, main, [LIBS="$LIBS -lnsl"])
 dnl AC_SUBST(LIBS)
+
+AC_CHECK_FUNCS(ltoa)
 
 dnl ----------------------------------------------------------------
 dnl non-standard substitutions

@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.1 1999/09/12 21:24:39 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.2 1999/09/12 21:27:34 aku Exp $)
 
 #--------------------------------------------------------------------
 # Configure script for package '@mName@', as distributed at @mDate@.
@@ -202,6 +202,13 @@ fi
 #--------------------------------------------------------------------
 
 AC_DEFINE(USE_TCL_STUBS)
+
+#--------------------------------------------------------------------
+# If ltoa is present, use it to convert integer values into strings.
+# If not, sprintf is used, which is slower and requires more code.
+#--------------------------------------------------------------------
+
+AC_CHECK_FUNCS(ltoa)
 
 #--------------------------------------------------------------------
 # This macro generates a line to use when building a library.  It
