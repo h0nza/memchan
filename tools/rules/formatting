@@ -41,7 +41,7 @@ proc protect {text} {
 }
 
 proc get_changelog {} {
-    set cl [exec [file join [here] .. changelog_to_list] [file join [here] .. .. ChangeLog]]
+    set cl [exec [file join [here] .. changelog_to_list] [file join [pwd] .. memchan ChangeLog]]
     proc get_changelog {} [list return $cl]
     return $cl
 }
