@@ -7,7 +7,7 @@
 #
 # Distribution as of @mDate@
 #
-# $Id: Makefile.in,v 1.15 2000/09/26 20:53:04 aku Exp $
+# $Id: Makefile.in,v 1.16 2000/09/26 21:22:34 aku Exp $
 
 EXTENSION	=	Memchan
 VERSION		=	@mFullVersion@
@@ -168,14 +168,17 @@ SOURCES		=	$(GENERIC_DIR)/memchan.c	\
 			$(GENERIC_DIR)/bufFix.c		\
 			$(GENERIC_DIR)/bufExt.c		\
 			$(GENERIC_DIR)/bufQueue.c	\
-			$(GENERIC_DIR)/counter.c
+			$(GENERIC_DIR)/counter.c	\
+			$(GENERIC_DIR)/bufStubInit.c	\
+			$(GENERIC_DIR)/bufStubLib.c
 
 OBJECTS		=	init.o counter.o	\
 			memchan.o fifo.o	\
 			fifo2.o null.o		\
 			buf.o bufQueue.o	\
 			bufRange.o bufExt.o	\
-			bufFix.o
+			bufFix.o bufStubInit.o	\
+			bufStubLib.o
 
 #-------------------------------------------------------#
 
