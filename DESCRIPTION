@@ -3,7 +3,7 @@ extension memchan {
     author       {Andreas Kupries (a.kupries@westend.com)}
     maintenance  {Andreas Kupries (a.kupries@westend.com)}
 
-    version	   2.1
+    version	   2.1p1
     copying-policy {BSD-Style, see 'tcl'-license}
     date           {@mDate@}
 
@@ -13,9 +13,9 @@ extension memchan {
     }
 
     primary-urls {
-	http://www.oche.de/%7Eakupries/tcltk.html
-	http://www.oche.de/%7Eakupries/soft/memchan/
-	http://www.oche.de/%7Eakupries/soft/memchan/download/<ARCH>
+	http://www.purl.org/NET/akupries/tcltk.html
+	http://www.purl.org/NET/akupries/soft/memchan/
+	http://www.purl.org/NET/akupries/soft/memchan/download/<ARCH>
     }
 
     dependencies {

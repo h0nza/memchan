@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.6 1999/07/27 21:25:17 aku Exp $
+ * CVS: $Id: memchanInt.h,v 1.7 1999/09/13 23:04:16 aku Exp $
  */
 
 
@@ -108,7 +108,7 @@ extern "C" {
  */
 
 EXTERN void
-panic _ANSI_ARGS_ ((char* format, ...));
+panic _ANSI_ARGS_ (TCL_VARARGS(char*, format));
 
 #undef  Tcl_Panic
 #define Tcl_Panic panic

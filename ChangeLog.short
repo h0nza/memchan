@@ -1,3 +1,7 @@
+Changes from 2.1 to 2.1p1
+
+*	Bug fix in the TEA makefile.
+
 Changes from 2.0 to 2.1
 
 *	Added support for TEA compliant building of this extension,

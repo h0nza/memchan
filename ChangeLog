@@ -1,3 +1,8 @@
+Sat Jan 15 00:28:52 2000  Andreas Kupries  <a.kupries@westend.com>
+
+	* tea/Makefile.in (install-lib-binaries): Fixed error in this
+	  target. Mailed problem and fix to TEA mailing list.
+
 Sat Sep 18 15:06:07 1999  Andreas Kupries  <a.kupries@westend.com>
 
 	* generic/fifo.c (GetOption): See below, '-allocated'.
