@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.7 2000/09/26 20:52:58 aku Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.8 2001/09/12 04:55:58 andreas_kupries Exp $
 
 #========================================================================
 # Additional variables defined here for convenient access to some
@@ -279,10 +279,10 @@ install-binaries: binaries install-lib-binaries install-bin-binaries
 install-libraries: libraries
 	$(mkinstalldirs) $(includedir)
 	@echo "Installing header files in $(includedir)"
-	@for i in $(GENERIC_HDRS) ; do \
-	    echo "Installing $$i" ; \
-	    $(INSTALL_DATA) $$i $(includedir) ; \
-	done;
+#	@for i in $(GENERIC_HDRS) ; do \
+#	    echo "Installing $$i" ; \
+#	    $(INSTALL_DATA) $$i $(includedir) ; \
+#	done;
 
 #========================================================================
 # Install documentation.  Unix manpages should go in the $(mandir)

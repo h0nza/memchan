@@ -14,9 +14,6 @@
 	[nav_link [stevel/home]]
 [page_content]
 
-<b>Note</b>: The [mem/txt/old/2] is still available.
-<hr>
-
 [p] Memchan is an extension library to the script language
 [tcl/sf/txt], as created by John Ousterhout. It provides several new
 channel types for in-memory channels and the appropriate commands for

@@ -1,3 +1,16 @@
+2001-11-04  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* tea/Makefile.in (install-libraries): Removed code trying to
+	  install header files. We have no public headers to install. Yet.
+
+	* htdocs/raw/index.exp: Removed reference to the old site.
+
+	* PREPARE: Added code to move the TEA makefiles to their correct
+	  location in the source distribution. This code also eliminates
+	  the 'tea' subdirectory to avoid confusion.
+
+	* README.install: Added compilation instructions.
+
 2001-09-19  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* htdocs/raw/mem_event.exp: New page for the website containing
