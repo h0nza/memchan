@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.10 1999/03/23 15:00:27 aku Exp $
+# CVS:	$Id: PREPARE,v 1.11 1999/03/23 22:15:59 aku Exp $
 
 
 # O. insert various information into some files
@@ -20,11 +20,12 @@ mGenerateLSM
 mGenerateANNOUNCE
 
 
-file copy unix/pkgIndex.tcl.in win/pkgIndex.tcl
+#file copy unix/pkgIndex.tcl.in win/pkgIndex.tcl
 
 set mInfo(@configure_input@)  "Distributed at $mDate"
 set mInfo(@MEMCHAN_VERSION@)  $mVersion
-set mInfo(@MEMCHAN_LIB_FILE@) mchan${mShortDosVersion}.dll
+#set mInfo(@MC_USING_STUBS@)   1 ; # implicit usage on Win*
+set mInfo(@MEMCHAN_LIB_FILE@) mchan${mShortDosVersion} ; # .dll added by index file itself
 #                             ~~~~~ coordinate with win/makefile.vc
 mInsertInfo win/pkgIndex.tcl
 
