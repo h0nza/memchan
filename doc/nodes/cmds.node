@@ -23,6 +23,7 @@ node memchan_cmds {
 		p "Memory channels support a single read-only option,
 		[opt -length]. Reading it via [cmd fconfigure] retrieves
 		the number of bytes currently stored in the channel.
+		"
 	    }
 	}
     }
