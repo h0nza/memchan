@@ -1,5 +1,5 @@
 [comment {-*- tcl -*- doctools}]
-[manpage_begin random n ?.?]
+[manpage_begin random n 2.2]
 [moddesc   {Memory channels}]
 [titledesc {Create and manipulate randomizer channels}]
 [copyright {2004 Pat Thoyts <patthoyts@users.sourceforge.net>}]
@@ -11,20 +11,29 @@
 
 [call [cmd random]]
 
-creates a random channel which absorbes everything written into it and
+creates a random channel which absorbs everything written into it and
 uses it as a seed for a random number generator. This generator is
 used to create a random sequence of bytes when reading from the
 channel. It is not possible to seek the channel.
 
 [list_end]
-[para]
-Memory channels created by [cmd random] provide no additional options to
+
+[section OPTIONS]
+
+Memory channels created by [cmd random] provide one additional option to
 set or query.
 
-[para]
+[list_begin definitions]
 
-A random channel is always writable and readable. This means that all
-[cmd fileevent]-handlers will fire continuously.
+    [lst_item [arg "-delay [opt milliseconds]"]]
+
+    A [cmd random] channel is always writable and readable. This means
+    that all [cmd fileevent]-handlers will fire continuously.  To
+    avoid starvation of other event sources the events raised by this
+    channel type have a configurable delay. This option is set in
+    milliseconds and defaults to 5.
+
+[list_end]
 
 [see_also memchan fifo fifo2 null zero]
 [keywords random {in-memory channel} channel i/o]

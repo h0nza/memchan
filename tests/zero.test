@@ -11,7 +11,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# $Id: null.test,v 1.1 2000/09/26 21:17:57 aku Exp $
+# $Id: zero.test,v 1.1 2004/06/03 23:39:13 patthoyts Exp $
 
 
 test zero-1.0 {Create zero devices} {
@@ -55,3 +55,32 @@ test zero-1.4 {Write and read} {
     close $chan
     set res
 } {-1 16}
+
+test zero-1.5 {presence of -delay option} {
+    list [catch {
+        set chan [zero]
+        set res [lsearch -exact [fconfigure $chan] -delay]
+        close $chan
+        set res [expr {$res != -1}]
+    } msg] $msg
+} {0 1}
+
+test zero-1.6 {read -delay option} {
+    list [catch {
+        set chan [zero]
+        set res [fconfigure $chan -delay]
+        close $chan
+        set res
+    } msg] $msg
+} {0 5}
+
+test zero-1.7 {change -delay option} {
+    list [catch {
+        set chan [zero]
+        set res [fconfigure $chan -delay 1000]
+        lappend res [fconfigure $chan -delay]
+        close $chan
+        set res
+    } msg] $msg
+} {0 {1000 1000}}
+

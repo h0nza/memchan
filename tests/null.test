@@ -10,7 +10,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# $Id: memchan_bb.test,v 1.1 1999/09/18 13:36:03 aku Exp $
+# $Id: null.test,v 1.1 2000/09/26 21:17:57 aku Exp $
 
 
 test null-basic-1.0 {Create null devices} {
@@ -55,3 +55,30 @@ test null-rw-1.1 {Write and read} {
     set res
 } {-1 {}}
 
+test null-1.5 {presence of -delay option} {
+    list [catch {
+        set chan [null]
+        set res [lsearch -exact [fconfigure $chan] -delay]
+        close $chan
+        set res [expr {$res != -1}]
+    } msg] $msg
+} {0 1}
+
+test null-1.6 {read -delay option} {
+    list [catch {
+        set chan [null]
+        set res [fconfigure $chan -delay]
+        close $chan
+        set res
+    } msg] $msg
+} {0 5}
+
+test null-1.7 {change -delay option} {
+    list [catch {
+        set chan [null]
+        set res [fconfigure $chan -delay 1000]
+        lappend res [fconfigure $chan -delay]
+        close $chan
+        set res
+    } msg] $msg
+} {0 {1000 1000}}

@@ -14,7 +14,7 @@ version of the package. Use the CVS to get the sources.
 
 [call [cmd null]]
 
-creates a null channel which absorbes everything written into
+creates a null channel which absorbs everything written into
 it. Reading from it is not possible, or rather will always return zero
 bytes. These channels are essentially Tcl-specific variants of the
 null device for unixoid operating systems (/dev/null). Transfering the
@@ -22,9 +22,23 @@ generated channel between interpreters is possible but does not make
 much sense.
 
 [list_end]
-[para]
-Memory channels created by [cmd null] provide no additional options to
+
+[section OPTIONS]
+
+Memory channels created by [cmd null] provide one additional option to
 set or query.
+
+[list_begin definitions]
+
+    [lst_item [arg "-delay [opt milliseconds]"]]
+
+    A [cmd null] channel is always writable and readable. This means
+    that all [cmd fileevent]-handlers will fire continuously.  To
+    avoid starvation of other event sources the events raised by this
+    channel type have a configurable delay. This option is set in
+    milliseconds and defaults to 5.
+
+[list_end]
 
 [para]
 

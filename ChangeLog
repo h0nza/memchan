@@ -1,3 +1,15 @@
+2004-06-04  Pat Thoyts  <patthoyts@users.sourceforge.net>
+
+	* generic/zero.c:   Make the interval between fileevent
+	* generic/null.c:   notifications configurable (FR #470415).
+	* generic/random.c:
+	* doc/zero.man:     Add the -delay option to the manual pages.
+	* doc/null.man:
+	* doc/random.man:
+	* tests/zero.test:  Additional tests for -delay ?ms? option.
+	* tests/null.test:
+	* tests/random.test:
+
 2004-06-03  Pat Thoyts  <patthoyts@users.sourceforge.net>
 
 	* configure.in:         Changed version to 2.2.0

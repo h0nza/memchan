@@ -22,14 +22,23 @@ generated channel between interpreters is possible but does not make
 much sense.
 
 [list_end]
-[para]
-Memory channels created by [cmd zero] provide no additional options to
+
+[section OPTIONS]
+
+Memory channels created by [cmd zero] provide one additional option to
 set or query.
 
-[para]
+[list_begin definitions]
 
-A zero channel is always writable and readable. This means that all
-[cmd fileevent]-handlers will fire continuously.
+    [lst_item [arg "-delay [opt milliseconds]"]]
+
+    A [cmd zero] channel is always writable and readable. This means
+    that all [cmd fileevent]-handlers will fire continuously.  To
+    avoid starvation of other event sources the events raised by this
+    channel type have a configurable delay. This option is set in
+    milliseconds and defaults to 5.
+
+[list_end]
 
 [see_also memchan fifo fifo2 null random]
 [keywords zero null {in-memory channel} channel i/o]

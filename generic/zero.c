@@ -27,7 +27,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: null.c,v 1.5 2004/05/21 20:24:45 andreas_kupries Exp $
+ * CVS: $Id: zero.c,v 1.1 2004/06/03 23:39:13 patthoyts Exp $
  */
 
 
@@ -38,22 +38,35 @@
  */
 
 static int	Close _ANSI_ARGS_((ClientData instanceData,
-    Tcl_Interp *interp));
+                                   Tcl_Interp *interp));
 
 static int	Input _ANSI_ARGS_((ClientData instanceData,
-    char *buf, int toRead, int *errorCodePtr));
+                                   char *buf, 
+                                   int toRead, int *errorCodePtr));
 
 static int	Output _ANSI_ARGS_((ClientData instanceData,
-    CONST84 char *buf, int toWrite, int *errorCodePtr));
+				    CONST84 char *buf, 
+				    int toWrite, 
+				    int *errorCodePtr));
 
 static void	WatchChannel _ANSI_ARGS_((ClientData instanceData, int mask));
 static void	ChannelReady _ANSI_ARGS_((ClientData instanceData));
 static int      GetFile      _ANSI_ARGS_((ClientData instanceData,
-    int direction,
-    ClientData* handlePtr));
+                                          int direction,
+					  ClientData* handlePtr));
 
 static int	BlockMode _ANSI_ARGS_((ClientData instanceData,
-    int mode));
+				       int mode));
+
+static int	GetOption _ANSI_ARGS_((ClientData instanceData,
+				       Tcl_Interp* interp,
+				       CONST84 char *optionName,
+				       Tcl_DString *dsPtr));
+
+static int	SetOption _ANSI_ARGS_((ClientData instanceData,
+				       Tcl_Interp* interp,
+				       CONST char *optionName,
+				       CONST char *newValue));
 
 /*
  * This structure describes the channel type structure for null channels:
@@ -62,13 +75,13 @@ static int	BlockMode _ANSI_ARGS_((ClientData instanceData,
 
 static Tcl_ChannelType channelType = {
     "zero",		/* Type name.                                    */
-    BlockMode,		/* Set blocking/nonblocking behaviour.           */
+    (Tcl_ChannelTypeVersion)BlockMode, /* Set blocking behaviour.        */
     Close,		/* Close channel, clean instance data            */
     Input,		/* Handle read request                           */
     Output,		/* Handle write request                          */
     NULL,		/* Move location of access point.      NULL'able */
-    NULL,		/* Set options.                        NULL'able */
-    NULL,		/* Get options.                        NULL'able */
+    SetOption,		/* Set options.                        NULL'able */
+    GetOption,		/* Get options.                        NULL'able */
     WatchChannel,	/* Initialize notifier                           */
 #if GT81
     GetFile,            /* Get OS handle from the channel.               */
@@ -88,6 +101,7 @@ typedef struct ChannelInstance {
     Tcl_Channel    chan;   /* Backreference to generic channel information */
     Tcl_TimerToken timer;  /* Timer used to link the channel into the
 			    * notifier. */
+    int            delay;  /* fileevent notification interval (in ms) */
 } ChannelInstance;
 
 /*
@@ -251,7 +265,7 @@ WatchChannel (instanceData, mask)
      int        mask;		/* Events of interest */
 {
     /*
-     * null channels are not based on files.
+     * zero channels are not based on files.
      * They are always writable, and always readable.
      * We could call Tcl_NotifyChannel immediately, but this
      * would starve other sources, so a timer is set up instead.
@@ -260,8 +274,10 @@ WatchChannel (instanceData, mask)
     ChannelInstance* chan = (ChannelInstance*) instanceData;
     
     if (mask) {
-	chan->timer = Tcl_CreateTimerHandler(DELAY,
-	    ChannelReady, instanceData);
+	if (chan->timer == (Tcl_TimerToken) NULL) {
+	    chan->timer = Tcl_CreateTimerHandler(chan->delay, ChannelReady,
+		instanceData);
+	}
     } else {
 	Tcl_DeleteTimerHandler (chan->timer);
 	chan->timer = (Tcl_TimerToken) NULL;
@@ -348,6 +364,110 @@ GetFile (instanceData, direction, handlePtr)
 /*
  *------------------------------------------------------*
  *
+ *	SetOption --
+ *
+ *	------------------------------------------------*
+ *	Set a channel option
+ *	------------------------------------------------*
+ *
+ *	Sideeffects:
+ *		Channel parameters may be modified.
+ *
+ *	Result:
+ *		A standard Tcl result. The new value of the
+ *		specified option is returned as the interpeter
+ *		result
+ *
+ *------------------------------------------------------*
+ */
+
+static int
+SetOption (instanceData, interp, optionName, newValue)
+     ClientData   instanceData;	/* Channel to query */
+     Tcl_Interp   *interp;	/* Interpreter to leave error messages in */
+     CONST char *optionName;	/* Name of requested option */
+     CONST char *newValue;	/* The new value */
+{
+    ChannelInstance *chan = (ChannelInstance*) instanceData;
+    CONST char *options = "delay";
+    int result = TCL_OK;
+
+    if (!strcmp("-delay", optionName)) {
+	int delay = DELAY;
+	result = Tcl_GetInt(interp, newValue, &delay);
+	if (result == TCL_OK) {
+	    chan->delay = delay;
+	    Tcl_SetObjResult(interp, Tcl_NewIntObj(delay));
+	}
+    } else {
+	result = Tcl_BadChannelOption(interp, optionName, options);
+    }
+    return result;
+}
+
+/*
+ *------------------------------------------------------*
+ *
+ *	GetOption --
+ *
+ *	------------------------------------------------*
+ *	Computes an option value for a zero
+ *	channel, or a list of all options and their values.
+ *	------------------------------------------------*
+ *
+ *	Sideeffects:
+ *		None.
+ *
+ *	Result:
+ *		A standard Tcl result. The value of the
+ *		specified option or a list of all options
+ *		and their values is returned in the
+ *		supplied DString.
+ *
+ *------------------------------------------------------*
+ */
+
+static int
+GetOption (instanceData, interp, optionName, dsPtr)
+     ClientData   instanceData;	/* Channel to query */
+     Tcl_Interp*  interp;	/* Interpreter to leave error messages in */
+     CONST84 char* optionName;	/* Name of reuqested option */
+     Tcl_DString* dsPtr;	/* String to place the result into */
+{
+    ChannelInstance *chan = (ChannelInstance*) instanceData;
+    char             buffer [50];
+    
+    /* Known options:
+     * -delay:    Number of milliseconds between readable fileevents.
+     */
+    
+    if ((optionName != (char*) NULL) &&
+	(0 != strcmp (optionName, "-delay"))) {
+	Tcl_SetErrno (EINVAL);
+	return Tcl_BadChannelOption (interp, optionName, "delay");
+    }
+    
+    if (optionName == (char*) NULL) {
+	/*
+	 * optionName == NULL
+	 * => a list of options and their values was requested,
+	 * so append the optionName before the retrieved value.
+	 */
+	Tcl_DStringAppendElement (dsPtr, "-delay");
+	LTOA (chan->delay, buffer);
+	Tcl_DStringAppendElement (dsPtr, buffer);
+	
+    } else if (0 == strcmp (optionName, "-delay")) {
+	LTOA (chan->delay, buffer);
+	Tcl_DStringAppendElement (dsPtr, buffer);
+    }
+    
+    return TCL_OK;
+}
+
+/*
+ *------------------------------------------------------*
+ *
  *	MemchanZeroCmd --
  *
  *	------------------------------------------------*
@@ -392,6 +512,7 @@ MemchanZeroCmd (notUsed, interp, objc, objv)
 
     instance->chan      = chan;
     instance->timer     = (Tcl_TimerToken) NULL;
+    instance->delay     = DELAY;
 
     Tcl_RegisterChannel  (interp, chan);
     Tcl_SetChannelOption (interp, chan, "-buffering", "none");

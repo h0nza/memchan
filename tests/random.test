@@ -6,7 +6,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# $Id$
+# $Id: random.test,v 1.1 2004/05/21 23:20:20 patthoyts Exp $
 
 test random-1.0 {Create random devices} {
     list [catch {
@@ -56,3 +56,31 @@ test random-1.4 {Write and read} {
         set res
     } msg] $msg
 } {0 {-1 64}}
+
+test random-1.5 {presence of -delay option} {
+    list [catch {
+        set chan [random]
+        set res [lsearch -exact [fconfigure $chan] -delay]
+        close $chan
+        set res [expr {$res != -1}]
+    } msg] $msg
+} {0 1}
+
+test random-1.6 {read -delay option} {
+    list [catch {
+        set chan [random]
+        set res [fconfigure $chan -delay]
+        close $chan
+        set res
+    } msg] $msg
+} {0 5}
+
+test random-1.7 {change -delay option} {
+    list [catch {
+        set chan [random]
+        set res [fconfigure $chan -delay 1000]
+        lappend res [fconfigure $chan -delay]
+        close $chan
+        set res
+    } msg] $msg
+} {0 {1000 1000}}
