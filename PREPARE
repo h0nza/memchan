@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.19 1999/07/27 21:25:11 aku Exp $
+# CVS:	$Id: PREPARE,v 1.20 1999/08/01 14:33:08 aku Exp $
 
 # Exclude older binary distributions, they are made available through the 1.9 site.
 
@@ -23,6 +23,7 @@ eval mInsertInfo \
 	DESCRIPTION doc/manual \
 	README win/README win/README.VC mac/README \
 	unix/configure.in unix/Makefile.in \
+	tea/configure.in tea/Makefile.in \
 	[glob win/makefile.vc*] win/Makefile.gnu win/mc.rc \
 	[glob doc/nodes/*.node] [glob doc/nodes/*.def]
 
@@ -51,6 +52,7 @@ mExclude patches mails
 
 # generate configure script to be used
 mConfigure unix
+mConfigure tea
 
 # Integrate tk-based testsuite interface.
 

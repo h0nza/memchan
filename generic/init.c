@@ -25,9 +25,10 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: init.c,v 1.4 1999/06/12 21:54:49 aku Exp $
+ * CVS: $Id: init.c,v 1.5 1999/07/27 21:25:17 aku Exp $
  */
 
+#include <stdlib.h>
 #include "memchanInt.h"
 
 /*

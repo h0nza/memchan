@@ -7,4 +7,8 @@
 
 set auto_path [concat [list [file join [pwd] ..]] $auto_path] ; # top dir of memchan sources
 
-package require Memchan
+puts lib=[glob [file join [pwd] .. tea lib*.so]]
+
+#package require Memchan
+
+load [glob [file join [pwd] .. tea lib*.so]]
