@@ -18,7 +18,7 @@
 # Copyright (c) 2003 Pat Thoyts
 #
 #-------------------------------------------------------------------------
-# RCS: @(#)$Id: makefile.vc,v 1.14 2004/06/04 14:06:40 patthoyts Exp $
+# RCS: @(#)$Id: makefile.vc,v 1.15 2004/11/09 23:11:00 patthoyts Exp $
 #-------------------------------------------------------------------------
 
 !if !defined(MSDEVDIR) && !defined(MSVCDIR) && !defined(VCToolkitInstallDir)
@@ -192,7 +192,8 @@ PRJDOCS = \
 	$(OUT_DIR)\memchan.html \
 	$(OUT_DIR)\null.html \
 	$(OUT_DIR)\zero.html \
-	$(OUT_DIR)\random.html
+	$(OUT_DIR)\random.html \
+	$(OUT_DIR)\memchanapi.html
 
 DLLRES = $(TMP_DIR)\mc.res
 
