@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.11 1999/09/18 13:35:54 aku Exp $
+ * CVS: $Id: memchan.c,v 1.13 1999/09/18 13:42:56 aku Exp $
  */
 
 
@@ -372,7 +372,7 @@ Tcl_DString* dsPtr;		/* String to place the result into */
       (0 != strcmp (optionName, "-length")) &&
       (0 != strcmp (optionName, "-allocated"))) {
     Tcl_SetErrno (EINVAL);
-    return Tcl_BadChannelOption (interp, optionName, "length");
+    return Tcl_BadChannelOption (interp, optionName, "length allocated");
   }
 
   if (optionName == (char*) NULL) {
