@@ -13,8 +13,7 @@ node memchan_where {
 
     contents {
 	p "The extension is distributed in several variants, as listed
-	below. The given links allow an immediate download. The binary
-	distributions are on a separate page.
+	below. The given links allow an immediate download.
 	"
 
 	table border=1 cellspacing=0 cellpadding=2 bgcolor=black width=100% {
@@ -38,10 +37,16 @@ node memchan_where {
 		    cgi_puts [link memchan_src_zip]
 		}
 	    }
+	    table_row bgcolor=#ffffcc {
+		table_data {
+		    p "The binary distributions are on a separate page."
+		    p [link memchan_bdist]
+		}
+	    }
 	}
 
 	hr
-	p "[strong [cem Upcoming:]] Version 2.0."
+	p "[strong [cem Upcoming:]] Version [strong 2.0]."
 	p "Changes to expect:"
 	bullet_list {
 	    li "Support for Tcl 7.x. / Tk 4.x. will be dropped."
