@@ -1,3 +1,6 @@
+Manual for memchan @mFullVersion@, as of @mDate@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 A single command is added to the loading interpreter:
 
 	memchan

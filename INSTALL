@@ -1,4 +1,4 @@
-# -- CVS $Id: INSTALL,v 1.2 1997/01/13 21:45:04 aku Exp $
+# -- CVS $Id: INSTALL,v 1.3 1997/02/15 19:30:11 aku Exp $
 #
 
 Installation and compilation instructions
@@ -15,8 +15,9 @@ script (-> UNIX) will check the version of the installed tcl.
 
 	The current distribution features a makefile for MSVC++
 	only. Just copy 'makefile.vc' to 'makefile', adapt the
-	paths at the top of it as required by your setup (aka
-	directory structure), then type
+	paths at the top of it as required by your setup
+	(= directory structure, see comments), then type inside
+	a DOS-box:
 
 	>	nmake
 	>	nmake install
@@ -29,7 +30,7 @@ script (-> UNIX) will check the version of the installed tcl.
 2.)	Mac
 ===========
 
-	I don't have a Mac, nor do I have access one. Because
+	I don't have a Mac, nor do I have access to one. Because
 	of this I am unable to provide a Mac port of this
 	extension.  I will most happily integrate any required
 	changes, makefiles, et cetera into the distribution,
@@ -55,7 +56,7 @@ o	The configure script searches for tcl.h in the following
 	places:
 
 	-1	$(TCL_INCLUDE_DIR)
-	-2	../tcl8.0*/generic
+	-2	../tcl8.0*/generic	(b1, a2, a1, in this order)
 	-3	../tcl7.6/generic
 	-4	../tcl/generic
 	-5	../tcl
@@ -77,7 +78,7 @@ o	The configure script searches for tcl.h in the following
 o	To find libtcl.a (libtcl.so.??) the paths
 
 	-1	$(TCL_LIB_DIR)
-	-2	../tcl8.0*/unix
+	-2	../tcl8.0*/unix		(b1, a2, a1, in this order)
 	-3	../tcl7.6/unix
 	-4	../tcl/unix
 	-5	../tcl

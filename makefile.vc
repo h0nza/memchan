@@ -3,7 +3,7 @@
 # See the file "doc/license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# CVS:	$Id: makefile.vc,v 1.3 1997/02/17 17:07:52 aku Exp $
+# CVS:	$Id: makefile.vc,v 1.4 1997/05/29 09:29:23 aku Exp $
 # 
 
 # Does not depend on the presence of any environment variables in
@@ -48,7 +48,7 @@ NODEBUG=1
 TCLSH		=	$(TCL)\bin\tclsh80.exe
 TCLLIB		=	$(TCL)\bin\tcl80.lib
 
-MC		=	mchan@mDosVersion@
+MC		=	mchan@mShortDosVersion@
 MCLIB		=	$(MC).lib
 MCDLL		=	$(MC).dll
 INSTALLDIR	=	$(TCL)\lib\$(MC)
