@@ -560,7 +560,7 @@ Tcl_Obj*CONST objv[];		/* Argument objects. */
     int   len;
     char* buf = Tcl_GetStringFromObj (objv [1], &len);
 
-    if (0 != strncmp (buf, "-initial-size", &len)) {
+    if (0 != strncmp (buf, "-initial-size", len)) {
       goto argerr;
     } else if (TCL_OK != Tcl_GetIntFromObj (interp, objv [2], &initialSize)) {
       goto argerr;
