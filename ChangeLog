@@ -1,3 +1,10 @@
+2004-05-22  Pat Thoyts  <patthoyts@users.sourceforge.net>
+
+	* win/makefile.vc:   Updated the MSVC build system for use with
+	* win/mc.rc:         MSVC++ 6 or 7.
+	* win/rules.vc:
+	* win/nmakehlp.c: 
+
 2004-05-21  Andreas Kupries  <andreask@activestate.com>
 
 	* generic/fifo2.c:   Failure in BMP is not allowed.

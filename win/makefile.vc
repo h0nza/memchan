@@ -1,235 +1,415 @@
-# Visual C++ 2.x and 4.0 makefile for memchan 2.2a4 (as of AUG-20-2002)
+# makefile.vc --                                               -*- Makefile -*-
 #
-# See the file "doc/license.terms" for information on usage and redistribution
+# Microsoft Visual C++ makefile for use with nmake.exe v1.62+ (VC++ 5.0+)
+#
+# This makefile is based upon the Tcl 8.4 Makefile.vc and modified to 
+# make it suitable as a general package makefile. Look for the word EDIT
+# which marks sections that may need modification. As a minumum you will
+# need to change the PROJECT, DOTVERSION and DLLOBJS variables to values
+# relevant to your package.
+#
+# See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-#
-# CVS:	$Id: makefile.vc,v 1.9 2002/08/21 05:59:14 andreas_kupries Exp $
 # 
-
-# Does not depend on the presence of any environment variables in
-# order to compile tcl; all needed information is derived from 
-# location of the compiler directories.
-
+# Copyright (c) 1995-1996 Sun Microsystems, Inc.
+# Copyright (c) 1998-2000 Ajuba Solutions.
+# Copyright (c) 2001 ActiveState Corporation.
+# Copyright (c) 2001-2002 David Gravereaux.
+# Copyright (c) 2003 Pat Thoyts
 #
-# Project directories
+#-------------------------------------------------------------------------
+# RCS: @(#)$Id: makefile.vc,v 1.2 2003/10/01 14:56:00 patthoyts Exp $
+#-------------------------------------------------------------------------
+
+!if "$(MSVCDIR)" == ""
+MSG = ^
+You will need to run vcvars32.bat from Developer Studio, first, to setup^
+the environment.  Jump to this line to read the new instructions.
+!error $(MSG)
+!endif
+
+#------------------------------------------------------------------------------
+# HOW TO USE this makefile:
 #
-# ROOT    = top of source tree
+# 1)  It is now necessary to have %MSVCDir% set in the environment.  This is
+#     used  as a check to see if vcvars32.bat had been run prior to running
+#     nmake or during the installation of Microsoft Visual C++, MSVCDir had
+#     been set globally and the PATH adjusted.  Either way is valid.
 #
-# TMPDIR  = location where .obj files should be stored during build
+#     You'll need to run vcvars32.bat contained in the MsDev's vc(98)/bin
+#     directory to setup the proper environment, if needed, for your current
+#     setup.  This is a needed bootstrap requirement and allows the swapping of
+#     different environments to be easier.
 #
-# TOOLS32 = location of VC++ 32-bit development tools. Note that the
-#	    VC++ 2.0 header files are broken, so you need to use the
-#	    ones that come with the developer network CD's, or later
-#	    versions of VC++.
+# 2)  To use the Platform SDK (not expressly needed), run setenv.bat after
+#     vcvars32.bat according to the instructions for it.  This can also turn on
+#     the 64-bit compiler, if your SDK has it.
 #
-# TCL     =	location where Tcl is installed.
+# 3)  Targets are:
+#	all       -- Builds everything.
+#       <project> -- Builds the project (eg: nmake sample)
+#	test      -- Builds and runs the test suite.
+#	install   -- Installs the built binaries and libraries to $(INSTALLDIR)
+#		     in an appropriate subdirectory.
+#	clean/realclean/distclean -- varying levels of cleaning.
 #
-# PKZIP	  =	name and path to pkzip archiver application
-#		(required for generation of binary distribution only)
+# 4)  Macros usable on the commandline:
+#	INSTALLDIR=<path>
+#		Sets where to install Tcl from the built binaries.
+#		C:\Progra~1\Tcl is assumed when not specified.
 #
-# TCLSH/TCLLIB
-#	choose the definitions matching your version of tcl.
+#	OPTS=static,msvcrt,staticpkg,threads,symbols,profile,loimpact,none
+#		Sets special options for the core.  The default is for none.
+#		Any combination of the above may be used (comma separated).
+#		'none' will over-ride everything to nothing.
 #
+#		static  =  Builds a static library of the core instead of a
+#			   dll.  The shell will be static (and large), as well.
+#		msvcrt  =  Effects the static option only to switch it from
+#			   using libcmt(d) as the C runtime [by default] to
+#			   msvcrt(d). This is useful for static embedding
+#			   support.
+#		staticpkg = Effects the static option only to switch
+#			   tclshXX.exe to have the dde and reg extension linked
+#			   inside it.
+#		threads =  Turns on full multithreading support.
+#		thrdalloc = Use the thread allocator (shared global free pool).
+#		symbols =  Adds symbols for step debugging.
+#		profile =  Adds profiling hooks.  Map file is assumed.
+#		loimpact =  Adds a flag for how NT treats the heap to keep memory
+#			   in use, low.  This is said to impact alloc performance.
+#
+#	STATS=memdbg,compdbg,none
+#		Sets optional memory and bytecode compiler debugging code added
+#		to the core.  The default is for none.  Any combination of the
+#		above may be used (comma separated).  'none' will over-ride
+#		everything to nothing.
+#
+#		memdbg   = Enables the debugging memory allocator.
+#		compdbg  = Enables byte compilation logging.
+#
+#	MACHINE=(IX86|IA64|ALPHA)
+#		Set the machine type used for the compiler, linker, and
+#		resource compiler.  This hook is needed to tell the tools
+#		when alternate platforms are requested.  IX86 is the default
+#		when not specified.
+#
+#	TMP_DIR=<path>
+#	OUT_DIR=<path>
+#		Hooks to allow the intermediate and output directories to be
+#		changed.  $(OUT_DIR) is assumed to be 
+#		$(BINROOT)\(Release|Debug) based on if symbols are requested.
+#		$(TMP_DIR) will de $(OUT_DIR)\<buildtype> by default.
+#
+#	TESTPAT=<file>
+#		Reads the tests requested to be run from this file.
+#
+#	CFG_ENCODING=encoding
+#		name of encoding for configuration information. Defaults
+#		to cp1252
+#
+# 5)  Examples:
+#
+#	Basic syntax of calling nmake looks like this:
+#	nmake [-nologo] -f makefile.vc [target|macrodef [target|macrodef] [...]]
+#
+#                        Standard (no frills)
+#       c:\tcl_src\win\>c:\progra~1\micros~1\vc98\bin\vcvars32.bat
+#       Setting environment for using Microsoft Visual C++ tools.
+#       c:\tcl_src\win\>nmake -f makefile.vc all
+#       c:\tcl_src\win\>nmake -f makefile.vc install INSTALLDIR=c:\progra~1\tcl
+#
+#                         Building for Win64
+#       c:\tcl_src\win\>c:\progra~1\micros~1\vc98\bin\vcvars32.bat
+#       Setting environment for using Microsoft Visual C++ tools.
+#       c:\tcl_src\win\>c:\progra~1\platfo~1\setenv.bat /pre64 /RETAIL
+#       Targeting Windows pre64 RETAIL
+#       c:\tcl_src\win\>nmake -f makefile.vc MACHINE=IA64
+#
+#------------------------------------------------------------------------------
+#==============================================================================
+###############################################################################
+#------------------------------------------------------------------------------
 
-ROOT		= ..
-TMPDIR		= .
-TOOLS32		= c:\msdev
-TCL		= c:\tcl
-TCLSH		= $(TCL)\bin\tclsh80.exe
-TCLLIB		= $(TCL)\bin\tcl80.lib
-#	TCLSH		= $(TCL)\bin\tclsh81.exe
-#	TCLLIB		= $(TCL)\bin\tcl81.lib
-PKZIP		= pkzip.exe
-MSVCRT		= msvcrt.dll
-MSVCRT_SYS	= c:\windows\system\msvcrt.dll
+!if !exist("makefile.vc")
+MSG = ^
+You must run this makefile only from the directory it is in.^
+Please `cd` to its location first.
+!error $(MSG)
+!endif
 
+#-------------------------------------------------------------------------
+# Project specific information (EDIT)
+#
+# You should edit this with the name and version of your project. This
+# information is used to generate the name of the package library and
+# it's install location.
+#
+# For example, the sample extension is  going to build sample04.dll and
+# would install it into $(INSTALLDIR)\lib\sample04
+#
+# You need to specify the object files that need to be linked into your
+# binary here.
+#
+#-------------------------------------------------------------------------
 
-# Set this to the appropriate value of /MACHINE: for your platform
-MACHINE	= IX86
+PROJECT = memchan
+!include "rules.vc"
 
-# Comment the following line to compile with symbols
-NODEBUG=1
+DOTVERSION      = 2.2
+MEMCHAN_VERSION = 2.2a4
+VERSION         = $(DOTVERSION:.=)
+STUBPREFIX      = $(PROJECT)stub
 
+DLLOBJS	= \
+	$(TMP_DIR)\memchan.obj	\
+	$(TMP_DIR)\init.obj	\
+	$(TMP_DIR)\counter.obj	\
+	$(TMP_DIR)\fifo.obj	\
+	$(TMP_DIR)\fifo2.obj	\
+	$(TMP_DIR)\null.obj	\
+	$(TMP_DIR)\random.obj	\
+	$(TMP_DIR)\buf.obj	\
+	$(TMP_DIR)\bufFix.obj	\
+	$(TMP_DIR)\bufExt.obj	\
+	$(TMP_DIR)\bufRange.obj	\
+	$(TMP_DIR)\bufQueue.obj	\
+	$(TMP_DIR)\bufStubInit.obj \
+	$(TMP_DIR)\bufStubLib.obj \
+	$(TMP_DIR)\dllEntry.obj \
+	$(TMP_DIR)\randport.obj
 
-######################################################################
-# Do not modify below this line
-######################################################################
+DLLRES = $(TMP_DIR)\mc.res
 
-MC		=	memchan22
-MCLIB		=	$(MC).lib
-MCDLL		=	$(MC).dll
-INSTALLDIR	=	$(TCL)\lib\$(MC)
+#-------------------------------------------------------------------------
+# Target names and paths ( shouldn't need changing )
+#-------------------------------------------------------------------------
 
-MCOBJS		=	$(TMPDIR)\memchan.obj	\
-			$(TMPDIR)\init.obj	\
-			$(TMPDIR)\counter.obj	\
-			$(TMPDIR)\fifo.obj	\
-			$(TMPDIR)\fifo2.obj	\
-			$(TMPDIR)\null.obj	\
-			$(TMPDIR)\buf.obj	\
-			$(TMPDIR)\bufFix.obj	\
-			$(TMPDIR)\bufExt.obj	\
-			$(TMPDIR)\bufRange.obj	\
-			$(TMPDIR)\bufQueue.obj	\
-			$(TMPDIR)\bufStubInit.obj	\
-			$(TMPDIR)\bufStubLib.obj	\
-			$(TMPDIR)\dllEntry.obj
+BINROOT		= .
+ROOT            = ..
 
+PRJIMPLIB	= $(OUT_DIR)\$(PROJECT)$(VERSION)$(SUFX).lib
+PRJLIBNAME	= $(PROJECT)$(VERSION)$(SUFX).$(EXT)
+PRJLIB		= $(OUT_DIR)\$(PRJLIBNAME)
 
-PATH=$(TOOLS32)\bin;$(PATH)
+PRJSTUBLIBNAME	= $(STUBPREFIX)$(VERSION).lib
+PRJSTUBLIB	= $(OUT_DIR)\$(PRJSTUBLIBNAME)
 
-cc32		= $(TOOLS32)\bin\cl.exe
-link32		= $(TOOLS32)\bin\link.exe
-rc32		= $(TOOLS32)\bin\rc.exe
-include32	= -I$(TOOLS32)\include
-CP      	= copy
-RM      	= del
+### Make sure we use backslash only.
+LIB_INSTALL_DIR		= $(_INSTALLDIR)\lib
+BIN_INSTALL_DIR		= $(_INSTALLDIR)\bin
+DOC_INSTALL_DIR		= $(_INSTALLDIR)\doc
+SCRIPT_INSTALL_DIR	= $(_INSTALLDIR)\lib\$(PROJECT)$(DOTVERSION)
+INCLUDE_INSTALL_DIR	= $(_INSTALLDIR)\include
 
-WINDIR          = $(ROOT)\win
+### The following paths CANNOT have spaces in them.
 GENERICDIR	= $(ROOT)\generic
+WINDIR		= $(ROOT)\win
+LIBDIR          = $(ROOT)\library
+DOCDIR		= $(ROOT)\doc
+TOOLSDIR	= $(ROOT)\tools
+COMPATDIR	= $(ROOT)\compat
+ISAACDIR	= $(ROOT)\isaac
 
-MC_INCLUDES	= -I$(WINDIR) -I$(GENERICDIR) -I$(ROOT) -I$(TCL)\include
-MC_DEFINES	= -nologo -D__WIN32__ -DHAVE_STDLIB_H -DMEMCHAN_VERSION=\"2.2a4\" -DBUILD_Memchan -DDLL_BUILD -DHAVE_LTOA
+### Find a tclsh for testing and installation.
+!if !exist("$(TCLSH)")
+TCLSH           = $(BIN_INSTALL_DIR)\tclsh$(TCL_VERSION).exe
+!endif
 
-#!include <ntwin32.mak> # what is this for?
-
-
-MC_CFLAGS	=	$(cdebug) $(cflags) $(cvarsdll) $(include32) \
-			$(MC_INCLUDES) $(MC_DEFINES)
-CON_CFLAGS	=	$(cdebug) $(cflags) $(cvars) $(include32) -DCONSOLE
-DOS_CFLAGS	=	$(cdebug) $(cflags) $(include16) -AL 
-
-######################################################################
-# Link flags
-######################################################################
-
-!IFDEF NODEBUG
-ldebug = /RELEASE
-!ELSE
-ldebug = -debug:full -debugtype:cv
-!ENDIF
-
-# declarations common to all linker options
-lcommon = /NODEFAULTLIB /RELEASE /NOLOGO
-
-# declarations for use on Intel i386, i486, and Pentium systems
-!IF "$(MACHINE)" == "IX86"
-DLLENTRY = @12
-lflags   = $(lcommon) -align:0x1000 /MACHINE:$(MACHINE)
-!ELSE
-lflags   = $(lcommon) /MACHINE:$(MACHINE)
-!ENDIF
-
-conlflags = $(lflags) -subsystem:console -entry:mainCRTStartup
-guilflags = $(lflags) -subsystem:windows -entry:WinMainCRTStartup
-dlllflags = $(lflags) -entry:_DllMainCRTStartup$(DLLENTRY) -dll
-
-!IF "$(MACHINE)" == "PPC"
-libc = libc.lib
-libcdll = crtdll.lib
-!ELSE
-libc = libc.lib oldnames.lib
-libcdll = msvcrt.lib oldnames.lib
-!ENDIF
-
-baselibs   = kernel32.lib $(optlibs) advapi32.lib
-winlibs    = $(baselibs) user32.lib gdi32.lib comdlg32.lib winspool.lib
-
-guilibs	   = $(libc) $(winlibs)
-conlibs	   = $(libc) $(baselibs)
-guilibsdll = $(libcdll) $(winlibs)
-conlibsdll = $(libcdll) $(baselibs)
-
-######################################################################
+#---------------------------------------------------------------------
 # Compile flags
-######################################################################
+#---------------------------------------------------------------------
 
-!IFDEF NODEBUG
-cdebug = -Ox
-!ELSE
-cdebug = -Z7 -Od -WX
+!if !$(DEBUG)
+!if $(OPTIMIZING)
+### This cranks the optimization level to maximize speed
+cdebug	= -O2 -Op -Gs
+!else
+cdebug	=
+!endif
+!else if "$(MACHINE)" == "IA64"
+### Warnings are too many, can't support warnings into errors.
+cdebug	= -Z7 -Od
+!else
+cdebug	= -Z7 -WX -Od
+!endif
+
+### Declarations common to all compiler options
+cflags = -nologo -c -W3 -YX -Fp$(TMP_DIR)^\
+
+!if $(PENT_0F_ERRATA)
+cflags = $(cflags) -QI0f
+!endif
+
+!if $(ITAN_B_ERRATA)
+cflags = $(cflags) -QIA64_Bx
+!endif
+
+!if $(MSVCRT)
+!if $(DEBUG)
+crt = -MDd
+!else
+crt = -MD
+!endif
+!else
+!if $(DEBUG)
+crt = -MTd
+!else
+crt = -MT
+!endif
+!endif
+
+INCLUDES	= $(TCL_INCLUDES) -I"$(WINDIR)" -I"$(GENERICDIR)" -I"$(ISAACDIR)"
+BASE_CLFAGS	= $(cflags) $(cdebug) $(crt) $(INCLUDES)
+CON_CFLAGS	= $(cflags) $(cdebug) $(crt) -DCONSOLE
+MC_CFLAGS	= -DHAVE_STDLIB_H -DMEMCHAN_VERSION=\"$(MEMCHAN_VERSION)\" \
+		  -DBUILD_Memchan  -DDLL_BUILD -DHAVE_LTOA -D__WIN32__
+TCL_CFLAGS	= -DUSE_TCL_STUBS -DVERSION="\"$(DOTVERSION)\"" \
+		  $(BASE_CLFAGS) $(OPTDEFINES) $(MC_CFLAGS)
+
+#---------------------------------------------------------------------
+# Link flags
+#---------------------------------------------------------------------
+
+!if $(DEBUG)
+ldebug	= -debug:full -debugtype:cv
+!else
+ldebug	= -release -opt:ref -opt:icf,3
+!endif
+
+### Declarations common to all linker options
+lflags	= -nologo -machine:$(MACHINE) $(ldebug)
+
+!if $(PROFILE)
+lflags	= $(lflags) -profile
+!endif
+
+!if $(ALIGN98_HACK) && !$(STATIC_BUILD)
+### Align sections for PE size savings.
+lflags	= $(lflags) -opt:nowin98
+!else if !$(ALIGN98_HACK) && $(STATIC_BUILD)
+### Align sections for speed in loading by choosing the virtual page size.
+lflags	= $(lflags) -align:4096
+!endif
+
+!if $(LOIMPACT)
+lflags	= $(lflags) -ws:aggressive
+!endif
+
+dlllflags = $(lflags) -dll
+conlflags = $(lflags) -subsystem:console
+guilflags = $(lflags) -subsystem:windows
+baselibs   = $(TCLSTUBLIB)
+
+#---------------------------------------------------------------------
+# TclTest flags
+#---------------------------------------------------------------------
+
+!IF "$(TESTPAT)" != ""
+TESTFLAGS = -file $(TESTPAT)
 !ENDIF
 
-# declarations common to all compiler options
-ccommon = -c -W3 -nologo -YX -Dtry=__try -Dexcept=__except
+#---------------------------------------------------------------------
+# Project specific targets (EDIT)
+#---------------------------------------------------------------------
 
-# NEED BYTEORDER INFORMATION HERE !!
-!IF "$(MACHINE)" == "IX86"
-cflags = $(ccommon) -D_X86_=1
-!ELSE
-!IF "$(MACHINE)" == "MIPS"
-cflags = $(ccommon) -D_MIPS_=1
-!ELSE
-!IF "$(MACHINE)" == "PPC"
-cflags = $(ccommon) -D_PPC_=1
-!ELSE
-!IF "$(MACHINE)" == "ALPHA"
-cflags = $(ccommon) -D_ALPHA_=1
-!ENDIF
-!ENDIF
-!ENDIF
-!ENDIF
+all:	    setup $(PROJECT)
+$(PROJECT): setup $(PRJLIB)
+install:    install-binaries install-libraries install-docs
 
-cvars      = -DWIN32 -D_WIN32
-cvarsmt    = $(cvars) -D_MT
-cvarsdll   = $(cvarsmt) -D_DLL
 
-######################################################################
-# Project specific targets
-######################################################################
-
-release:    $(MCDLL)
-all:	    $(MCDLL)
-test:	    $(MCDLL)
+test: setup $(PROJECT)
+	set TCL_LIBRARY=$(ROOT)/library
 	$(TCLSH) <<
-		load $(MCDLL)
-		cd ../tests
+		load $(PRJLIB:\=/)
+		cd $(ROOT)/tests
 		source all
 <<
 
-install:	$(MCDLL)
-	-@md	$(INSTALLDIR)
-	-@$(CP) $(MCDLL)		$(INSTALLDIR)
-	-@$(CP) $(WINDIR)\pkgIndex.tcl	$(INSTALLDIR)\pkgIndex.tcl
+setup:
+	@if not exist $(OUT_DIR)\nul mkdir $(OUT_DIR)
+	@if not exist $(TMP_DIR)\nul mkdir $(TMP_DIR)
 
+$(PRJLIB): $(DLLOBJS) $(DLLRES)
+	$(link32) $(dlllflags) -out:$@ $(baselibs) @<<
+$**
+<<
+	-@del $*.exp
 
-$(MCDLL): $(MCOBJS)
-	$(link32) $(ldebug) $(dlllflags) $(TCLLIB) \
-		$(guilibsdll) -out:$(MCDLL) $(MCOBJS)
+$(PRJSTUBLIB): $(PRJSTUBOBJS)
+	$(lib32) -nologo -out:$@ $(PRJSTUBOBJS)
 
-
-bindist:	$(MCDLL)
-	-@md	$(MC)
-	-@$(CP) $(MCDLL)		$(MC)\$(MCDLL)
-	-@$(CP) $(ROOT)\pkgIndex.win	$(MC)\pkgIndex.tcl
-	$(PKZIP) -rp $(MC)b.zip	$(MC)\*.*
-	-@$(RM)	$(MC)\$(MCDLL)
-	-@$(RM)	$(MC)\pkgIndex.tcl
-	-@rd	$(MC)
-
-
-#
+#---------------------------------------------------------------------
 # Implicit rules
+#---------------------------------------------------------------------
+
+{$(WINDIR)}.c{$(TMP_DIR)}.obj::
+    $(cc32) $(TCL_CFLAGS) -DBUILD_$(PROJECT) -Fo$(TMP_DIR)\ @<<
+$<
+<<
+
+{$(ISAACDIR)}.c{$(TMP_DIR)}.obj::
+    $(cc32) $(TCL_CFLAGS) -DBUILD_$(PROJECT) -Fo$(TMP_DIR)\ @<<
+$<
+<<
+
+{$(GENERICDIR)}.c{$(TMP_DIR)}.obj::
+    $(cc32) $(TCL_CFLAGS) -DBUILD_$(PROJECT) -Fo$(TMP_DIR)\ @<<
+$<
+<<
+
+{$(COMPATDIR)}.c{$(TMP_DIR)}.obj::
+    $(cc32) $(TCL_CFLAGS) -DBUILD_$(PROJECT) -Fo$(TMP_DIR)\ @<<
+$<
+<<
+
+{$(WINDIR)}.rc{$(TMP_DIR)}.res:
+	$(rc32) -fo $@ -r -i "$(GENERICDIR)" -D__WIN32__ \
+!if $(DEBUG)
+	-d DEBUG \
+!endif
+!if $(TCL_THREADS)
+	-d TCL_THREADS \
+!endif
+!if $(STATIC_BUILD)
+	-d STATIC_BUILD \
+!endif
+	$<
+
+.SUFFIXES:
+.SUFFIXES:.c .rc
+
+#---------------------------------------------------------------------
+# Installation. (EDIT)
 #
+# You may need to modify this section to reflect the final distribution
+# of your files and possibly to generate documentation.
+#
+#---------------------------------------------------------------------
 
-{$(WINDIR)}.c{$(TMPDIR)}.obj:
-    $(cc32) $(MC_CFLAGS) -Fo$(TMPDIR)\ $<
+install-binaries:
+	@echo Installing to '$(SCRIPT_INSTALL_DIR)'
+	@if not exist $(SCRIPT_INSTALL_DIR)\nul mkdir $(SCRIPT_INSTALL_DIR)
+	$(CPY) $(PRJLIB) $(SCRIPT_INSTALL_DIR)
 
-{$(GENERICDIR)}.c{$(TMPDIR)}.obj:
-    $(cc32) $(MC_CFLAGS) -Fo$(TMPDIR)\ $<
+install-libraries:
+	@echo Installing to '$(SCRIPT_INSTALL_DIR)'
+	@if exist $(LIBDIR)\nul $(CPY) $(LIBDIR)\*.tcl $(SCRIPT_INSTALL_DIR)
+	@cd $(SCRIPT_INSTALL_DIR)
+	@echo pkg_mkIndex -verbose . | $(TCLSH)
 
-{$(ROOT)\compat}.c{$(TMPDIR)}.obj:
-    $(cc32) $(MC_CFLAGS) -Fo$(TMPDIR)\ $<
+install-docs:
 
-{$(WINDIR)}.rc{$(TMPDIR)}.res:
-	$(rc32) -fo $@ -r -i $(GENERICDIR) -i $(WINDIR) -D__WIN32__ \
-		$(MC_DEFINES) $<
-
-
+#---------------------------------------------------------------------
+# Clean up
+#---------------------------------------------------------------------
 
 clean:
-        -@del *.exp 
-	-@del *.lib 
-	-@del *.dll 
-	-@del *.pch
-        -@del $(TMPDIR)\*.obj
+	@if exist $(TMP_DIR)\nul $(RMDIR) $(TMP_DIR)
+
+realclean: clean
+	@if exist $(OUT_DIR)\nul $(RMDIR) $(OUT_DIR)
+
+distclean: realclean
+	@if exist $(WINDIR)\nmakehlp.exe del $(WINDIR)\nmakehlp.exe
+	@if exist $(WINDIR)\nmakehlp.obj del $(WINDIR)\nmakehlp.obj
