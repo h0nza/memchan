@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.9 1999/03/23 10:15:00 aku Exp $
+# CVS:	$Id: PREPARE,v 1.10 1999/03/23 15:00:27 aku Exp $
 
 
 # O. insert various information into some files
@@ -12,7 +12,7 @@ mInsertInfo \
 	DESCRIPTION doc/manual \
 	README win/README win/README.VC mac/README \
 	unix/configure.in unix/Makefile.in \
-	win/makefile.vc
+	win/makefile.vc win/mc.rc
 
 mGetDescription
 mExpandUrls
