@@ -1,10 +1,10 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.6 2001/11/13 01:36:37 andreas_kupries Exp $)
+AC_REVISION($Id: configure.in,v 1.7 2001/11/20 03:48:39 andreas_kupries Exp $)
 
 #--------------------------------------------------------------------
-# Configure script for package '@mName@', as distributed at @mDate@.
+# Configure script for package 'memchan', as distributed at AUG-20-2002.
 # TEA compliant.
 #--------------------------------------------------------------------
 
@@ -26,8 +26,8 @@ AC_INIT(./generic/memchan.c)
 PACKAGE=Memchan
 PACKAGE_SUB=Buf
 
-MAJOR_VERSION=@mMajor@
-MINOR_VERSION=@mMinor@
+MAJOR_VERSION=2
+MINOR_VERSION=2
 #MAJOR_VERSION=10
 #MINOR_VERSION=0
 PATCHLEVEL=

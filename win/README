@@ -1,6 +1,6 @@
 
 		Memory Channels in Tcl
-		(Version @mFullVersion@ / @mDate@)
+		(Version 2.2a4 / AUG-20-2002)
 
 		Andreas Kupries	(a.kupries@westend.com)
 
@@ -16,7 +16,7 @@ for compilation and installation of this package.
 
 In order to compile Memchan for Windows, you need the following items:
 
-	Memchan @mFullVersion@ Source Distribution
+	Memchan 2.2a4 Source Distribution
 	Tcl 7.6, 8.0* Source or binary distribution
 
 	Either	MS Visual C++ 2.x/4.x/5.x

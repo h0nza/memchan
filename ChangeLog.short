@@ -1,3 +1,13 @@
+Changes from 2.1a1 to 2.2a4
+
+*	Moved to SourceForge
+
+*	Squashed dependency on Pool/MakeDist for generation
+	of a source distribution.
+
+*	Made raw CVS checkout a compileable and installable
+	distribution.
+
 Changes from 2.1p1 to 2.2a1
 
 *	Two new channel types, 'null' and 'fifo2'. One is a null

@@ -1,13 +1,13 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.12 1999/09/13 23:04:17 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.13 2000/09/26 21:18:06 aku Exp $)
 dnl
 AC_INIT(Makefile.in)
 
-MEMCHAN_VERSION=@mFullVersion@
-MEMCHAN_MAJOR_VERSION=@mMajor@
-MEMCHAN_MINOR_VERSION=@mMinor@
+MEMCHAN_VERSION=2.2a4
+MEMCHAN_MAJOR_VERSION=2
+MEMCHAN_MINOR_VERSION=2
 VERSION=${MEMCHAN_VERSION}
 
 TCL_REQ_MAJOR_VERSION=8

@@ -10,7 +10,7 @@
 #
 # All rights reserved.
 # 
-# CVS $Id$
+# CVS $Id: testshell,v 1.1 1999/09/18 13:35:59 aku Exp $
 
 if {[lsearch [namespace children] ::tcltest] == -1} {
     # Initialize autoloader, then load the commands and initialize

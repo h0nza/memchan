@@ -1,10 +1,10 @@
 # **************************************************************************
-# Visual C++ 2.x and 4.0 makefile for Memchan @mFullVersion@ (@mDate@)
+# Visual C++ 2.x and 4.0 makefile for Memchan 2.2a4 (AUG-20-2002)
 #
 # See the file "doc/license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# CVS:	$Id: makefile.vc5,v 1.6 1999/06/12 21:54:53 aku Exp $
+# CVS:	$Id: makefile.vc5,v 1.7 1999/09/13 23:04:18 aku Exp $
 # 
 # Does not depend on the presence of any environment variables in
 # order to compile tcl; all needed information is derived from 
@@ -132,7 +132,7 @@ TCLLIB		= $(TCL_LIBRARIES)\tcl$(TCL_SHORTVERS).lib
 # Base name of the generated library, full names for DLL and its stub,
 # and complete installation directory for the package.
 
-MC		=	memchan@mShortDosVersion@
+MC		=	memchan22
 MCLIB		=	$(MC).lib
 MCDLL		=	$(MC).dll
 INSTALLDIR	=	$(PKG_INSTALLBASEDIR)\$(MC)
@@ -169,7 +169,7 @@ GENERICDIR	= $(ROOT)\generic
 # ... and the compiler flags
 
 MC_INCLUDES	= -I$(WINDIR) -I$(GENERICDIR) -I$(ROOT) -I$(TCL_INCLUDES)
-MC_DEFINES	= -nologo -D__WIN32__ -DHAVE_STDLIB_H $(BINIO) -DMEMCHAN_VERSION=\"@mFullVersion@\" -DBUILD_Memchan -DDLL_BUILD -DHAVE_LTOA
+MC_DEFINES	= -nologo -D__WIN32__ -DHAVE_STDLIB_H $(BINIO) -DMEMCHAN_VERSION=\"2.2a4\" -DBUILD_Memchan -DDLL_BUILD -DHAVE_LTOA
 
 
 

@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.14 2002/04/25 06:29:48 andreas_kupries Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.15 2002/04/26 05:21:55 andreas_kupries Exp $
 
 #========================================================================
 # Additional variables defined here for convenient access to some
@@ -362,6 +362,20 @@ checkstubs:
 		done; \
 		if [ $$match -eq 0 ]; then echo $$i; fi \
 	done
+
+dist:
+	rm -rf $(PACKAGE)$(MEMCHAN_VERSION)*
+	ls -d $(srcdir_/* > __FILES
+	mkdir $(PACKAGE)$(MEMCHAN_VERSION)
+	cp -rf `cat __FILES | grep -v __FILES` $(PACKAGE)$(MEMCHAN_VERSION)
+	rm __FILES
+	find $(PACKAGE)$(MEMCHAN_VERSION) -name CVS -prune -exec rm -rf {} \;
+	cd $(PACKAGE)$(MEMCHAN_VERSION) ; $(TCLSH_PROG) PREPARE
+	-tar cf - $(PACKAGE)$(MEMCHAN_VERSION) | gzip --best > $(PACKAGE)$(MEMCHAN_VERSION).tar.gz
+	-tar cf - $(PACKAGE)$(MEMCHAN_VERSION) | bzip2 > $(PACKAGE)$(MEMCHAN_VERSION).tar.bz2
+	-zip -r $(PACKAGE)$(MEMCHAN_VERSION).zip $(PACKAGE)$(MEMCHAN_VERSION)
+	rm -rf $(PACKAGE)$(MEMCHAN_VERSION)
+
 
 #========================================================================
 # Enumerate the names of the object files included in this package.

@@ -1,9 +1,9 @@
-# Visual C++ 2.x and 4.0 makefile for memchan @mFullVersion@ (as of @mDate@)
+# Visual C++ 2.x and 4.0 makefile for memchan 2.2a4 (as of AUG-20-2002)
 #
 # See the file "doc/license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# CVS:	$Id: makefile.vc,v 1.7 1999/06/12 21:54:53 aku Exp $
+# CVS:	$Id: makefile.vc,v 1.8 1999/09/13 23:04:18 aku Exp $
 # 
 
 # Does not depend on the presence of any environment variables in
@@ -55,7 +55,7 @@ NODEBUG=1
 # Do not modify below this line
 ######################################################################
 
-MC		=	memchan@mShortDosVersion@
+MC		=	memchan22
 MCLIB		=	$(MC).lib
 MCDLL		=	$(MC).dll
 INSTALLDIR	=	$(TCL)\lib\$(MC)
@@ -80,7 +80,7 @@ WINDIR          = $(ROOT)\win
 GENERICDIR	= $(ROOT)\generic
 
 MC_INCLUDES	= -I$(WINDIR) -I$(GENERICDIR) -I$(ROOT) -I$(TCL)\include
-MC_DEFINES	= -nologo -D__WIN32__ -DHAVE_STDLIB_H -DMEMCHAN_VERSION=\"@mFullVersion@\" -DBUILD_Memchan -DDLL_BUILD -DHAVE_LTOA
+MC_DEFINES	= -nologo -D__WIN32__ -DHAVE_STDLIB_H -DMEMCHAN_VERSION=\"2.2a4\" -DBUILD_Memchan -DDLL_BUILD -DHAVE_LTOA
 
 #!include <ntwin32.mak> # what is this for?
 

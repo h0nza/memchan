@@ -1,14 +1,14 @@
 #
 #----------------------------------------------------------------
-# This file is a Makefile for Memchan @mFullVersion@ (as of @mDate@), usable for CygWin B20.1
+# This file is a Makefile for Memchan 2.2a4 (as of AUG-20-2002), usable for CygWin B20.1
 # Donated by Jan Nijtmans <jan.nijtmans@cmg.nl> <nijtmans@wxs.nl>
 #----------------------------------------------------------------
 
 EXTENSION	= Memchan
-VERSION		= @mFullVersion@
+VERSION		= 2.2a4
 TCL_VERSION	= 81
 
-MEMCHAN_DLL_FILE= memchan@mShortDosVersion@.dll
+MEMCHAN_DLL_FILE= memchan22.dll
 
 #
 #----------------------------------------------------------------

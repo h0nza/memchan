@@ -1,90 +1,108 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.30 2002/04/25 06:29:48 andreas_kupries Exp $
+# CVS:	$Id: PREPARE,v 1.31 2002/08/21 03:30:19 andreas_kupries Exp $
 
-# Exclude older binary distributions, they are made available through the 1.9 site.
+## Make this script completely independent of external packages.
+## Assume [pwd] == Toplevel directory of memchan distribution in
+## preparation.
+##
+## This will be run via 'make dist'.
 
-mExclude \
-	doc/nodes doc/manual
+###
+##
+# ### Helper procedures.
+##
+###
 
+proc LastChanges {} {
+    if {
+	[file  exists      ChangeLog.short] &&
+	![file isdirectory ChangeLog.short] &&
+        [file  readable    ChangeLog.short]
+    } {
+        set f [open ChangeLog.short r]
+        set t [read $f]
+        close $f
 
+        set start [string first "Changes from" $t]
+        set end $start
+        incr end
+        set offset [string first "Changes from" [string range $t $end end]]
 
-# O. insert various information into some files
-#    (version, patchlevel, current date)
+        if {$offset < 0} {
+            set end end
+        } else {
+            incr end $offset
+            incr end -1
+        }
 
-mExclude LSM ANNOUNCE
-
-eval mInsertInfo \
-	DESCRIPTION \
-	README win/README win/README.VC mac/README \
-	unix/configure.in unix/Makefile.in \
-	tea/configure.in tea/Makefile.in tea/pkgIndex.tcl \
-	[glob win/makefile.vc*] win/Makefile.gnu win/mc.rc
-
-mGetDescription
-mExpandUrls
-mGenerateLSM
-mGenerateANNOUNCE
-
-package require MSA
-mGenerateAnnounceMail tcl-announce@mitchell.org lvirden@cas.org
-mSupport    AMAIL
-file delete AMAIL
-
-#file copy unix/pkgIndex.tcl.in win/pkgIndex.tcl
-
-set mInfo(@configure_input@)  "Distributed at $mDate"
-set mInfo(@MEMCHAN_VERSION@)  $mVersion
-#set mInfo(@MC_USING_STUBS@)   1 ; # implicit usage on Win*
-set mInfo(@MEMCHAN_LIB_FILE@) memchan${mShortDosVersion} ; # .dll added by index file itself
-#                             ~~~~~ coordinate with win/makefile.*
-mInsertInfo win/pkgIndex.tcl
-
-# remove internal directories
-
-mExclude patches mails
-
-# generate configure script to be used
-mConfigure unix
-mConfigure tea
-
-# Integrate tk-based testsuite interface.
-
-if {0} {
-    exec makedist tg
-    exec tar xfz [glob tg*.tar.gz]
-    eval file delete \
-	    [glob tg*.README] [glob tg*.ANNOUNCE] \
-	    [glob tg*.LSM] [glob tg*.tar.gz] \
-	    [glob tg*.DESCRIPTION]
-    
-    eval file rename [glob tg*] testlib
+        return [string trim [string range $t $start $end]]
+        unset t
+    }
+    return {}
 }
 
-# Now generate documentation for linkage into my
-# site and standalone distribution
+proc UpdateAnnounce {} {
+    set            fh [open ANNOUNCE r]
+    set ano [read $fh]
+    close         $fh
+
+    set    fh [open ANNOUNCE w]
+    puts  $fh [string map [list @CHANGES@ [LastChanges]] $ano]
+    close $fh
+    return
+}
+
+proc UpdateAnnounceMail {} {
+    set            fh [open ANNOUNCE.MAIL r]
+    set mail [read $fh]
+    close         $fh
+
+    set            fh [open ANNOUNCE r]
+    set ano [read $fh]
+    close         $fh
+
+    set            fh [open ~/.signature r]
+    set sig [read $fh]
+    close         $fh
+
+    set    fh [open ANNOUNCE.MAIL w]
+    puts  $fh [string map [list @ANO@ $ano @SIG@ $sig] $mail]
+    close $fh
+    return
+}
+
+
+###
+##
+#
+# ### Eliminate data not required by a source distribution.
+# ### Generate the official documentation in various formats.
+# ### Also create the CHANGES file required by the Neosoft CS Archives.
+# ### Ensure uptodate configure scripts for TEA and UNIX.
+#
+##
+###
+
+file delete -force patches mails tea doc/nodes
+
+file copy ChangeLog.short CHANGES
 
 cd doc
 exec ../tools/manpage_regen > /dev/null 2>/dev/null
 cd ..
 
-file mkdir doc/art
+file mkdir                                doc/art/
+file rename        htdocs/art/logo100.gif doc/art/
+file rename        htdocs/art/logo520.jpg doc/art/
+file rename        htdocs/art/logo64.gif  doc/art/
+file delete -force htdocs
 
-file rename htdocs/art/logo100.gif doc/art/
-file rename htdocs/art/logo520.jpg doc/art/
-file rename htdocs/art/logo64.gif  doc/art/
+cd unix ; exec autoconf
+cd ..   ; exec autoconf
 
-mExclude htdocs
+UpdateAnnounce
+UpdateAnnounceMail
+file rename ANNOUNCE.MAIL [file join .. [file tail [pwd]].AMAIL]
 
-
-#mHandleBinaryDistributions
-#mHandleBinaryDistributions doc/license.terms README
-
-# create the file required by the NeoSoft CSA
-file copy ChangeLog.short CHANGES
-
-# Move the files in TEA into the main directory.
-
-file rename         tea/README README.tea
-eval file rename -- [glob tea/*] [pwd]
-file delete -force tea
+exit
