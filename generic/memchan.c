@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.16 2002/03/01 19:56:14 andreas_kupries Exp $
+ * CVS: $Id: memchan.c,v 1.17 2002/08/20 20:43:53 andreas_kupries Exp $
  */
 
 
@@ -310,7 +310,8 @@ int*       errorCodePtr;	/* Location of error flag. */
     break;
 
   case SEEK_END:
-    newLocation = chan->used - offset;
+    /* SF Memchan Bug 556819 */
+    newLocation = chan->used + offset;
     break;
 
   default:

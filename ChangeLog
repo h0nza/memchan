@@ -1,3 +1,8 @@
+2003-02-04  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* generic/memchan.c (Seek): Fixed bug 556819. Interpretation of
+	  the sign of the seek offset was wrong for seek mode SEEK_END.
+
 2003-01-24  Andreas Kupries  <andreask@activestate.com>
 
 	* Makefile.in:        Providing information about tclsh and its
