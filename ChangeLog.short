@@ -1,3 +1,11 @@
+Changes from 2.0 to 2.1
+
+*	Added support for TEA compliant building of this extension,
+	see the subdirectory 'tea'. This requires at least Tcl/Tk 8.2.
+
+	The old built facilities (unix, win) still exist and are
+	still usable.
+
 Changes from 1.9 to 2.0
 
 *	Dropped support for Tcl 7.6. Otherwise equivalent to 1.9.
