@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.9 1999/07/27 21:25:17 aku Exp $
+ * CVS: $Id: memchan.c,v 1.10 1999/09/13 23:04:16 aku Exp $
  */
 
 
@@ -248,8 +248,9 @@ int*       errorCodePtr;	/* Location of error flag. */
   memcpy ((VOID*) ((char*) chan->data + chan->rwLoc), (VOID*) buf, toWrite);
   chan->rwLoc += toWrite;
 
-  if (chan->rwLoc > chan->used)
+  if (chan->rwLoc > chan->used) {
     chan->used = chan->rwLoc;
+  }
 
   return toWrite;
 }
@@ -348,9 +349,11 @@ char*        optionName;	/* Name of reuqested option */
 Tcl_DString* dsPtr;		/* String to place the result into */
 {
   /*
-   * In-memory channels provide a channel type specific,
-   * read-only, fconfigure option, "length", that obtains
-   * the current number of bytes of data stored in the channel.
+   * In-memory channels provide two channel type specific,
+   * read-only, fconfigure options, "length", that obtains
+   * the current number of bytes of data stored in the channel,
+   * and "allocated", that obtains the current number of bytes
+   * really allocated by the system for its buffers.
    */
 
   ChannelInstance* chan;
@@ -359,23 +362,39 @@ Tcl_DString* dsPtr;		/* String to place the result into */
 
   chan = (ChannelInstance*) instanceData;
 
-  if ((optionName != (char*) NULL) && (0 != strcmp (optionName, "-length"))) {
+  /* Known options:
+   * -length:    Number of bytes currently used by the buffers.
+   * -allocated: Number of bytes currently allocated by the buffers.
+   */
+
+  if ((optionName != (char*) NULL) &&
+      (0 != strcmp (optionName, "-length")) &&
+      (0 != strcmp (optionName, "-allocated"))) {
     Tcl_SetErrno (EINVAL);
     return Tcl_BadChannelOption (interp, optionName, "length");
   }
 
-
   if (optionName == (char*) NULL) {
-    /*
-     * optionName == NULL
+    /* optionName == NULL
      * => a list of options and their values was requested,
-     * so append the optionName before the retrieved value.
      */
-    Tcl_DStringAppendElement (dsPtr, "-length");
-  }
 
-  LTOA (chan->used, buffer);
-  Tcl_DStringAppendElement (dsPtr, buffer);
+    Tcl_DStringAppendElement (dsPtr, "-length");
+    LTOA (chan->used, buffer);
+    Tcl_DStringAppendElement (dsPtr, buffer);
+
+    Tcl_DStringAppendElement (dsPtr, "-allocated");
+    LTOA (chan->allocated, buffer);
+    Tcl_DStringAppendElement (dsPtr, buffer);
+
+  } else if (0 == strcmp (optionName, "-length")) {
+    LTOA (chan->used, buffer);
+    Tcl_DStringAppendElement (dsPtr, buffer);
+
+  } else if (0 == strcmp (optionName, "-allocated")) {
+    LTOA (chan->allocated, buffer);
+    Tcl_DStringAppendElement (dsPtr, buffer);
+  }
 
   return TCL_OK;
 }
@@ -532,19 +551,31 @@ Tcl_Obj*CONST objv[];		/* Argument objects. */
   Tcl_Obj*         channelHandle;
   Tcl_Channel      chan;
   ChannelInstance* instance;
+  int              initialSize = 0;
 
-  if (objc != 1) {
-    Tcl_AppendResult (interp,
-		      "wrong # args: should be \"memchan\"",
-		      (char*) NULL);
-    return TCL_ERROR;
+  if ((objc != 1) && (objc != 3)) {
+    goto argerr;
+  } else if (objc = 3) {
+    int   len;
+    char* buf = Tcl_GetStringFromObj (objv [1], &len);
+
+    if (0 != strncmp (buf, "-initial-size", &len)) {
+      goto argerr;
+    } else if (TCL_OK != Tcl_GetIntFromObj (interp, objv [2], &initialSize)) {
+      goto argerr;
+    }
   }
 
   instance = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
   instance->rwLoc     = 0;
-  instance->allocated = 0;
   instance->used      = 0;
-  instance->data      = (VOID*) NULL;
+  instance->allocated = initialSize;
+
+  if (initialSize > 0) {
+    instance->data      = (VOID*) Tcl_Alloc (initialSize);
+  } else {
+    instance->data      = (VOID*) NULL;
+  }
 
   channelHandle = MemchanGenHandle ("mem");
 
@@ -562,5 +593,11 @@ Tcl_Obj*CONST objv[];		/* Argument objects. */
 
   Tcl_SetObjResult     (interp, channelHandle);
   return TCL_OK;
+
+argerr:
+  Tcl_AppendResult (interp,
+		    "wrong # args: should be \"memchan ?-initial-size number?\"",
+		    (char*) NULL);
+  return TCL_ERROR;
 }
 

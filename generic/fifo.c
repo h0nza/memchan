@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo.c,v 1.5 1999/07/27 21:25:17 aku Exp $
+ * CVS: $Id: fifo.c,v 1.6 1999/09/13 23:04:16 aku Exp $
  */
 
 
@@ -384,9 +384,11 @@ char*        optionName;	/* Name of reuqested option */
 Tcl_DString* dsPtr;		/* String to place the result into */
 {
   /*
-   * In-memory fifo channels provide a channel type specific,
-   * read-only, fconfigure option, "length", that obtains
-   * the current number of bytes of data stored in the channel.
+   * In-memory fifo channels provide two channel type specific,
+   * read-only, fconfigure options, "length", that obtains
+   * the current number of bytes of data stored in the channel,
+   * and "allocated", that obtains the current number of bytes
+   * really allocated by the system for its buffers.
    */
 
   ChannelInstance* chan;
@@ -395,7 +397,14 @@ Tcl_DString* dsPtr;		/* String to place the result into */
 
   chan = (ChannelInstance*) instanceData;
 
-  if ((optionName != (char*) NULL) && (0 != strcmp (optionName, "-length"))) {
+  /* Known options:
+   * -length:    Number of bytes currently used by the buffers.
+   * -allocated: Number of bytes currently allocated by the buffers.
+   */
+
+  if ((optionName != (char*) NULL) &&
+      (0 != strcmp (optionName, "-length")) &&
+      (0 != strcmp (optionName, "-allocated"))) {
     Tcl_SetErrno (EINVAL);
     return Tcl_BadChannelOption (interp, optionName, "length");
   }
@@ -407,10 +416,21 @@ Tcl_DString* dsPtr;		/* String to place the result into */
      * so append the optionName before the retrieved value.
      */
     Tcl_DStringAppendElement (dsPtr, "-length");
-  }
+    LTOA (chan->length, buffer);
+    Tcl_DStringAppendElement (dsPtr, buffer);
 
-  LTOA (chan->length, buffer);
-  Tcl_DStringAppendElement (dsPtr, buffer);
+    Tcl_DStringAppendElement (dsPtr, "-allocated");
+    LTOA (chan->length, buffer);
+    Tcl_DStringAppendElement (dsPtr, buffer);
+
+  } else if (0 == strcmp (optionName, "-length")) {
+    LTOA (chan->length, buffer);
+    Tcl_DStringAppendElement (dsPtr, buffer);
+
+  } else if (0 == strcmp (optionName, "-allocated")) {
+    LTOA (chan->length, buffer);
+    Tcl_DStringAppendElement (dsPtr, buffer);
+  }
 
   return TCL_OK;
 }
