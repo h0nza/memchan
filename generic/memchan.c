@@ -23,12 +23,13 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.10 1999/09/13 23:04:16 aku Exp $
+ * CVS: $Id: memchan.c,v 1.11 1999/09/18 13:35:54 aku Exp $
  */
 
 
 #include <tcl.h>
 #include <errno.h>
+#include <string.h>
 
 #include "memchanInt.h"
 
@@ -555,7 +556,7 @@ Tcl_Obj*CONST objv[];		/* Argument objects. */
 
   if ((objc != 1) && (objc != 3)) {
     goto argerr;
-  } else if (objc = 3) {
+  } else if (objc == 3) {
     int   len;
     char* buf = Tcl_GetStringFromObj (objv [1], &len);
 
