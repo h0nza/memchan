@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.14 2003/01/24 19:27:39 andreas_kupries Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.15 2004/05/21 23:20:20 patthoyts Exp $
 
 #========================================================================
 # Edit the following few lines when writing a new extension
@@ -48,6 +48,13 @@ Memchan_SOURCES	=		\
 WIN_SOURCES	= 
 UNIX_SOURCES	= 
 
+DOC_SOURCES = \
+	memchan.man \
+	fifo.man \
+	fifo2.man \
+	null.man \
+	random.man
+
 #========================================================================
 # Identify the object files.  This replaces .c with .$(OBJEXT) for all
 # the named source files.   These objects are created and linked into the
@@ -65,6 +72,9 @@ Memchan_LIB_FILE= @Memchan_LIB_FILE@
 
 Memchanstub_OBJECTS=	bufStubLib.$(OBJEXT)
 Memchanstub_LIB_FILE= @Memchanstub_LIB_FILE@
+
+DOCS_NROFF = $(DOC_SOURCES:.man=.n)
+DOCS_HTML  = $(DOC_SOURCES:.man=.html)
 
 #========================================================================
 # RUNTIME_SOURCES identifies Tcl runtime files that are associated with
@@ -188,6 +198,8 @@ AR		= ar
 CFLAGS		= @CFLAGS@
 COMPILE		= $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 
+MPEXPAND        = $(TCLSH) $(srcdir)/tools/mpexpand.tcl
+
 #========================================================================
 # Start of user-definable TARGETS section
 #========================================================================
@@ -213,7 +225,10 @@ binaries: $(BINARIES) pkgIndex.tcl-hand
 
 libraries:
 
-doc:
+doc: $(DOCS_NROFF)
+doc-html: $(DOCS_HTML)
+
+doc-old:
 	if [ "x$(srcdir)" != "x." -a "x$(srcdir)" != "x`pwd`" ] ; then	\
 		rm -rf tools htdocs		; \
 		cp -rf $(srcdir)/tools .	; \
@@ -222,14 +237,6 @@ doc:
 		cp $(srcdir)/doc/*.man doc/	; \
 	fi
 	cd doc ; $(TCLSH_ENV) ../tools/nroff_regen "$(TCLSH_PROG)"
-
-#	Currently no documentation to create, the HTML is part of the
-#	distribution.
-#	.................................................................
-#	@echo "If you have documentation to create, place the commands to"
-#	@echo "build the docs in the 'doc:' target.  For example:"
-#	@echo "        xml2nroff sample.xml > sample.n"
-#	@echo "        xml2html sample.xml > sample.html"
 
 install: all install-binaries install-libraries install-doc
 
@@ -258,7 +265,7 @@ install-libraries: libraries
 install-doc: doc
 	@mkdir -p $(DESTDIR)$(mandir)/mann
 	@echo "Installing documentation in $(DESTDIR)$(mandir)"
-	@for i in doc/*.n; do \
+	@for i in $(DOC_NROFF); do \
 	    echo "Installing $$i"; \
 	    rm -f $(DESTDIR)$(mandir)/mann/`basename $$i`; \
 	    $(INSTALL_DATA) $$i $(DESTDIR)$(mandir)/mann ; \
@@ -320,10 +327,17 @@ $($(PACKAGE)stub_LIB_FILE): $($(PACKAGE)stub_OBJECTS)
 # As necessary, add $(srcdir):$(srcdir)/compat:....
 #========================================================================
 
-VPATH = $(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win:$(srcdir)/isaac
+VPATH = $(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win:$(srcdir)/isaac:$(srcdir)/doc
+.SUFFIXES: .c .$(OBJEXT) .man .n .html
 
 .c.$(OBJEXT):
 	$(COMPILE) -c `@CYGPATH@ $<` -o $@
+
+.man.n:
+	$(MPEXPAND) nroff `@CYGPATH@ $<` $@
+
+.man.html:
+	$(MPEXPAND) html  `@CYGPATH@ $<` $@
 
 #========================================================================
 # Create the pkgIndex.tcl file.
@@ -473,8 +487,6 @@ install-bin-binaries:
 	    $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/$$p; \
 	  fi; \
 	done
-
-.SUFFIXES: .c .$(OBJEXT)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
