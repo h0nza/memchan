@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.23 2001/09/12 04:55:58 andreas_kupries Exp $
+# CVS:	$Id: PREPARE,v 1.24 2001/09/19 08:13:04 andreas_kupries Exp $
 
 # Exclude older binary distributions, they are made available through the 1.9 site.
 
@@ -56,14 +56,16 @@ mConfigure tea
 
 # Integrate tk-based testsuite interface.
 
-exec makedist tg
-exec tar xfz [glob tg*.tar.gz]
-eval file delete \
-	[glob tg*.README] [glob tg*.ANNOUNCE] \
-	[glob tg*.LSM] [glob tg*.tar.gz] \
-	[glob tg*.DESCRIPTION]
-
-eval file rename [glob tg*] testlib
+if {0} {
+    exec makedist tg
+    exec tar xfz [glob tg*.tar.gz]
+    eval file delete \
+	    [glob tg*.README] [glob tg*.ANNOUNCE] \
+	    [glob tg*.LSM] [glob tg*.tar.gz] \
+	    [glob tg*.DESCRIPTION]
+    
+    eval file rename [glob tg*] testlib
+}
 
 # Now generate documentation for linkage into my
 # site and standalone distribution
