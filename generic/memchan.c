@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.1 1999/03/23 10:15:08 aku Exp $
+ * CVS: $Id: memchan.c,v 1.2 1999/03/23 15:00:33 aku Exp $
  */
 
 
@@ -45,8 +45,17 @@
  * our entry point.
  */
 
+#ifdef TCL_STORAGE_CLASS
+# undef TCL_STORAGE_CLASS
+#endif
+#ifdef BUILD_trf
+# define TCL_STORAGE_CLASS DLLEXPORT
+#else
+# define TCL_STORAGE_CLASS DLLIMPORT
+#endif
+
 #   if defined(_MSC_VER)
-#	define EXPORT(a,b) __declspec(dllexport) a b
+#	define EXPORT(a,b) TCL_STORAGE_CLASS a b
 #	define DllEntryPoint DllMain
 #   else
 #	if defined(__BORLANDC__)
