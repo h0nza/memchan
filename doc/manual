@@ -1,0 +1,13 @@
+Manual for memchan @mFullVersion@, as of @mDate@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A single command is added to the loading interpreter:
+
+	memchan
+
+It does not accept any options. Result is the handle
+of the generated memory channel.
+
+Memory channels support a single read-only option, '-length'.
+Reading it via 'fconfigure' retrieves the number of bytes
+currently stored in the channel.
