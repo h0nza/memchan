@@ -25,7 +25,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: init.c,v 1.6 1999/09/12 21:24:31 aku Exp $
+ * CVS: $Id: init.c,v 1.7 2000/09/26 20:52:50 aku Exp $
  */
 
 /*#include <stdlib.h>*/
@@ -57,7 +57,7 @@ Buf_InitStubs _ANSI_ARGS_((Tcl_Interp *interp, CONST char *version, int exact));
  *------------------------------------------------------*
  */
 
-EXPORT (int,Memchan_Init) (interp)
+int Memchan_Init (interp)
 Tcl_Interp* interp;
 {
 #if GT81
@@ -122,7 +122,7 @@ Tcl_Interp* interp;
  *------------------------------------------------------*
  */
 
-EXPORT (int,Memchan_SafeInit) (interp)
+int Memchan_SafeInit (interp)
 Tcl_Interp* interp;
 {
   return Memchan_Init (interp);

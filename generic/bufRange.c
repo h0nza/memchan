@@ -8,7 +8,7 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: bufDecls.h,v 1.2 1999/09/21 18:48:57 aku Exp $
+ * RCS: @(#) $Id: bufRange.c,v 1.1 2000/09/26 21:17:49 aku Exp $
  */
 
 #include "buf.h"
@@ -179,7 +179,7 @@ DupProc (buf, clientData)
 {
   RangeBuffer* iBuf   = (RangeBuffer*) clientData;
   RangeBuffer* newBuf = (RangeBuffer*) Tcl_Alloc (sizeof(RangeBuffer));
-  Buf_Buffer   new    = Buf_Create (&range, newBuf);
+  Buf_Buffer   new    = Buf_Create (&range, (ClientData) newBuf);
 
   newBuf->buf  = iBuf->buf;
   newBuf->size = iBuf->size;
@@ -258,7 +258,7 @@ Buf_CreateRange (buf, size)
   }
 
   newBuf = (RangeBuffer*) Tcl_Alloc (sizeof(RangeBuffer));
-  new    = Buf_Create (&range, newBuf);
+  new    = Buf_Create (&range, (ClientData) newBuf);
   loc    = Buf_Tell (buf);
 
   if (Buf_GetType (buf) == &range) {

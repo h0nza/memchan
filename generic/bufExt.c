@@ -8,7 +8,7 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: bufDecls.h,v 1.2 1999/09/21 18:48:57 aku Exp $
+ * RCS: @(#) $Id: bufExt.c,v 1.1 2000/09/26 21:17:49 aku Exp $
  */
 
 #include "buf.h"
@@ -185,7 +185,7 @@ DupProc (buf, clientData)
   ExtBuffer* iBuf   = (ExtBuffer*) clientData;
   ExtBuffer* newBuf = (ExtBuffer*) Tcl_Alloc (sizeof(ExtBuffer) +
 					      (iBuf->limit - iBuf->data));
-  Buf_Buffer   new    = Buf_Create (&ext, newBuf);
+  Buf_Buffer   new    = Buf_Create (&ext, (ClientData) newBuf);
 
   newBuf->buf      = new;
   newBuf->data     = Tcl_Alloc (iBuf->size);
@@ -311,7 +311,7 @@ Buf_CreateExtendableBuffer (size)
      int size;
 {
   ExtBuffer* newBuf = (ExtBuffer*) Tcl_Alloc (sizeof(ExtBuffer));
-  Buf_Buffer new    = Buf_Create (&ext, newBuf);
+  Buf_Buffer new    = Buf_Create (&ext, (ClientData) newBuf);
 
   newBuf->buf      = new;
   newBuf->size     = size;

@@ -198,7 +198,7 @@ declare 62 generic {
 }
 
 declare 63 generic {
-    int Buf_QueueWrite (Buf_BufferQueue queue, char* inbuf, int size)
+    int Buf_QueueWrite (Buf_BufferQueue queue, CONST char* inbuf, int size)
 }
 
 declare 64 generic {

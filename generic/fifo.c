@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo.c,v 1.8 2000/09/26 20:52:50 aku Exp $
+ * CVS: $Id: fifo.c,v 1.9 2002/04/24 05:42:14 andreas_kupries Exp $
  */
 
 
@@ -232,7 +232,7 @@ int*       errorCodePtr;	/* Location of error flag */
 static int
 Output (instanceData, buf, toWrite, errorCodePtr)
 ClientData instanceData;	/* The channel to write to */
-char*      buf;			/* Data to be stored. */
+CONST84 char* buf;		/* Data to be stored. */
 int        toWrite;		/* Number of bytes to write. */
 int*       errorCodePtr;	/* Location of error flag. */
 {
@@ -275,7 +275,7 @@ static int
 GetOption (instanceData, interp, optionName, dsPtr)
 ClientData   instanceData;	/* Channel to query */
 Tcl_Interp*  interp;		/* Interpreter to leave error messages in */
-char*        optionName;	/* Name of reuqested option */
+CONST84 char* optionName;	/* Name of reuqested option */
 Tcl_DString* dsPtr;		/* String to place the result into */
 {
   /*

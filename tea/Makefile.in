@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.12 2001/11/20 03:48:39 andreas_kupries Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.13 2002/04/24 05:42:14 andreas_kupries Exp $
 
 #========================================================================
 # Additional variables defined here for convenient access to some
@@ -508,8 +508,14 @@ install-lib-binaries: installdirs
 	  else :; fi; \
 	done
 	if test "x$(MAKE_LIB)" = "x$(MAKE_SHARED_LIB)"; then \
-	  $(TCLSH_PROG) mkIndex.tcl; \
+	  $(INSTALL_DATA) $(srcdir)/pkgIndex.tcl $(DESTDIR)$(pkglibdir)/pkgIndex.tcl \
 	fi
+
+## This thing did not work ...
+#
+##	if test "x$(MAKE_LIB)" = "x$(MAKE_SHARED_LIB)"; then \
+##	  $(TCLSH_PROG) mkIndex.tcl; \
+##	fi
 
 #========================================================================
 # Install binary executables (e.g. .exe files)

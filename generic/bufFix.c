@@ -8,7 +8,7 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: bufDecls.h,v 1.2 1999/09/21 18:48:57 aku Exp $
+ * RCS: @(#) $Id: bufFix.c,v 1.1 2000/09/26 21:17:49 aku Exp $
  */
 
 #include "buf.h"
@@ -189,7 +189,7 @@ DupProc (buf, clientData)
 {
   FixedBuffer* iBuf   = (FixedBuffer*) clientData;
   FixedBuffer* newBuf = (FixedBuffer*) Tcl_Alloc (sizeof(FixedBuffer) + iBuf->size);
-  Buf_Buffer   new    = Buf_Create (&fix, newBuf);
+  Buf_Buffer   new    = Buf_Create (&fix, (ClientData) newBuf);
 
   newBuf->buf      = new;
   newBuf->size     = iBuf->size;
@@ -302,7 +302,7 @@ Buf_CreateFixedBuffer (size)
      int size;
 {
   FixedBuffer* newBuf = (FixedBuffer*) Tcl_Alloc (sizeof(FixedBuffer) + size);
-  Buf_Buffer   new    = Buf_Create (&fix, newBuf);
+  Buf_Buffer   new    = Buf_Create (&fix, (ClientData) newBuf);
 
   newBuf->buf      = new;
   newBuf->size     = size;

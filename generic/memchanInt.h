@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.11 2002/03/01 19:56:14 andreas_kupries Exp $
+ * CVS: $Id: memchanInt.h,v 1.12 2002/04/24 05:42:14 andreas_kupries Exp $
  */
 
 
@@ -134,6 +134,11 @@ extern "C" {
 #define CONST84
 #endif
 
+#ifndef EWOULDBLOCK
+#define EWOULDBLOCK EAGAIN
+#endif
+
+
 #if ! (GT81)
 /* Enable use of procedure internal to tcl. Necessary only
  * for versions of tcl below 8.1.
@@ -183,6 +188,19 @@ MemchanNullCmd _ANSI_ARGS_ ((ClientData notUsed,
 
 Tcl_Obj*
 MemchanGenHandle _ANSI_ARGS_ ((CONST char* prefix));
+
+#ifdef BUILD_Memchan
+#undef  TCL_STORAGE_CLASS
+#define TCL_STORAGE_CLASS DLLEXPORT
+#endif
+
+EXTERN int Memchan_SafeInit _ANSI_ARGS_ ((Tcl_Interp* interp));
+EXTERN int Memchan_Init     _ANSI_ARGS_ ((Tcl_Interp* interp));
+
+
+#undef  TCL_STORAGE_CLASS
+#define TCL_STORAGE_CLASS DLLIMPORT
+
 
 #ifdef __cplusplus
 }

@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: null.c,v 1.1 2000/09/26 21:17:49 aku Exp $
+ * CVS: $Id: null.c,v 1.2 2002/04/24 05:42:14 andreas_kupries Exp $
  */
 
 
@@ -185,7 +185,7 @@ int*       errorCodePtr;	/* Location of error flag */
 static int
 Output (instanceData, buf, toWrite, errorCodePtr)
 ClientData instanceData;	/* The channel to write to */
-char*      buf;			/* Data to be stored. */
+CONST84 char* buf;		/* Data to be stored. */
 int        toWrite;		/* Number of bytes to write. */
 int*       errorCodePtr;	/* Location of error flag. */
 {

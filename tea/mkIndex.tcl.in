@@ -70,7 +70,9 @@ proc Nativepath {pathName} {
     global tcl_platform
 
     if {![string match $tcl_platform(platform) unix]} {
-	if {[regexp {//(.)/(.*)} $pathName null driveLetter pathRemains]} {
+	if {[regexp {^//(.)/(.*)$} $pathName null driveLetter pathRemains]} {
+	    set pathName $driveLetter:/$pathRemains
+	} elseif {[regexp {^/cygdrive/(.)/(.*)$} $pathName null driveLetter pathRemains]} {
 	    set pathName $driveLetter:/$pathRemains
 	}
     }
@@ -82,8 +84,9 @@ set exec_prefix "@exec_prefix@"
 
 set exec_prefix [Nativepath $exec_prefix] 
 
-set libdir @libdir@
+set libdir [Nativepath @libdir@]
 set package @PACKAGE@@MEMCHAN_VERSION@
+set pkg     @PACKAGE@
 
 cd $libdir
 puts "Making pkgIndex.tcl in [file join [pwd] $package]"
@@ -91,5 +94,5 @@ puts "Making pkgIndex.tcl in [file join [pwd] $package]"
 if {$tcl_platform(platform) == "unix"} {
     pkg_mkIndex $package [file join lib${package}*[info sharedlibextension]] *.tcl
 } else {
-    pkg_mkIndex $package [file join .. .. bin *[info sharedlibextension]]
+    pkg_mkIndex $package [file join .. .. bin ${pkg}*[info sharedlibextension]] *.tcl
 }

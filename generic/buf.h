@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.8 2000/01/14 23:52:21 aku Exp $
+ * CVS: $Id: buf.h,v 1.1 2000/09/26 21:17:49 aku Exp $
  */
 
 
@@ -55,7 +55,7 @@ extern "C" {
 #ifdef MAC_TCL
 #define VECTOR(returns,name) typedef pascal returns *(name)
 #elif defined __WIN32__
-#define VECTOR(returns,name) typedef returns (__stdcall name)
+#define VECTOR(returns,name) typedef returns (name)
 #else
 #define VECTOR(returns,name) typedef returns (name)
 #endif

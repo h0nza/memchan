@@ -8,7 +8,7 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: bufDecls.h,v 1.2 1999/09/21 18:48:57 aku Exp $
+ * RCS: @(#) $Id: bufQueue.c,v 1.1 2000/09/26 21:17:49 aku Exp $
  */
 
 #include "buf.h"
@@ -216,7 +216,7 @@ Buf_QueueRead (queue, outbuf, size)
 int
 Buf_QueueWrite (queue, inbuf, size)
 Buf_BufferQueue queue;
-char*           inbuf;
+CONST char*     inbuf;
 int             size;
 {
   Queue* q = (Queue*) queue;
