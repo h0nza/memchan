@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.11 2002/08/23 18:04:38 andreas_kupries Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.12 2002/10/02 20:26:10 andreas_kupries Exp $
 
 #========================================================================
 # Edit the following few lines when writing a new extension
@@ -299,9 +299,9 @@ $($(PACKAGE)_LIB_FILE): $($(PACKAGE)_OBJECTS)
 	$(RANLIB) $($(PACKAGE)_LIB_FILE)
 
 $($(PACKAGE)stub_LIB_FILE): $($(PACKAGE)stub_OBJECTS)
-	-rm -f $($(PACKAGE)_LIB_FILE)
+	-rm -f $($(PACKAGE)stub_LIB_FILE)
 	${MAKE_STUB_LIB}
-	$(RANLIB) $($(PACKAGE)_LIB_FILE)
+	$(RANLIB) $($(PACKAGE)stub_LIB_FILE)
 
 #========================================================================
 # We need to enumerate the list of .c to .o lines here.
