@@ -25,7 +25,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: init.c,v 1.12 1999/03/25 16:48:17 aku Exp $
+ * CVS: $Id: init.c,v 1.1 1999/05/25 18:29:39 aku Exp $
  */
 
 #include "memchanInt.h"
@@ -90,6 +90,11 @@ Tcl_Interp* interp;
 
   Tcl_CreateCommand (interp, "memchan",
 		     &MemchanCmd,
+		     (ClientData) NULL,
+		     (Tcl_CmdDeleteProc*) NULL);
+
+  Tcl_CreateCommand (interp, "fifo",
+		     &MemchanFifoCmd,
 		     (ClientData) NULL,
 		     (Tcl_CmdDeleteProc*) NULL);
 

@@ -1,3 +1,13 @@
+Changes from 1.8
+
+*	Made **thread-safe** if compiled against a thread-enabled 8.1.
+	(Mutex around counter used to generate handles).
+
+*	Small internal reorganization in the 'generic'
+	directory (memchan.c split into several files).
+
+*	Headers now usable with a C++ compiler.
+
 Changes from 1.7
 
 *	Bugfixes for windows.

@@ -7,7 +7,7 @@
 #
 # Distribution as of @mDate@
 #
-# $Id: Makefile.in,v 1.9 1999/05/25 18:10:56 aku Exp $
+# $Id: Makefile.in,v 1.10 1999/05/25 18:29:44 aku Exp $
 
 EXTENSION	=	Memchan
 VERSION		=	@mFullVersion@
@@ -160,9 +160,10 @@ HEADER		=
 
 SOURCES		=	$(GENERIC_DIR)/memchan.c	\
 			$(GENERIC_DIR)/init.c		\
+			$(GENERIC_DIR)/fifo.c		\
 			$(GENERIC_DIR)/counter.c
 
-OBJECTS		=	memchan.o init.o counter.o
+OBJECTS		=	memchan.o init.o counter.o fifo.o
 
 
 #-------------------------------------------------------#
@@ -226,6 +227,9 @@ TAGS:
 
 memchan.o: $(GENERIC_DIR)/memchan.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/memchan.c -o $@
+
+fifo.o: $(GENERIC_DIR)/fifo.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/fifo.c -o $@
 
 init.o: $(GENERIC_DIR)/init.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/init.c -o $@

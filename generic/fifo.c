@@ -1,7 +1,7 @@
 /*
- * memchan.c --
+ * fifo.c --
  *
- *	Implementation of a memory channel.
+ *	Implementation of a memory channel having fifo behaviour.
  *
  * Copyright (C) 1996-1999 Andreas Kupries (a.kupries@westend.com)
  * All rights reserved.
@@ -46,9 +46,6 @@ static int	Input _ANSI_ARGS_((ClientData instanceData,
 static int	Output _ANSI_ARGS_((ClientData instanceData,
 	            char *buf, int toWrite, int *errorCodePtr));
 
-static int	Seek _ANSI_ARGS_((ClientData instanceData,
-		    long offset, int mode, int *errorCodePtr));
-
 static void	WatchChannel _ANSI_ARGS_((ClientData instanceData, int mask));
 
 
@@ -74,15 +71,16 @@ static int      GetFile      _ANSI_ARGS_((ClientData instanceData,
 
 /*
  * This structure describes the channel type structure for in-memory channels:
+ * Fifo are not seekable. They have no writable options, but a readable.
  */
 
 static Tcl_ChannelType channelType = {
-  "memory",		/* Type name.                                    */
+  "memory/fifo",	/* Type name.                                    */
   NULL,			/* Set blocking/nonblocking behaviour. NULL'able */
   Close,		/* Close channel, clean instance data            */
   Input,		/* Handle read request                           */
   Output,		/* Handle write request                          */
-  Seek,			/* Move location of access point.      NULL'able */
+  NULL,			/* Move location of access point.      NULL'able */
   NULL,			/* Set options.                        NULL'able */
   GetOption,		/* Get options.                        NULL'able */
   WatchChannel,		/* Initialize notifier                           */
@@ -100,20 +98,63 @@ static Tcl_ChannelType channelType = {
 
 
 /*
- * This structure describes the per-instance state of a in-memory channel.
+ * struct ChannelBuffer:
+ *
+ * Buffers data being sent to or from a channel.
+ *
+ * Copied from tcl/generic/tclIO.c (Why reinvent the wheel ?). Used here
+ * to store the information placed into the channel.
+ */
+
+typedef struct ChannelBuffer {
+    int nextAdded;		/* The next position into which a character
+                                 * will be put in the buffer. */
+    int nextRemoved;		/* Position of next byte to be removed
+                                 * from the buffer. */
+    int bufLength;		/* How big is the buffer? */
+
+    struct ChannelBuffer *nextPtr;
+    				/* Next buffer in chain. */
+    char buf[4];		/* Placeholder for real buffer. The real
+                                 * buffer occuppies this space + bufSize-4
+                                 * bytes. This must be the last field in
+                                 * the structure. */
+} ChannelBuffer;
+
+#define CHANNELBUFFER_HEADER_SIZE	(sizeof(ChannelBuffer) - 4)
+
+/*
+ * This structure describes the per-instance state of a in-memory fifo channel.
  */
 
 typedef struct ChannelInstance {
-  unsigned long  rwLoc;	    /* current location to read from (or write to). */
-  unsigned long  allocated; /* number of allocated bytes */
-  unsigned long  used;	    /* number of bytes stored in the channel. */
-  VOID*          data;	    /* memory plane used to store the channel contents */
-  Tcl_Channel    chan;      /* Backreference to generic channel information */
+  Tcl_Channel    chan;   /* Backreference to generic channel information */
+  long int       length; /* Total number of bytes in the channel */
+  ChannelBuffer* first;  /* Reference to the first buffer used to hold the
+			  * channel data. 'nextAdded' is *not* relevant.
+			  * 'nextRemoved' is used as defined. */
+  ChannelBuffer* last;   /* Last buffer holding the channel data. 'nextAdded'
+			  * is used as defined, 'nextRemoved' is not relevant.
+			  */
 
 #if (TCL_MAJOR_VERSION >= 8)
-  Tcl_TimerToken timer;     /* Timer used to link the channel into the notifier */
+  Tcl_TimerToken timer;  /* Timer used to link the channel into the
+			  * notifier. */
+#if 0
+#if (GT81) && defined (TCL_THREADS)
+  Tcl_Mutex lock;        /* Semaphor to handle thread-spanning access to this
+			  * fifo. */
+#endif
+#endif /* 0 */
+
 #endif
 } ChannelInstance;
+
+/* Macro to check a fifo channel for emptiness.
+ */
+
+#define FIFO_EMPTY(c) ((c->first == (ChannelBuffer*) NULL) || ((c->first == c->last) && (c->first->nextRemoved > c->first->nextAdded))
+
 
 /*
  *------------------------------------------------------*
@@ -123,7 +164,7 @@ typedef struct ChannelInstance {
  *	------------------------------------------------*
  *	This procedure is called from the generic IO
  *	level to perform channel-type-specific cleanup
- *	when an in-memory channel is closed.
+ *	when an in-memory fifo channel is closed.
  *	------------------------------------------------*
  *
  *	Sideeffects:
@@ -145,8 +186,17 @@ Tcl_Interp* interp;          /* unused */
 
   chan = (ChannelInstance*) instanceData;
 
-  if (chan->data != (char*) NULL) {
-    Tcl_Free ((char*) chan->data);
+  /* Iterate over the chain of buffers and release the
+   * allocated memory. We can be sure that this is done only
+   * after the last user closed the channel, i.e. there will
+   * be no thread-spanning access !
+   */
+
+  while (chan->first != (ChannelBuffer*) NULL) {
+    chan->last = chan->first->nextPtr;
+
+    Tcl_Free ((char*) chan->first);
+    chan->first = chan->last;
   }
 
   Tcl_Free ((char*) chan);
@@ -161,7 +211,7 @@ Tcl_Interp* interp;          /* unused */
  *
  *	------------------------------------------------*
  *	This procedure is invoked from the generic IO
- *	level to read input from an in-memory channel.
+ *	level to read input from an in-memory fifo channel.
  *	------------------------------------------------*
  *
  *	Sideeffects:
@@ -184,25 +234,73 @@ char*      buf;			/* Buffer to fill */
 int        toRead;		/* Requested number of bytes */
 int*       errorCodePtr;	/* Location of error flag */
 {
+  ChannelBuffer*   cbuf;
   ChannelInstance* chan;
+  long int         required;
+  long int         cbufSize;
 
-  if (toRead == 0)
+  if (toRead == 0) {
     return 0;
+  }
 
   chan = (ChannelInstance*) instanceData;
 
-  if ((chan->rwLoc + toRead) > chan->used) {
+  if (toRead > chan->length) {
     /*
      * Reading behind the last byte is not possible,
      * truncate the request.
      */
-    toRead = chan->used - chan->rwLoc;
+    toRead = chan->length;
   }
 
-  if (toRead > 0) {
-    memcpy ((VOID*) buf, (VOID*) ((char*) chan->data + chan->rwLoc), toRead);
-    chan->rwLoc += toRead;
+  while (required > 0) {
+    /* Iterate over the chain until the request is satisfied.
+     * Releases all buffers which were completely consumed.
+     */
+
+    cbuf     = chan->first;
+    cbufSize = cbuf->bufLength - cbuf->nextRemoved;
+
+    if (required <= cbufSize) {
+      /* The current buffer satisfies the whole (remaining) request.
+       * Copy as needed.
+       */
+
+      memcpy ((VOID*) buf, (VOID*) ((char*) cbuf->buf + cbuf->nextRemoved),
+	      required);
+      cbuf->nextRemoved += required;
+      required = 0;
+
+    } else {
+      /* The current buffer is not enough. Copy everything in it, then
+       * prepare ourselves for another round of the loop
+       */
+
+      memcpy ((VOID*) buf, (VOID*) ((char*) cbuf->buf + cbuf->nextRemoved),
+	      cbufSize);
+
+      cbuf->nextRemoved += cbufSize;
+      required          -= cbufSize;
+      buf               += cbufSize;
+    }
+
+    /* Release an empty buffer at the head of the chain.
+     */
+
+    if (cbuf->nextRemoved == cbuf->bufLength) {
+      chan->first = cbuf->nextPtr;
+
+      if (chan->first == (ChannelBuffer*) NULL) {
+	chan->last = chan->first;
+      }
+
+      Tcl_Free ((char*) cbuf);
+    }
+
+    /* and around */
   }
+
+  chan->length -= toRead;
 
   *errorCodePtr = 0;
   return toRead;
@@ -239,99 +337,34 @@ int        toWrite;		/* Number of bytes to write. */
 int*       errorCodePtr;	/* Location of error flag. */
 {
   ChannelInstance* chan;
+  ChannelBuffer*   cbuf;
 
-  if (toWrite == 0)
+  if (toWrite == 0) {
     return 0;
+  }
 
   chan = (ChannelInstance*) instanceData;
 
-  if ((chan->rwLoc + toWrite) > chan->allocated) {
-    /*
-     * We are writing beyond the end of the allocated area,
-     * it is necessary to extend it. Try to use a fixed
-     * increment first and adjust if that is not enough.
-     */
+  /* Simple strategy for now: Every write to the channel is placed
+   * into its own buffer, which is then appended to the chain.
+   */
 
-    chan->allocated += INCREMENT;
+  cbuf = (ChannelBuffer*) Tcl_Alloc (CHANNELBUFFER_HEADER_SIZE + toWrite);
+  cbuf->nextAdded   = toWrite;
+  cbuf->nextRemoved = 0;
+  cbuf->bufLength   = toWrite;
+  cbuf->nextPtr     = chan->last;
 
-    if ((chan->rwLoc + toWrite) > chan->allocated) {
-      chan->allocated = chan->rwLoc + toWrite;
-    }
+  memcpy ((VOID*) ((char*) cbuf->buf, (VOID*) buf, toWrite);
 
-    chan->data = Tcl_Realloc (chan->data, chan->allocated);
+  if (chan->first == (ChannelBuffer*) NULL) {
+    chan->first = cbuf;
   }
 
-  memcpy ((VOID*) ((char*) chan->data + chan->rwLoc), (VOID*) buf, toWrite);
-  chan->rwLoc += toWrite;
-
-  if (chan->rwLoc > chan->used)
-    chan->used = chan->rwLoc;
+  chan->last   = cbuf;
+  chan->length += toWrite;
 
   return toWrite;
-}
-
-/*
- *------------------------------------------------------*
- *
- *	Seek --
- *
- *	------------------------------------------------*
- *	This procedure is called by the generic IO level
- *	to move the access point in a in-memory channel.
- *	------------------------------------------------*
- *
- *	Sideeffects:
- *		Moves the location at which the channel
- *		will be accessed in future operations.
- *
- *	Result:
- *		-1 if failed, the new position if
- *		successful. An output argument contains
- *		the POSIX error code if an error
- *		occurred, or zero.
- *
- *------------------------------------------------------*
- */
-
-static int
-Seek (instanceData, offset, mode, errorCodePtr)
-ClientData instanceData;	/* The channel to manipulate */
-long       offset;		/* Size of movement. */
-int        mode;		/* How to move */
-int*       errorCodePtr;	/* Location of error flag. */
-{
-  ChannelInstance* chan;
-  long int         newLocation;
-
-  chan = (ChannelInstance*) instanceData;
-  *errorCodePtr = 0;
-
-  switch (mode) {
-  case SEEK_SET:
-    newLocation = offset;
-    break;
-
-  case SEEK_CUR:
-    newLocation = chan->rwLoc + offset;
-    break;
-
-  case SEEK_END:
-    newLocation = chan->used - offset;
-    break;
-
-  default:
-    Tcl_Panic ("illegal seek-mode specified");
-    return -1;
-  }
-
-  if ((newLocation < 0) || (newLocation > (long int) chan->used)) {
-    *errorCodePtr = EINVAL; /* EBADRQC ?? */
-    return -1;
-  }
-
-  chan->rwLoc = newLocation;
-
-  return newLocation;
 }
 
 /*
@@ -340,8 +373,8 @@ int*       errorCodePtr;	/* Location of error flag. */
  *	GetOption --
  *
  *	------------------------------------------------*
- *	Computes an option value for a in-memory channel,
- *	or a list of all options and their values.
+ *	Computes an option value for a in-memory fifo
+ *	channel, or a list of all options and their values.
  *	------------------------------------------------*
  *
  *	Sideeffects:
@@ -372,7 +405,7 @@ Tcl_DString* dsPtr;		/* String to place the result into */
 #endif
 {
   /*
-   * In-memory channels provide a channel type specific,
+   * In-memory fifo channels provide a channel type specific,
    * read-only, fconfigure option, "length", that obtains
    * the current number of bytes of data stored in the channel.
    */
@@ -392,7 +425,6 @@ Tcl_DString* dsPtr;		/* String to place the result into */
 #endif
   }
 
-
   if (optionName == (char*) NULL) {
     /*
      * optionName == NULL
@@ -402,7 +434,7 @@ Tcl_DString* dsPtr;		/* String to place the result into */
     Tcl_DStringAppendElement (dsPtr, "-length");
   }
 
-  sprintf (buffer, "%lu", chan->used);
+  sprintf (buffer, "%lu", chan->length);
   Tcl_DStringAppendElement (dsPtr, buffer);
 
   return TCL_OK;
@@ -435,7 +467,7 @@ int        mask;		/* Events of interest */
 {
 #if (TCL_MAJOR_VERSION >= 8)
   /*
-   * In-memory channels are not based on files.
+   * In-memory fifo channels are not based on files.
    * They are always writable, and almost always readable.
    * We could call Tcl_NotifyChannel immediately, but this
    * would starve other sources, so a timer is set up instead.
@@ -451,7 +483,7 @@ int        mask;		/* Events of interest */
   }
 #else
   /*
-   * In-memory channels are not based on files. Readiness
+   * In-memory fifo channels are not based on files. Readiness
    * for events is defined explicitly, see "ChannelReady".
    * Nothing has to be done here.
    */
@@ -486,10 +518,9 @@ ClientData instanceData;	/* Channel to query */
 int        mask;		/* Mask of queried events */
 {
   /*
-   * In-memory channels are always writable (fileevent
+   * In-memory fifo channels are always writable (fileevent
    * writable will fire continuously) and they are readable
-   * when the current access point is before the last byte
-   * contained in the channel.
+   * if they are not empty.
    */
 
   ChannelInstance* chan;
@@ -498,8 +529,7 @@ int        mask;		/* Mask of queried events */
   chan       = (ChannelInstance*) instanceData;
   resultMask = mask;
 
-  if ((resultMask & TCL_READABLE) &&
-      (chan->rwLoc >= chan->used)) {
+  if ((resultMask & TCL_READABLE) && (! FIFO_EMPTY (chan))) {
       resultMask &= ~TCL_READABLE;
   }
 
@@ -532,9 +562,8 @@ ChannelReady (instanceData)
 ClientData instanceData; /* Channel to query */
 {
   /*
-   * In-memory channels are always writable (fileevent
-   * writable) and they are readable if the current access
-   * point is before the last byte contained in the channel.
+   * In-memory fifo channels are always writable (fileevent
+   * writable) and they are readable if they are not empty.
    */
 
   ChannelInstance* chan = (ChannelInstance*) instanceData;
@@ -546,8 +575,9 @@ ClientData instanceData; /* Channel to query */
 
   chan->timer = (Tcl_TimerToken) NULL;
 
-  if (chan->rwLoc >= chan->used)
+  if (! FIFO_EMPTY (chan)) {
     mask &= ~TCL_READABLE;
+  }
 
   /* Tell Tcl about the possible events.
    * This will regenerate the timer too, via 'WatchChannel'.
@@ -565,7 +595,7 @@ ClientData instanceData; /* Channel to query */
  *
  *	------------------------------------------------*
  *	Called from Tcl_GetChannelFile to retrieve
- *	Tcl_Files from inside a in-memory channel.
+ *	Tcl_Files from inside a in-memory fifo channel.
  *	------------------------------------------------*
  *
  *	Sideeffects:
@@ -584,7 +614,7 @@ ClientData instanceData;	/* Channel to query */
 int        mask;		/* Direction of interest */
 {
   /*
-   * In-memory channels are not based on files.
+   * In-memory fifo channels are not based on files.
    */
 
   return (Tcl_File) NULL;
@@ -597,7 +627,7 @@ int        mask;		/* Direction of interest */
  *
  *	------------------------------------------------*
  *	Called from Tcl_GetChannelHandle to retrieve
- *	OS handles from inside a in-memory channel.
+ *	OS handles from inside a in-memory fifo channel.
  *	------------------------------------------------*
  *
  *	Sideeffects:
@@ -616,7 +646,7 @@ int         direction;		/* Direction of interest */
 ClientData* handlePtr;          /* Space to the handle into */
 {
   /*
-   * In-memory channels are not based on files.
+   * In-memory fifo channels are not based on files.
    */
 
   /* *handlePtr = (ClientData) NULL; */
@@ -627,10 +657,10 @@ ClientData* handlePtr;          /* Space to the handle into */
 /*
  *------------------------------------------------------*
  *
- *	MemchanCmd --
+ *	MemchanFifoCmd --
  *
  *	------------------------------------------------*
- *	This procedure realizes the 'memchan' command.
+ *	This procedure realizes the 'fifo' command.
  *	See the manpages for details on what it does.
  *	------------------------------------------------*
  *
@@ -645,13 +675,13 @@ ClientData* handlePtr;          /* Space to the handle into */
 	/* ARGSUSED */
 int
 #if TCL_MAJOR_VERSION < 8
-MemchanCmd (notUsed, interp, argc, argv)
+MemchanFifoCmd (notUsed, interp, argc, argv)
 ClientData  notUsed;		/* Not used. */
 Tcl_Interp* interp;		/* Current interpreter. */
 int         argc;		/* Number of arguments. */
 char**      argv;		/* Argument strings. */
 #else
-MemchanCmd (notUsed, interp, objc, objv)
+MemchanFifoCmd (notUsed, interp, objc, objv)
 ClientData  notUsed;		/* Not used. */
 Tcl_Interp* interp;		/* Current interpreter. */
 int         objc;		/* Number of arguments. */
@@ -667,20 +697,19 @@ Tcl_Obj**   objv;		/* Argument objects. */
   Tcl_Obj* channelHandle;
 #endif
 
-  if (ARGC != 1) {
+  if (argc != 1) {
     Tcl_AppendResult (interp,
-		      "wrong # args: should be \"memchan\"",
+		      "wrong # args: should be \"fifo\"",
 		      (char*) NULL);
     return TCL_ERROR;
   }
 
   instance = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
-  instance->rwLoc     = 0;
-  instance->allocated = 0;
-  instance->used      = 0;
-  instance->data      = (VOID*) NULL;
+  instance->length = 0;
+  instance->first  = (ChannelBuffer) NULL;
+  instance->last   = (ChannelBuffer) NULL;
 
-  channelHandle = MemchanGenHandle ("mem");
+  channelHandle = MemchanGenHandle ("fifo");
 
 #if TCL_MAJOR_VERSION < 8
   chan = Tcl_CreateChannel (&channelType,

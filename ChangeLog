@@ -1,3 +1,10 @@
+Wed May 26 00:17:18 1999  Andreas Kupries  <a.kupries@westend.com>
+
+	* generic/fifo.c: New file, new channel type. Like memchan in
+	  memory, but access is done fifo-like (first in/first
+	  out). Seeking is not possible. Like a socket or a pipe, but in
+	  memory.
+
 Tue May 25 18:35:24 1999  Andreas Kupries  <a.kupries@westend.com>
 
 	* generic/memchanInt.h: Made the header usable for C++ compilers.
