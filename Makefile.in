@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.16 2004/05/22 09:12:45 patthoyts Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.17 2004/05/31 16:01:16 andreas_kupries Exp $
 
 #========================================================================
 # Edit the following few lines when writing a new extension
@@ -226,8 +226,8 @@ binaries: $(BINARIES) pkgIndex.tcl-hand
 
 libraries:
 
-doc: $(DOCS_NROFF)
-doc-html: $(DOCS_HTML)
+doc: $(DOC_NROFF)
+doc-html: $(DOC_HTML)
 
 doc-old:
 	if [ "x$(srcdir)" != "x." -a "x$(srcdir)" != "x`pwd`" ] ; then	\
