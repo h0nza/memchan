@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo2.c,v 1.4 2004/05/20 19:08:30 andreas_kupries Exp $
+ * CVS: $Id: fifo2.c,v 1.5 2004/05/21 20:24:43 andreas_kupries Exp $
  */
 
 
@@ -65,7 +65,7 @@ static int	BlockMode _ANSI_ARGS_((ClientData instanceData,
 
 static Tcl_ChannelType channelType = {
   "memory/fifo2",	/* Type name.                                    */
-  BlockMode,		/* Set blocking/nonblocking behaviour. */
+  (Tcl_ChannelTypeVersion)BlockMode, /* Set blocking  behaviour.         */
   Close,		/* Close channel, clean instance data            */
   Input,		/* Handle read request                           */
   Output,		/* Handle write request                          */
@@ -853,6 +853,9 @@ Tcl_Obj*CONST objv[];		/* Argument objects. */
   instanceB->eof      = 0;
   instanceB->interest = 0;
   instanceB->lock     = instanceA->lock;
+
+  /* bug #996078 - Tcl_Mutex expects the mutex to be NULL */
+  memset((ChannelLock *)instanceA->lock, 0, sizeof (ChannelLock));
 
   instanceA->otherPtr = instanceB;
   instanceB->otherPtr = instanceA;

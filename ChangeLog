@@ -1,3 +1,8 @@
+2004-08-04  Pat Thoyts  <pat@zsplat.freeserve.co.uk>
+
+	* generic/fifo2.c: Applied fix for bug #996078 which sets the channel
+	                   mutex to NULL in threaded tcl (Jeff Gilbertson)
+
 2004-06-04  Pat Thoyts  <patthoyts@users.sourceforge.net>
 
 	* configure:        Updated and regenerated the TEA configure script
