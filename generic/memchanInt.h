@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.9 2000/09/26 20:52:51 aku Exp $
+ * CVS: $Id: memchanInt.h,v 1.10 2001/11/20 03:48:39 andreas_kupries Exp $
  */
 
 
@@ -129,7 +129,9 @@ extern "C" {
 #else
 #define MC_UNCONSTB84   (char*)
 #endif
-
+#ifndef CONST84
+#define CONST84
+#endif
 
 
 #if ! (GT81)

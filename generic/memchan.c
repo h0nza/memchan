@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.14 1999/10/07 16:38:17 aku Exp $
+ * CVS: $Id: memchan.c,v 1.15 2000/09/26 20:52:50 aku Exp $
  */
 
 
@@ -41,15 +41,23 @@ static int	Input _ANSI_ARGS_((ClientData instanceData,
 		    char *buf, int toRead, int *errorCodePtr));
 
 static int	Output _ANSI_ARGS_((ClientData instanceData,
-	            char *buf, int toWrite, int *errorCodePtr));
+	            CONST84 char *buf, int toWrite, int *errorCodePtr));
 
-static int	Seek _ANSI_ARGS_((ClientData instanceData,
-		    long offset, int mode, int *errorCodePtr));
+#if GT84
+#define SEEK_OFF_T Tcl_WideInt
+#define SEEK_OUT_T Tcl_WideInt
+#else
+#define SEEK_OFF_T long
+#define SEEK_OUT_T int
+#endif
+
+static SEEK_OUT_T	Seek _ANSI_ARGS_((ClientData instanceData,
+		    SEEK_OFF_T offset, int mode, int *errorCodePtr));
 
 static void	WatchChannel _ANSI_ARGS_((ClientData instanceData, int mask));
 
 static int	GetOption _ANSI_ARGS_((ClientData instanceData,
-				       Tcl_Interp* interp, char *optionName,
+				       Tcl_Interp* interp, CONST84 char *optionName,
 				       Tcl_DString *dsPtr));
 
 static void	ChannelReady _ANSI_ARGS_((ClientData instanceData));
@@ -227,9 +235,9 @@ int*       errorCodePtr;	/* Location of error flag */
 static int
 Output (instanceData, buf, toWrite, errorCodePtr)
 ClientData instanceData;	/* The channel to write to */
-char*      buf;			/* Data to be stored. */
-int        toWrite;		/* Number of bytes to write. */
-int*       errorCodePtr;	/* Location of error flag. */
+CONST84 char* buf;		/* Data to be stored. */
+int           toWrite;		/* Number of bytes to write. */
+int*          errorCodePtr;	/* Location of error flag. */
 {
   ChannelInstance* chan;
 
@@ -287,10 +295,10 @@ int*       errorCodePtr;	/* Location of error flag. */
  *------------------------------------------------------*
  */
 
-static int
+static SEEK_OUT_T
 Seek (instanceData, offset, mode, errorCodePtr)
 ClientData instanceData;	/* The channel to manipulate */
-long       offset;		/* Size of movement. */
+SEEK_OFF_T offset;		/* Size of movement. */
 int        mode;		/* How to move */
 int*       errorCodePtr;	/* Location of error flag. */
 {
@@ -352,10 +360,10 @@ int*       errorCodePtr;	/* Location of error flag. */
 
 static int
 GetOption (instanceData, interp, optionName, dsPtr)
-ClientData   instanceData;	/* Channel to query */
-Tcl_Interp*  interp;		/* Interpreter to leave error messages in */
-char*        optionName;	/* Name of reuqested option */
-Tcl_DString* dsPtr;		/* String to place the result into */
+ClientData    instanceData;	/* Channel to query */
+Tcl_Interp*   interp;		/* Interpreter to leave error messages in */
+CONST84 char* optionName;	/* Name of reuqested option */
+Tcl_DString*  dsPtr;		/* String to place the result into */
 {
   /*
    * In-memory channels provide two channel type specific,
