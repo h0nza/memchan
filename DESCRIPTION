@@ -3,9 +3,9 @@ extension memchan {
     author       {Andreas Kupries (andreas_kupries@users.sourceforge.net)}
     maintenance  {Andreas Kupries (andreas_kupries@users.sourceforge.net)}
 
-    version	   2.2.0
+    version	   2.2.1
     copying-policy {BSD-Style, see 'tcl'-license}
-    date           {JUN-03-2004}
+    date           {DEC-03-2004}
 
     description {
 	an extension implementing several new channel-types. Instances
