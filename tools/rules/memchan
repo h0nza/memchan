@@ -28,7 +28,7 @@ sitepage mem/anim      "Animations"        animations.html
 sitepage mem/doc       "Documentation"     documentation.html
 sitepage mem/clog      "ChangeLog"         changelog.html
 sitepage mem/copyright "&#169; Disclaimer" disclaimer.html
-
+sitepage mem/event/gen "Event generation"  mem_event.html
 
 # memchan specific commands
 

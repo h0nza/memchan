@@ -1,21 +1,19 @@
 # -*- tcl -*-
 extension memchan {
-    author       {Andreas Kupries (a.kupries@westend.com)}
-    maintenance  {Andreas Kupries (a.kupries@westend.com)}
+    author       {Andreas Kupries (andreas_kupries@users.sourceforge.net)}
+    maintenance  {Andreas Kupries (andreas_kupries@users.sourceforge.net)}
 
-    version	   2.2
+    version	   2.2a1
     copying-policy {BSD-Style, see 'tcl'-license}
     date           {@mDate@}
 
     description {
-	an extension implementing two new channel-types. Instances
+	an extension implementing several new channel-types. Instances
 	store their contents in memory, not on disk.
     }
 
     primary-urls {
-	http://www.purl.org/NET/akupries/tcltk.html
-	http://www.purl.org/NET/akupries/soft/memchan/
-	http://www.purl.org/NET/akupries/soft/memchan/download/<ARCH>
+	http://memchan.sourceforge.net/
     }
 
     dependencies {
@@ -25,6 +23,7 @@ extension memchan {
     }
 
     comments {
-	Pre-release of a TEA compliant version. (As far as TEA currently goes).
+	TEA compliant version (As far as TEA currently goes).
+	Additional channel types: null, fifo2.
     }
 }

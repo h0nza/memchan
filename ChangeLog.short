@@ -1,6 +1,10 @@
-Changes from 2.1p1 to 2.2
+Changes from 2.1p1 to 2.2a1
 
-*	Two new channel types, 'null' and 'fifo2'.
+*	Two new channel types, 'null' and 'fifo2'. One is a null
+	device, the other 2 cross-connected fifos allowing a
+	bidirectional stream of data between two interpreters.
+
+*	Restructured the internal buffer system.
 
 Changes from 2.1 to 2.1p1
 

@@ -1,4 +1,4 @@
-[manpage_begin manpage n ?.? manpage {Manpage generation} {Generate manpage from tcl markup}]
+[manpage_begin manpages n ?.? manpages {Manpage generation} {Generate manpage from tcl markup}]
 [description]
 [para]
 This manpage actually does not belong into the memchan package. It is

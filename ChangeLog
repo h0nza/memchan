@@ -1,3 +1,22 @@
+2001-09-19  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* htdocs/raw/mem_event.exp: New page for the website containing
+	  thoughts about generation of file events for memory
+	  channels. References the new documentation about the
+	  interactions in the Tcl core between I/O system and notifier.
+
+	* tools/rules/memchan: Added declaration of additional
+	  documentation page about event generation.
+
+	* tools/rules/references: Added reference to Tcl documentation
+	  about the interaction between the components of the Tcl I/O
+	  system and the components of the Tcl notifier.
+
+	* ChangeLog.short: Updated contents a bit.
+
+	* DESCRIPTION: Updated to 2.2a1, switched to new mailing address
+	  and new location.
+
 2001-09-11  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* tea/Makefile.in (install-doc): Added installation of the memchan

@@ -51,3 +51,6 @@ url jcw     "Jean-Claude Wippler" http://www.equi4.com/jcw/
 url tclwiki "Tcl'ers Wiki"        http://www.purl.org/tcl/wiki/
 url lvirden "Larry W. Virden"     http://www.purl.org/net/lvirden/
 url jan     "Jan Nijtmans"        http://www.purl.org/net/nijtmans/
+
+url tcl/io/fevent "Interaction of I/O system and notifier in the Tcl core" \
+	http://sourceforge.net/docman/display_doc.php?docid=6710&group_id=10894

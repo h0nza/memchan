@@ -25,8 +25,6 @@ do
 
 	echo $i '-->' `basename $i .man`.html
 	../tools/expand -rules ../tools/rules/manpage.html.site $i  > ../htdocs/mp.`basename $i .man`.html
-done
-exit
 
 	echo $i '-->' `basename $i .man`.tmml
 	../tools/expand -rules ../tools/rules/manpage.tmml $i  > `basename $i .man`.tmml
