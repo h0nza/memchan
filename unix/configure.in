@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.2 1999/03/23 15:00:37 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.3 1999/03/23 22:16:03 aku Exp $)
 dnl
 AC_INIT(Makefile.in)
 
@@ -107,11 +107,11 @@ dnl
 dnl Locate tcl.h
 dnl Searches:
 dnl	TCL_INCLUDE_DIR		(--with-tcl, --with-tcl-include-dir)
-dnl	../tcl8.1*/generic	(assume tcl source in sibling directory)
-dnl	../tcl8.0/generic	(assume tcl source in sibling directory)
-dnl	../tcl7.6/generic	(assume tcl source in sibling directory)
-dnl	../tcl/generic		(see above)
-dnl	../tcl			(should be old version)
+dnl	../../tcl8.1*/generic	(assume tcl source in sibling directory)
+dnl	../../tcl8.0/generic	(assume tcl source in sibling directory)
+dnl	../../tcl7.6/generic	(assume tcl source in sibling directory)
+dnl	../../tcl/generic	(see above)
+dnl	../../tcl		(should be old version)
 dnl	$prefix/include		(--prefix)
 dnl	/usr/local/include
 dnl	/usr/include
@@ -121,18 +121,18 @@ AC_CACHE_CHECK(for directory with tcl.h,
 	memchan_cv_path_TCL_INCLUDE_DIR,
 	[memchan_cv_path_TCL_INCLUDE_DIR=""
 	 places="$TCL_INCLUDE_DIR \
-		../tcl8.1/generic \
-		../tcl8.1b2/generic \
-		../tcl8.1b1/generic \
-		../tcl8.1a2/generic \
-		../tcl8.1a1/generic \
-		../tcl8.0.5/generic \
-		../tcl8.0.4/generic \
-		../tcl8.0.3/generic \
-		../tcl8.0/generic \
-		../tcl7.6/generic \
-		../tcl/generic \
-		../tcl \
+		../../tcl8.1/generic \
+		../../tcl8.1b2/generic \
+		../../tcl8.1b1/generic \
+		../../tcl8.1a2/generic \
+		../../tcl8.1a1/generic \
+		../../tcl8.0.5/generic \
+		../../tcl8.0.4/generic \
+		../../tcl8.0.3/generic \
+		../../tcl8.0/generic \
+		../../tcl7.6/generic \
+		../../tcl/generic \
+		../../tcl \
 		$prefix/include \
 		/usr/local/include \
 		/usr/include"
@@ -178,11 +178,11 @@ dnl
 dnl Locate tcl library
 dnl Searches:
 dnl	TCL_LIB_DIR		(--with-tcl, --with-tcl-lib-dir)
-dnl	../tcl8.1*/unix		(assume tcl source in sibling directory)
-dnl	../tcl8.0/unix		(assume tcl source in sibling directory)
-dnl	../tcl7.6/unix		(assume tcl source in sibling directory)
-dnl	../tcl/unix		(see above)
-dnl	../tcl			(should be old version)
+dnl	../../tcl8.1*/unix	(assume tcl source in sibling directory)
+dnl	../../tcl8.0/unix	(assume tcl source in sibling directory)
+dnl	../../tcl7.6/unix	(assume tcl source in sibling directory)
+dnl	../../tcl/unix		(see above)
+dnl	../../tcl			(should be old version)
 dnl	$exec_prefix/lib	(--exec-prefix)
 dnl	$prefix/lib		(--prefix)
 dnl	/usr/local/lib
@@ -192,16 +192,16 @@ AC_CACHE_CHECK(for tcl library,
 	memchan_cv_lib_TCL_LIB,
 	[memchan_cv_lib_TCL_LIB=""
 	 places="$TCL_LIB_DIR \
-	../tcl8.1/unix \
-	../tcl8.1b*/unix \
-	../tcl8.1a*/unix \
-	../tcl8.0.5/unix \
-	../tcl8.0.4/unix \
-	../tcl8.0.3/unix \
-	../tcl8.0/unix \
-	../tcl7.6/unix \
-	../tcl/unix \
-	../tcl \
+	../../tcl8.1/unix \
+	../../tcl8.1b*/unix \
+	../../tcl8.1a*/unix \
+	../../tcl8.0.5/unix \
+	../../tcl8.0.4/unix \
+	../../tcl8.0.3/unix \
+	../../tcl8.0/unix \
+	../../tcl7.6/unix \
+	../../tcl/unix \
+	../../tcl \
 	 $exec_prefix/lib \
 	 $prefix/lib \
 	 /usr/local/lib \
