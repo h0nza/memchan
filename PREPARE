@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.22 2001/09/08 20:34:34 andreas_kupries Exp $
+# CVS:	$Id: PREPARE,v 1.23 2001/09/12 04:55:58 andreas_kupries Exp $
 
 # Exclude older binary distributions, they are made available through the 1.9 site.
 
@@ -21,7 +21,7 @@ mExclude \
 mExclude LSM ANNOUNCE
 
 eval mInsertInfo \
-	DESCRIPTION doc/manual \
+	DESCRIPTION \
 	README win/README win/README.VC mac/README \
 	unix/configure.in unix/Makefile.in \
 	tea/configure.in tea/Makefile.in \
