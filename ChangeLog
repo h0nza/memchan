@@ -1,8 +1,22 @@
+2001-09-08 Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* PREPARE: Removed the generation of the 'webTemplate' based
+	  documentation.
+
+	* Completed FR [ #459565 ] Manpages: Zip bundle. See below.
+
+	* tools/htdocs_setup: Added generation of zipped documentation
+	  bundles.
+
+	* htdocs/raw/documentation.exp: Added zipped documentation bundles
+	  to the page.
+
+	* tools/rules/memchan: Added references for zipped documentation
+	  bundles. 
+
 2001-09-06 Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* tools/htdocs_setup: Fixed typos.
-
-2001-09-06 Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* tools/htdocs_setup: Added generation of manpages and
 	  documentation bundles for the website.

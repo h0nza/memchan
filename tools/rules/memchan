@@ -45,5 +45,7 @@ proc mem/latest-release {} {
 
 url mc/doc/nroff/gz  "Archive"  doc/memchan.nroff.tar.gz
 url mc/doc/nroff/bz  "Archive"  doc/memchan.nroff.tar.bz2
+url mc/doc/nroff/zip "Archive"  doc/memchan.nroff.tar.zip
 url mc/doc/html/gz   "Archive"  doc/memchan.html.tar.gz
 url mc/doc/html/bz   "Archive"  doc/memchan.html.tar.bz2
+url mc/doc/html/zip  "Archive"  doc/memchan.html.tar.zip

@@ -24,12 +24,12 @@ rm $out ; touch $out
 cd doc    ; ../tools/manpage_regen  >>$out ; cd ..
 cd htdocs ; ../tools/htdocs_refresh        ; cd ..
 
-
-tar cfz memchan.nroff.tar.gz  doc/*.n
-tar cfI memchan.nroff.tar.bz2 doc/*.n
-
-tar cfz memchan.html.tar.gz   doc/*.html
-tar cfI memchan.html.tar.bz2  doc/*.html
+tar cfz memchan.nroff.tar.gz   doc/*.n
+tar cfI memchan.nroff.tar.bz2  doc/*.n
+zip     memchan.nroff.tar.zip  doc/*.n
+tar cfz memchan.html.tar.gz    doc/*.html
+tar cfI memchan.html.tar.bz2   doc/*.html
+zip     memchan.html.tar.zip   doc/*.html
 
 mkdir -p     htdocs/doc
 mv memchan.* htdocs/doc/

@@ -8,7 +8,7 @@ cd `dirname $0`/..
 export CVSROOT
 CVSROOT=:pserver:anonymous@cvs.memchan.sourceforge.net:/cvsroot/memchan
 
-if cvs diff memchan >/dev/null 2>&1
+if [ 0 -lt `cvs diff memchan 2>/dev/null | wc -l` ]
 then
 	out=$HOME/logs/memchan
 	mkdir -p `dirname $out`
