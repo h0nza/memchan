@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.6 1999/05/25 18:10:56 aku Exp $
+ * CVS: $Id: memchan.c,v 1.7 1999/05/25 22:26:47 aku Exp $
  */
 
 
@@ -652,10 +652,10 @@ int         argc;		/* Number of arguments. */
 char**      argv;		/* Argument strings. */
 #else
 MemchanCmd (notUsed, interp, objc, objv)
-ClientData  notUsed;		/* Not used. */
-Tcl_Interp* interp;		/* Current interpreter. */
-int         objc;		/* Number of arguments. */
-Tcl_Obj**   objv;		/* Argument objects. */
+ClientData    notUsed;		/* Not used. */
+Tcl_Interp*   interp;		/* Current interpreter. */
+int           objc;		/* Number of arguments. */
+Tcl_Obj*CONST objv[];		/* Argument objects. */
 #endif
 {
   Tcl_Channel      chan;

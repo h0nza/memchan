@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo.c,v 1.1 1999/05/25 22:26:47 aku Exp $
+ * CVS: $Id: fifo.c,v 1.2 1999/05/25 22:30:19 aku Exp $
  */
 
 
@@ -153,7 +153,7 @@ typedef struct ChannelInstance {
 /* Macro to check a fifo channel for emptiness.
  */
 
-#define FIFO_EMPTY(c) ((c->first == (ChannelBuffer*) NULL) || ((c->first == c->last) && (c->first->nextRemoved > c->first->nextAdded))
+#define FIFO_EMPTY(c) ((c->first == (ChannelBuffer*) NULL) || ((c->first == c->last) && (c->first->nextRemoved > c->first->nextAdded)))
 
 
 /*
@@ -684,10 +684,10 @@ int         argc;		/* Number of arguments. */
 char**      argv;		/* Argument strings. */
 #else
 MemchanFifoCmd (notUsed, interp, objc, objv)
-ClientData  notUsed;		/* Not used. */
-Tcl_Interp* interp;		/* Current interpreter. */
-int         objc;		/* Number of arguments. */
-Tcl_Obj**   objv;		/* Argument objects. */
+ClientData    notUsed;		/* Not used. */
+Tcl_Interp*   interp;		/* Current interpreter. */
+int           objc;		/* Number of arguments. */
+Tcl_Obj*CONST objv[];		/* Argument objects. */
 #endif
 {
   Tcl_Channel      chan;

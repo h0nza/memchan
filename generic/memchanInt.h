@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.1 1999/05/25 18:18:48 aku Exp $
+ * CVS: $Id: memchanInt.h,v 1.3 1999/05/25 22:27:58 aku Exp $
  */
 
 
@@ -134,12 +134,12 @@ MemchanFifoCmd _ANSI_ARGS_ ((ClientData notUsed,
 extern int
 MemchanCmd _ANSI_ARGS_ ((ClientData notUsed,
 			 Tcl_Interp* interp,
-			 int objc, Tcl_Obj** objv));
+			 int objc, Tcl_Obj*CONST objv[]));
 
 extern int
 MemchanFifoCmd _ANSI_ARGS_ ((ClientData notUsed,
 			     Tcl_Interp* interp,
-			     int objc, Tcl_Obj** objv));
+			     int objc, Tcl_Obj*CONST objv[]));
 #define ARGC objc
 #endif
 

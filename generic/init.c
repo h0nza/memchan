@@ -25,7 +25,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: init.c,v 1.1 1999/05/25 18:29:39 aku Exp $
+ * CVS: $Id: init.c,v 1.2 1999/05/25 22:26:47 aku Exp $
  */
 
 #include "memchanInt.h"
@@ -88,6 +88,7 @@ Tcl_Interp* interp;
   }
 #endif
 
+#if TCL_MAJOR_VERSION < 8
   Tcl_CreateCommand (interp, "memchan",
 		     &MemchanCmd,
 		     (ClientData) NULL,
@@ -97,6 +98,17 @@ Tcl_Interp* interp;
 		     &MemchanFifoCmd,
 		     (ClientData) NULL,
 		     (Tcl_CmdDeleteProc*) NULL);
+#else
+  Tcl_CreateObjCommand (interp, "memchan",
+			&MemchanCmd,
+			(ClientData) NULL,
+			(Tcl_CmdDeleteProc*) NULL);
+
+  Tcl_CreateObjCommand (interp, "fifo",
+			&MemchanFifoCmd,
+			(ClientData) NULL,
+			(Tcl_CmdDeleteProc*) NULL);
+#endif
 
   /* register memory channels as available package */
   Tcl_PkgProvide (interp, "Memchan", MEMCHAN_VERSION);
