@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.7 1999/04/12 16:08:34 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.8 1999/05/30 11:48:32 aku Exp $)
 dnl
 AC_INIT(Makefile.in)
 
@@ -208,7 +208,7 @@ AC_CACHE_CHECK(for tcl library,
             if test -n "$memchan_cv_lib_TCL_LIB"; then
                 break
             fi
-            for libsuff in .so ".so.*" .a; do
+            for libsuff in .so ".so.*" .sl .a; do
                 if test -n "$memchan_cv_lib_TCL_LIB"; then
                     break
                 fi

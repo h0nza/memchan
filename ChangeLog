@@ -1,3 +1,9 @@
+Mon Jun 28 23:17:35 1999  Andreas Kupries  <a.kupries@westend.com>
+
+	* unix/configure.in, Makefile.in: Matt Newman <matt@novadigm.com>
+	  sent in some changes to built the extension on HPUX (Basically
+	  check for .sl extension too).
+
 Sat Jun 12 23:12:26 1999  Andreas Kupries  <a.kupries@westend.com>
 
 	* win/makefile.vc5 (MCOBJS): See below.
