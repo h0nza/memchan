@@ -12,6 +12,7 @@
 
 	[nav_link [andreas_kupries/home]]
 	[nav_link [stevel/home]]
+	[nav_link [pat/home]]
 [page_content]
 
 [p] Memchan is an extension library to the script language
