@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.10 2001/11/20 03:48:39 andreas_kupries Exp $
+ * CVS: $Id: memchanInt.h,v 1.14 2002/08/23 18:04:40 andreas_kupries Exp $
  */
 
 
@@ -123,6 +123,7 @@ panic _ANSI_ARGS_ (TCL_VARARGS(char*, format));
 #define Tcl_Panic panic
 #endif
 
+#undef HAVE_LTOA /* Forcing 'sprintf'. HP ltoa function signature may diverge */
 #ifdef HAVE_LTOA
 #define LTOA(x,str) ltoa (x, str, 10)
 #else

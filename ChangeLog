@@ -1,3 +1,11 @@
+2003-05-15  Andreas Kupries  <andreask@activestate.com>
+
+	* generic/memchanInt.h: forcing usage of 'sprintf' for the
+	  generation of the channel name across all platforms
+	  now. Encountered an HP lto with a different signature than we
+	  use here, causing the code to get what is essentially on the
+	  stack as handle suffix, completely bogus.
+
 2003-04-04  Andreas Kupries  <andreask@activestate.com>
 
 	* configure.in:
