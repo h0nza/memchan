@@ -1,6 +1,0 @@
-# Tcl package index file, manually generated
-#
-# @configure_input@
-#
-
-package ifneeded Memchan @MEMCHAN_VERSION@ "tclPkgSetup $dir Memchan @MEMCHAN_VERSION@ {{@MEMCHAN_LIB_FILE@ load {memchan}}}"

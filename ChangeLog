@@ -1,3 +1,19 @@
+Thu Dec  5 19:02:06 1996  Andreas Kupries  <aku@bluepeak.westend.com>
+
+	* PREPARE: updated to exclude the new directories (see below) from
+	  distribution.
+
+	* added internal directories 'patches' and 'mails'.
+
+	* configure.in (AC_OUTPUT): adapted to last change, done by patch,
+	  see below.
+
+	* pkgIndex.tcl.in: former pkgIndex.in, renamed by patch, see below.
+
+	* Makefile.in (LIB_RUNTIME_DIR): added by patch, see below.
+
+	* got a patch from Jan Nijtmans <nijtmans@nici.kun.nl>.
+
 Fri Nov 15 22:45:04 1996  Andreas Kupries  <aku@bluepeak.westend.com>
 
 	* Extracted memory channel code from trans-patch and made it a

@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.1.1.1 1996/10/07 19:08:33 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.1.1.1 1996/11/15 21:37:43 aku Exp $)
 dnl
 AC_INIT(memchan.c)
 
@@ -286,5 +286,5 @@ fi
 
 
 dnl
-AC_OUTPUT(Makefile pkgIndex)
+AC_OUTPUT(Makefile pkgIndex.tcl)
 
