@@ -25,6 +25,22 @@ node memchan_cmds {
 		characteristics. No arguments, no options. Returns the
 		handle of the created channel.
 		"
+		p "The introduction already told us that these channels are
+		useful to transfer large amounts of data between procedures
+		or interpreters. The difference is this: [strong memchan]s are
+		block-oriented, [strong fifo]s on the other hand are
+		stream-oriented. With a [cmd memchan] the producer fills the
+		memory channel with the relevant data and then transfers
+		control to the consumer. With a [cmd fifo] producer and
+		consumer may work in parallel. This is currently only possible
+		for an event-driven application, but the moment additional
+		interfaces come up, allowing me to transfer a channel between
+		threads this concept may find its real use for inter-thread
+		communicaton of bulk information; whose transfer through the
+		currently implemented send-oriented interface (see
+		[afile tclTestThread.c]) is awkward. [cmd fifo]s complement
+		this interface, they don't replace it.
+		"
 	    }
 	    cmdrow fconfigure {... -length ...} {
 		p "Memory and fifo channels support a single read-only option,

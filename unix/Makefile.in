@@ -7,7 +7,7 @@
 #
 # Distribution as of @mDate@
 #
-# $Id: Makefile.in,v 1.10 1999/05/25 18:29:44 aku Exp $
+# $Id: Makefile.in,v 1.11 1999/05/25 22:26:48 aku Exp $
 
 EXTENSION	=	Memchan
 VERSION		=	@mFullVersion@
@@ -184,7 +184,7 @@ install-lib: $(MEMCHAN_LIB_FILE)
 	@echo "Installing $(MEMCHAN_LIB_FILE)"
 	@$(INSTALL_DATA) $(MEMCHAN_LIB_FILE) $(LIB_INSTALL_DIR)
 	@$(RANLIB) $(LIB_INSTALL_DIR)/$(MEMCHAN_LIB_FILE)
-	@$(INSTALL_DATA) $(srcdir)/pkgIndex.tcl $(LIB_INSTALL_DIR)/pkgIndex.tcl
+	@$(INSTALL_DATA) $(UNIX_DIR)/pkgIndex.tcl $(LIB_INSTALL_DIR)/pkgIndex.tcl
 
 # Important in 'test': Move win/pkgIndex.tcl out of the way, prevent its usage.
 

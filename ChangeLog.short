@@ -1,7 +1,4 @@
-Changes from 1.8
-
-*	New channel type: fifo. Same as memchan, but with fifo
-	characteristics, like sockets and pipes.
+Changes from 1.8 to 1.9
 
 *	Made **thread-safe** if compiled against a thread-enabled 8.1.
 	(Mutex around counter used to generate handles).
@@ -11,7 +8,26 @@ Changes from 1.8
 
 *	Headers now usable with a C++ compiler.
 
-Changes from 1.7
+*	**New channel type**: fifo. Same as memchan, but with fifo
+	characteristics, like sockets and pipes.
+
+	Notes on fifos:
+	It was already said that memory channels are useful to transfer
+	large amounts of data between procedures or interpreters. The
+	difference is this: **memchan's** are block-oriented, **fifo's**
+	on the other hand are stream-oriented. With a 'memchan' the producer
+	fills the memory channel with the relevant data and then transfers
+	control to the consumer(s). With a 'fifo' producer and consumer
+	may work in parallel. This is currently only possible for an event-
+	driven application, but the moment additional interfaces come up
+	allowing me to transfer a channel between threads this concept may
+	find its real use for inter-thread communicaton of bulk information;
+	whose transfer through the currently implemented send-oriented
+	interface (see 'tclTestThread.c') is awkward. 'fifo's complement
+	this interface, they don't replace it.
+
+
+Changes from 1.7 to 1.8
 
 *	Bugfixes for windows.
 

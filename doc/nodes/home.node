@@ -30,14 +30,14 @@ node memchan_home {
 
 	p "
 	[memchan] is an extension library to the script language [tcl], as
-	created by [jo]. It provides a new channel type for in-memory
-	channels and a single command, 'memchan' for their creation.
+	created by [jo]. It provides two new channel types for in-memory
+	channels and the appropriate commands for their creation.
 	"
 
 	p "They are useful to transfer large amounts of data between procedures
-	or interpreters, and additionally provide an easy interface to on-the-fly
-	generation of code too. No need to [bold set] or [bold append] to a
-	string, just do a simple [bold puts].
+	or interpreters, and additionally provide an easy interface to
+	on-the-fly generation of code too. No need to [strong set] or
+	[strong append] to a string, just do a simple [strong puts].
 	"
     }
 }
