@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.4 1999/03/23 22:24:55 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.5 1999/03/23 23:04:43 aku Exp $)
 dnl
 AC_INIT(Makefile.in)
 
@@ -284,11 +284,13 @@ AC_MSG_CHECKING(for stubs)
 if test \( \( $TCL_MAJOR_VERSION -eq 8 -a $TCL_MINOR_VERSION -gt 0 \) -o $TCL_MAJOR_VERSION -gt 8 \) -a "x$ok" = "xyes"
 then
     AC_MSG_RESULT(yes)
+    MC_USING_STUBS=1
     # Stubs
     TCL_DEFS="$TCL_DEFS -DUSE_TCL_STUBS"
     TCL_SHARED_LIBS="${TCL_STUB_LIB_SPEC}"
 else
     AC_MSG_RESULT(no)
+    MC_USING_STUBS=0
     # No stubs
     case "$SHLIB_LD" in
 	*ldAix*)
@@ -372,6 +374,7 @@ AC_SUBST(TCL_LIB_DIR)
 AC_SUBST(TCL_INCLUDE_DIR)
 AC_SUBST(TCL_VERSION)
 AC_SUBST(TCL_DEFS)
+AC_SUBST(MC_USING_STUBS)
 AC_SUBST(MEMCHAN_BUILD_LIB_SPEC)
 AC_SUBST(MEMCHAN_LD_SEARCH_FLAGS)
 AC_SUBST(MEMCHAN_LIB_FILE)
