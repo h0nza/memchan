@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo.c,v 1.7 1999/09/18 13:35:53 aku Exp $
+ * CVS: $Id: fifo2.c,v 1.1 2000/09/26 21:17:49 aku Exp $
  */
 
 
@@ -41,12 +41,13 @@ static int	Input _ANSI_ARGS_((ClientData instanceData,
 		    char *buf, int toRead, int *errorCodePtr));
 
 static int	Output _ANSI_ARGS_((ClientData instanceData,
-	            char *buf, int toWrite, int *errorCodePtr));
+	            CONST84 char *buf, int toWrite, int *errorCodePtr));
 
 static void	WatchChannel _ANSI_ARGS_((ClientData instanceData, int mask));
 
 static int	GetOption _ANSI_ARGS_((ClientData instanceData,
-				       Tcl_Interp* interp, char *optionName,
+				       Tcl_Interp* interp,
+				       CONST84 char *optionName,
 				       Tcl_DString *dsPtr));
 
 static void	ChannelReady _ANSI_ARGS_((ClientData instanceData));

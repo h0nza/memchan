@@ -72,8 +72,8 @@ Buf_InitStubs(interp, version, exact)
      * The interface 'Buf' is provided by the package 'Memchan'.
      */
 
-    actualVersion = Tcl_PkgRequireEx(interp, "Memchan", MC_UNCONSTB84 version, exact,
-		(ClientData *) &bufStubsPtr);
+    actualVersion = Tcl_PkgRequireEx(interp, "Memchan", MC_UNCONSTB84 version,
+		exact, (ClientData *) &bufStubsPtr);
 
     if (!actualVersion) {
 	return NULL;

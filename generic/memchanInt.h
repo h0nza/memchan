@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.10 2001/11/20 03:48:39 andreas_kupries Exp $
+ * CVS: $Id: memchanInt.h,v 1.11 2002/03/01 19:56:14 andreas_kupries Exp $
  */
 
 
@@ -129,10 +129,10 @@ extern "C" {
 #else
 #define MC_UNCONSTB84   (char*)
 #endif
+
 #ifndef CONST84
 #define CONST84
 #endif
-
 
 #if ! (GT81)
 /* Enable use of procedure internal to tcl. Necessary only
