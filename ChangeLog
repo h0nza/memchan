@@ -1,3 +1,7 @@
+Mon Feb 17 17:47:22 1997  Andreas Kupries  <aku@bluepeak.westend.com>
+
+	* memchan.c: added prototypes missed by MSVC++.
+
 Sat Feb 15 20:09:58 1997  Andreas Kupries  <aku@bluepeak.westend.com>
 
 	* memchan.c: integrated changes required to compile cleanly on

@@ -3,7 +3,7 @@
 # See the file "doc/license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# CVS:	$Id: makefile.vc,v 1.1 1997/02/15 19:30:14 aku Exp $
+# CVS:	$Id: makefile.vc,v 1.2 1997/02/15 20:03:32 aku Exp $
 # 
 
 # Does not depend on the presence of any environment variables in
@@ -170,7 +170,7 @@ bindist:	$(MCDLL)
 	-@md	$(MC)
 	-@$(CP) $(MCDLL)		$(MC)\$(MCDLL)
 	-@$(CP) $(ROOT)\pkgIndex.win	$(MC)\pkgIndex.tcl
-	$(PKZIP) -r $(MC)b.zip	$(MC)
+	$(PKZIP) -rp $(MC)b.zip	$(MC)\*.*
 	-@$(RM)	$(MC)\$(MCDLL)
 	-@$(RM)	$(MC)\pkgIndex.tcl
 	-@rd	$(MC)

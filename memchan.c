@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.1.1.1 1996/11/15 21:37:43 aku Exp $
+ * CVS: $Id: memchan.c,v 1.2 1997/02/15 21:29:32 aku Exp $
  */
 
 
@@ -92,6 +92,9 @@ static void	WatchChannel _ANSI_ARGS_((ClientData instanceData, int mask));
 static int	ChannelReady _ANSI_ARGS_((ClientData instanceData, int mask));
 static Tcl_File GetFile      _ANSI_ARGS_((ClientData instanceData, int mask));
 
+static int      MemoryChannelCmd _ANSI_ARGS_ ((ClientData notUsed,
+					       Tcl_Interp* interp,
+					       int argc, char** argv));
 
 /*
  * This structure describes the channel type structure for in-memory channels:
@@ -531,7 +534,7 @@ int        mask;		/* Direction of interest */
  *------------------------------------------------------*
  */
 	/* ARGSUSED */
-int
+static int
 MemoryChannelCmd (notUsed, interp, argc, argv)
 ClientData  notUsed;		/* Not used. */
 Tcl_Interp* interp;		/* Current interpreter. */
