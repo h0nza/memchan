@@ -1,3 +1,9 @@
+2002-10-02  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* Makefile.in ($($(PACKAGE)stub_LIB_FILE)): Fixed copy/paste
+	  error. Do not use AR explicitly.
+	  (MAKE_STUB_LIB): S.a.
+
 2002-08-26  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* === Release 2.2a4  available ===
