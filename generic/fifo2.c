@@ -23,12 +23,53 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo2.c,v 1.6 2004/08/04 12:43:14 patthoyts Exp $
+ * CVS: $Id: fifo2.c,v 1.7 2004/11/09 23:11:00 patthoyts Exp $
  */
 
 
 #include "memchanInt.h"
 #include "buf.h"
+
+#if ((TCL_THREADS) && (TCL_MAJOR_VERSION == 8) && (TCL_MINOR_VERSION == 2))
+
+#error "The fifo2 is not supported with threaded tcl 8.2."
+
+/*
+ *  Tcl 8.2 supports Tcl_Mutexes but doesn't include the Tcl_MutexFinalize
+ *  command. This means that we will leak a mutex on every close of a fifo2
+ *  channel pair in this version of tcl -- ONLY THREADED TCL.
+ *
+ *  If you _really_ want to build memchan on threaded tcl 8.2 then comment
+ *  out the #error line above and you can get these two stub functions
+ *  which avoids the issue while permitting the remainder of memchan 
+ *  to be built.
+ */
+
+void
+Memchan_CreateFifo2Channel(interp, aPtr, bPtr)
+     Tcl_Interp *interp;	/* the current interp */
+     Tcl_Channel *aPtr;		/* pointer to channel A */
+     Tcl_Channel *bPtr;		/* pointer to channel B */
+{
+    Tcl_SetResult(interp, 
+	"fifo2 is not supported in threaded tcl 8.2", TCL_STATIC);
+    return;
+}
+
+int
+MemchanFifo2Cmd (notUsed, interp, objc, objv)
+     ClientData    notUsed;	/* Not used. */
+     Tcl_Interp*   interp;	/* Current interpreter. */
+     int           objc;	/* Number of arguments. */
+     Tcl_Obj*CONST objv[];	/* Argument objects. */
+{
+    Tcl_SetResult(interp, 
+	"fifo2 is not supported in threaded tcl 8.2", TCL_STATIC);
+    return TCL_ERROR;
+}
+
+#else
+
 
 /*
  * Forward declarations of internal procedures.
@@ -209,7 +250,11 @@ typedef struct ChannelInstance {
 #if (GT81)
 #define MLOCK(chan) Tcl_MutexLock     (&((chan)->lock->lock))
 #define MUNLK(chan) Tcl_MutexUnlock   (&((chan)->lock->lock))
-#define MFIN(chan)  Tcl_MutexFinalize (&((chan)->lock->lock))
+#if (TCL_MAJOR_VERSION >= 8) && (TCL_MINOR_VERSION == 2)
+#  define MFIN(chan)
+#else
+#  define MFIN(chan)  Tcl_MutexFinalize (&((chan)->lock->lock))
+#endif
 #else
 #define MLOCK(chan) 
 #define MUNLK(chan) 
@@ -923,4 +968,5 @@ MemchanFifo2Cmd (notUsed, interp, objc, objv)
     Tcl_SetObjResult (interp, Tcl_NewListObj(2, channel));
     return TCL_OK;
 }
-
+
+#endif /* !threaded tcl 8.2 */

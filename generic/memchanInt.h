@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.17 2004/06/03 23:39:13 patthoyts Exp $
+ * CVS: $Id: memchanInt.h,v 1.18 2004/11/09 23:11:00 patthoyts Exp $
  */
 
 
@@ -105,10 +105,17 @@ extern "C" {
 #define MC_UNCONSTB84
 #else
 #define MC_UNCONSTB84   (char*)
-#endif
+#endif /* GT84 */
 
 #ifndef CONST84
 #define CONST84
+#endif
+
+/*
+ * Pre-8.3 the Tcl_ChannelTypeVersion was not defined.
+ */
+#if ((TCL_MAJOR_VERSION >= 8) && (TCL_MINOR_VERSION < 3))
+typedef Tcl_DriverBlockModeProc* Tcl_ChannelTypeVersion;
 #endif
 
 #if ! (GT81)

@@ -26,7 +26,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: random.c,v 1.3 2004/06/04 14:09:11 patthoyts Exp $
+ * CVS: $Id: random.c,v 1.4 2004/11/09 23:11:00 patthoyts Exp $
  */
 
 
@@ -415,13 +415,14 @@ SetOption (instanceData, interp, optionName, newValue)
 
     if (!strcmp("-delay", optionName)) {
 	int delay = DELAY;
-	result = Tcl_GetInt(interp, newValue, &delay);
+	result = Tcl_GetInt(interp, (CONST84 char *)newValue, &delay);
 	if (result == TCL_OK) {
 	    chan->delay = delay;
 	    Tcl_SetObjResult(interp, Tcl_NewIntObj(delay));
 	}
     } else {
-	result = Tcl_BadChannelOption(interp, optionName, options);
+	result = Tcl_BadChannelOption(interp, 
+	    (CONST84 char *)optionName, (CONST84 char *)options);
     }
     return result;
 }
