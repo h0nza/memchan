@@ -1,4 +1,3 @@
-
 /*
  * memchan.c --
  *
@@ -24,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id$
+ * CVS: $Id: memchan.c,v 1.1.1.1 1996/11/15 21:37:43 aku Exp $
  */
 
 
@@ -32,11 +31,43 @@
 #include <errno.h>
 
 /*
+ * Definitions to enable the generation of a DLL under Windows.
+ * Taken from 'ftp://ftp.sunlabs.com/pub/tcl/example.zip(example.c)'
+ */
+
+#if defined(__WIN32__)
+#   define WIN32_LEAN_AND_MEAN
+#   include <windows.h>
+#   undef WIN32_LEAN_AND_MEAN
+
+/*
+ * VC++ has an alternate entry point called DllMain, so we need to rename
+ * our entry point.
+ */
+
+#   if defined(_MSC_VER)
+#	define EXPORT(a,b) __declspec(dllexport) a b
+#	define DllEntryPoint DllMain
+#   else
+#	if defined(__BORLANDC__)
+#	    define EXPORT(a,b) a _export b
+#	else
+#	    define EXPORT(a,b) a b
+#	endif
+#   endif
+#else
+#   define EXPORT(a,b) a b
+#endif
+
+/*
  * Number of bytes used to extend a storage area being to small.
  */
 
 #define INCREMENT (512)
 
+/* enable use of procedure internal to tcl */
+EXTERN void
+panic _ANSI_ARGS_ ((CONST char* format, ...));
 
 /*
  * Forward declarations of internal procedures.
@@ -274,7 +305,7 @@ int        mode;		/* How to move */
 int*       errorCodePtr;	/* Location of error flag. */
 {
   ChannelInstance* chan;
-  int              newLocation;
+  long int         newLocation;
 
   chan = (ChannelInstance*) instanceData;
   *errorCodePtr = 0;
@@ -297,7 +328,7 @@ int*       errorCodePtr;	/* Location of error flag. */
     return -1;
   }
 
-  if ((newLocation < 0) || (newLocation > chan->used)) {
+  if ((newLocation < 0) || (newLocation > (long int) chan->used)) {
     *errorCodePtr = EINVAL; /* EBADRQC ?? */
     return -1;
   }
@@ -541,7 +572,7 @@ char**      argv;		/* Argument strings. */
 
   chan = Tcl_CreateChannel (&channelType,
 			    channelName,
-			    instance,
+			    (ClientData) instance,
 			    TCL_READABLE | TCL_WRITABLE);
 
   Tcl_RegisterChannel  (interp, chan);
@@ -569,14 +600,15 @@ char**      argv;		/* Argument strings. */
  *------------------------------------------------------*
  */
 
-EXTERN int
-Memchan_Init (interp)
+EXTERN EXPORT (int,Memchan_Init) (interp)
 Tcl_Interp* interp;
 {
-  Tcl_CreateCommand (interp, "memchan", &MemoryChannelCmd,
-		     (ClientData) NULL, NULL);
+  Tcl_CreateCommand (interp, "memchan",
+		     &MemoryChannelCmd,
+		     (ClientData) NULL,
+		     (Tcl_CmdDeleteProc*) NULL);
 
-  /* register memory channels as now available package */
+  /* register memory channels as available package */
   Tcl_PkgProvide (interp, "Memchan", MEMCHAN_VERSION);
 
   return TCL_OK;
@@ -601,8 +633,7 @@ Tcl_Interp* interp;
  *------------------------------------------------------*
  */
 
-EXTERN int
-Mem_SafeInit (interp)
+EXTERN EXPORT (int,Mem_SafeInit) (interp)
 Tcl_Interp* interp;
 {
   return Memchan_Init (interp);
