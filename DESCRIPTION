@@ -7,7 +7,7 @@ extension memchan {
     copying-policy {BSD-Style, see 'tcl'-license}
     date           {@mDate@}
 
-    comment {
+    description {
 	Implements memory channels, i.e. channels
 	storing their contents in memory, not on disk.
     }
