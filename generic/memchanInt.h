@@ -119,8 +119,7 @@ panic _ANSI_ARGS_ ((char* format, ...));
 /* Internal command visible to other parts of the package.
  */
 
-if TCL_MAJOR_VERSION < 8
-
+#if TCL_MAJOR_VERSION < 8
 extern int
 MemchanCmd _ANSI_ARGS_ ((ClientData notUsed,
 			 Tcl_Interp* interp,
