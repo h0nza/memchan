@@ -23,15 +23,12 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo.c,v 1.6 1999/09/13 23:04:16 aku Exp $
+ * CVS: $Id: fifo.c,v 1.7 1999/09/18 13:35:53 aku Exp $
  */
 
 
-#include <tcl.h>
-#include <errno.h>
-
 #include "memchanInt.h"
-
+#include "buf.h"
 
 /*
  * Forward declarations of internal procedures.
@@ -81,33 +78,6 @@ static Tcl_ChannelType channelType = {
 #endif
 };
 
-
-/*
- * struct ChannelBuffer:
- *
- * Buffers data being sent to or from a channel.
- *
- * Copied from tcl/generic/tclIO.c (Why reinvent the wheel ?). Used here
- * to store the information placed into the channel.
- */
-
-typedef struct ChannelBuffer {
-    int nextAdded;		/* The next position into which a character
-                                 * will be put in the buffer. */
-    int nextRemoved;		/* Position of next byte to be removed
-                                 * from the buffer. */
-    int bufLength;		/* How big is the buffer? */
-
-    struct ChannelBuffer *nextPtr;
-    				/* Next buffer in chain. */
-    char buf[4];		/* Placeholder for real buffer. The real
-                                 * buffer occuppies this space + bufSize-4
-                                 * bytes. This must be the last field in
-                                 * the structure. */
-} ChannelBuffer;
-
-#define CHANNELBUFFER_HEADER_SIZE	(sizeof(ChannelBuffer) - 4)
-
 /*
  * This structure describes the per-instance state of a in-memory fifo channel.
  */
@@ -115,15 +85,15 @@ typedef struct ChannelBuffer {
 typedef struct ChannelInstance {
   Tcl_Channel    chan;   /* Backreference to generic channel information */
   long int       length; /* Total number of bytes in the channel */
-  ChannelBuffer* first;  /* Reference to the first buffer used to hold the
-			  * channel data. 'nextAdded' is *not* relevant.
-			  * 'nextRemoved' is used as defined. */
-  ChannelBuffer* last;   /* Last buffer holding the channel data. 'nextAdded'
-			  * is used as defined, 'nextRemoved' is not relevant.
-			  */
+
+  Buf_BufferQueue queue;  /* Queue of buffers holding the information in this
+			   * channel. */
 
   Tcl_TimerToken timer;  /* Timer used to link the channel into the
 			  * notifier. */
+  int          interest; /* Interest in events as signaled by the user of
+			  * the channel */
+
 #if 0
 #if (GT81) && defined (TCL_THREADS)
   Tcl_Mutex lock;        /* Semaphor to handle thread-spanning access to this
@@ -136,7 +106,7 @@ typedef struct ChannelInstance {
 /* Macro to check a fifo channel for emptiness.
  */
 
-#define FIFO_EMPTY(c) ((c->first == (ChannelBuffer*) NULL) || ((c->first == c->last) && (c->first->nextRemoved > c->first->nextAdded)))
+#define FIFO_EMPTY(c) (c->length == 0)
 
 
 /*
@@ -169,20 +139,18 @@ Tcl_Interp* interp;          /* unused */
 
   chan = (ChannelInstance*) instanceData;
 
-  /* Iterate over the chain of buffers and release the
-   * allocated memory. We can be sure that this is done only
-   * after the last user closed the channel, i.e. there will
-   * be no thread-spanning access !
+  /* Release the allocated memory. We can be sure that this is done
+   * only after the last user closed the channel, i.e. there will be
+   * no thread-spanning access !
    */
 
-  while (chan->first != (ChannelBuffer*) NULL) {
-    chan->last = chan->first->nextPtr;
-
-    Tcl_Free ((char*) chan->first);
-    chan->first = chan->last;
+  if (chan->timer != (Tcl_TimerToken) NULL) {
+    Tcl_DeleteTimerHandler (chan->timer);
   }
+  chan->timer = (Tcl_TimerToken) NULL;
 
-  Tcl_Free ((char*) chan);
+  Buf_FreeQueue (chan->queue);
+  Tcl_Free      ((char*) chan);
 
   return 0;
 }
@@ -217,10 +185,7 @@ char*      buf;			/* Buffer to fill */
 int        toRead;		/* Requested number of bytes */
 int*       errorCodePtr;	/* Location of error flag */
 {
-  ChannelBuffer*   cbuf;
   ChannelInstance* chan;
-  long int         required;
-  long int         cbufSize;
 
   if (toRead == 0) {
     return 0;
@@ -228,66 +193,15 @@ int*       errorCodePtr;	/* Location of error flag */
 
   chan = (ChannelInstance*) instanceData;
 
-  if (toRead > chan->length) {
-    /*
-     * Reading behind the last byte is not possible,
-     * truncate the request.
-     */
-    toRead = chan->length;
+  if (chan->length == 0) {
+    *errorCodePtr = EWOULDBLOCK;
+    return -1;
   }
 
-  required = toRead;
-
-  while (required > 0) {
-    /* Iterate over the chain until the request is satisfied.
-     * Releases all buffers which were completely consumed.
-     */
-
-    cbuf     = chan->first;
-    cbufSize = cbuf->bufLength - cbuf->nextRemoved;
-
-    if (required <= cbufSize) {
-      /* The current buffer satisfies the whole (remaining) request.
-       * Copy as needed.
-       */
-
-      memcpy ((VOID*) buf, (VOID*) ((char*) cbuf->buf + cbuf->nextRemoved),
-	      required);
-      cbuf->nextRemoved += required;
-      required = 0;
-
-    } else {
-      /* The current buffer is not enough. Copy everything in it, then
-       * prepare ourselves for another round of the loop
-       */
-
-      memcpy ((VOID*) buf, (VOID*) ((char*) cbuf->buf + cbuf->nextRemoved),
-	      cbufSize);
-
-      cbuf->nextRemoved += cbufSize;
-      required          -= cbufSize;
-      buf               += cbufSize;
-    }
-
-    /* Release an empty buffer at the head of the chain.
-     */
-
-    if (cbuf->nextRemoved == cbuf->bufLength) {
-      chan->first = cbuf->nextPtr;
-
-      if (chan->first == (ChannelBuffer*) NULL) {
-	chan->last = chan->first;
-      }
-
-      Tcl_Free ((char*) cbuf);
-    }
-
-    /* and around */
-  }
-
+  toRead        = Buf_QueueRead (chan->queue, buf, toRead);
   chan->length -= toRead;
-
   *errorCodePtr = 0;
+
   return toRead;
 }
 
@@ -322,33 +236,13 @@ int        toWrite;		/* Number of bytes to write. */
 int*       errorCodePtr;	/* Location of error flag. */
 {
   ChannelInstance* chan;
-  ChannelBuffer*   cbuf;
 
   if (toWrite == 0) {
     return 0;
   }
 
-  chan = (ChannelInstance*) instanceData;
-
-  /* Simple strategy for now: Every write to the channel is placed
-   * into its own buffer, which is then appended to the chain.
-   */
-
-  cbuf = (ChannelBuffer*) Tcl_Alloc (CHANNELBUFFER_HEADER_SIZE + toWrite);
-  cbuf->nextAdded   = toWrite;
-  cbuf->nextRemoved = 0;
-  cbuf->bufLength   = toWrite;
-  cbuf->nextPtr     = (ChannelBuffer*) NULL;
-
-  memcpy ((VOID*) cbuf->buf, (VOID*) buf, toWrite);
-
-  if (chan->first == (ChannelBuffer*) NULL) {
-    chan->first = cbuf;
-  } else {
-    chan->last->nextPtr = cbuf;
-  }
-
-  chan->last    = cbuf;
+  chan          = (ChannelInstance*) instanceData;
+  toWrite       = Buf_QueueWrite (chan->queue, buf, toWrite);
   chan->length += toWrite;
 
   return toWrite;
@@ -406,7 +300,7 @@ Tcl_DString* dsPtr;		/* String to place the result into */
       (0 != strcmp (optionName, "-length")) &&
       (0 != strcmp (optionName, "-allocated"))) {
     Tcl_SetErrno (EINVAL);
-    return Tcl_BadChannelOption (interp, optionName, "length");
+    return Tcl_BadChannelOption (interp, optionName, "length allocated");
   }
 
   if (optionName == (char*) NULL) {
@@ -426,7 +320,6 @@ Tcl_DString* dsPtr;		/* String to place the result into */
   } else if (0 == strcmp (optionName, "-length")) {
     LTOA (chan->length, buffer);
     Tcl_DStringAppendElement (dsPtr, buffer);
-
   } else if (0 == strcmp (optionName, "-allocated")) {
     LTOA (chan->length, buffer);
     Tcl_DStringAppendElement (dsPtr, buffer);
@@ -470,11 +363,17 @@ int        mask;		/* Events of interest */
   ChannelInstance* chan = (ChannelInstance*) instanceData;
 
   if (mask) {
-    chan->timer = Tcl_CreateTimerHandler (DELAY, ChannelReady, instanceData);
+    if (chan->timer == (Tcl_TimerToken) NULL) {
+      chan->timer = Tcl_CreateTimerHandler (DELAY, ChannelReady, instanceData);
+    }
   } else {
-    Tcl_DeleteTimerHandler (chan->timer);
+    if (chan->timer != (Tcl_TimerToken) NULL) {
+      Tcl_DeleteTimerHandler (chan->timer);
+    }
     chan->timer = (Tcl_TimerToken) NULL;
   }
+
+  chan->interest = mask;
 }
 
 /*
@@ -514,6 +413,10 @@ ClientData instanceData; /* Channel to query */
 
   chan->timer = (Tcl_TimerToken) NULL;
 
+  if (!chan->interest) {
+    return;
+  }
+
   if (! FIFO_EMPTY (chan)) {
     mask &= ~TCL_READABLE;
   }
@@ -522,7 +425,12 @@ ClientData instanceData; /* Channel to query */
    * This will regenerate the timer too, via 'WatchChannel'.
    */
 
-  Tcl_NotifyChannel (chan->chan, mask);
+  mask &= chan->interest;
+  if (mask) {
+    Tcl_NotifyChannel (chan->chan, mask);
+  } else {
+    chan->timer = Tcl_CreateTimerHandler (DELAY, ChannelReady, instanceData);
+  }
 }
 
 /*
@@ -597,8 +505,7 @@ Tcl_Obj*CONST objv[];		/* Argument objects. */
 
   instance = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
   instance->length = 0;
-  instance->first  = (ChannelBuffer*) NULL;
-  instance->last   = (ChannelBuffer*) NULL;
+  instance->queue  = Buf_NewQueue ();
 
   channelHandle = MemchanGenHandle ("fifo");
 
@@ -609,6 +516,7 @@ Tcl_Obj*CONST objv[];		/* Argument objects. */
 
   instance->chan      = chan;
   instance->timer     = (Tcl_TimerToken) NULL;
+  instance->interest  = 0;
 
   Tcl_RegisterChannel  (interp, chan);
   Tcl_SetChannelOption (interp, chan, "-buffering", "none");

@@ -25,11 +25,18 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: init.c,v 1.5 1999/07/27 21:25:17 aku Exp $
+ * CVS: $Id: init.c,v 1.6 1999/09/12 21:24:31 aku Exp $
  */
 
-#include <stdlib.h>
+/*#include <stdlib.h>*/
 #include "memchanInt.h"
+#include "buf.h"
+
+extern BufStubs bufStubs;
+
+char *
+Buf_InitStubs _ANSI_ARGS_((Tcl_Interp *interp, CONST char *version, int exact));
+
 
 /*
  *------------------------------------------------------*
@@ -54,7 +61,7 @@ EXPORT (int,Memchan_Init) (interp)
 Tcl_Interp* interp;
 {
 #if GT81
-  if (Tcl_InitStubs(interp, "8.1", 0) == NULL) {
+  if (Tcl_InitStubs (interp, "8.1", 0) == NULL) {
     return TCL_ERROR;
   }
 #endif
@@ -69,9 +76,30 @@ Tcl_Interp* interp;
 			(ClientData) NULL,
 			(Tcl_CmdDeleteProc*) NULL);
 
+  Tcl_CreateObjCommand (interp, "fifo2",
+			&MemchanFifo2Cmd,
+			(ClientData) NULL,
+			(Tcl_CmdDeleteProc*) NULL);
+
+  Tcl_CreateObjCommand (interp, "null",
+			&MemchanNullCmd,
+			(ClientData) NULL,
+			(Tcl_CmdDeleteProc*) NULL);
+
+#if GT81
+    /* register extension and its interfaces as now available package
+     */
+    Tcl_PkgProvideEx (interp, "Memchan", MEMCHAN_VERSION, (ClientData) &bufStubs);
+
+#ifndef __WIN32__
+    Buf_InitStubs (interp, MEMCHAN_VERSION, 0);
+#endif
+#else
   /* register memory channels as available package */
   Tcl_PkgProvide (interp, "Memchan", MEMCHAN_VERSION);
+#endif
 
+  Buf_Init (interp);
   return TCL_OK;
 }
 

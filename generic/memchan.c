@@ -23,16 +23,12 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.13 1999/09/18 13:42:56 aku Exp $
+ * CVS: $Id: memchan.c,v 1.14 1999/10/07 16:38:17 aku Exp $
  */
 
 
-#include <tcl.h>
-#include <errno.h>
-#include <string.h>
-
+#include <string.h> /* strncmp */
 #include "memchanInt.h"
-
 
 /*
  * Forward declarations of internal procedures.
@@ -98,6 +94,8 @@ typedef struct ChannelInstance {
   Tcl_Channel    chan;      /* Backreference to generic channel information */
   Tcl_TimerToken timer;     /* Timer used to link the channel into the
 			     * notifier */
+  int            interest;  /* Interest in events as signaled by the user of
+			     * the channel */
 } ChannelInstance;
 
 /*
@@ -134,8 +132,12 @@ Tcl_Interp* interp;          /* unused */
     Tcl_Free ((char*) chan->data);
   }
 
-  Tcl_Free ((char*) chan);
+  if (chan->timer != (Tcl_TimerToken) NULL) {
+    Tcl_DeleteTimerHandler (chan->timer);
+  }
+  chan->timer = (Tcl_TimerToken) NULL;
 
+  Tcl_Free ((char*) chan);
   return 0;
 }
 
@@ -175,6 +177,12 @@ int*       errorCodePtr;	/* Location of error flag */
     return 0;
 
   chan = (ChannelInstance*) instanceData;
+
+  if ((chan->used - chan->rwLoc) <= 0) {
+    /* At end, block request */
+    *errorCodePtr = EWOULDBLOCK;
+    return -1;
+  }
 
   if ((chan->rwLoc + toRead) > chan->used) {
     /*
@@ -435,11 +443,17 @@ int        mask;		/* Events of interest */
   ChannelInstance* chan = (ChannelInstance*) instanceData;
 
   if (mask) {
-    chan->timer = Tcl_CreateTimerHandler (DELAY, ChannelReady, instanceData);
+    if (chan->timer == (Tcl_TimerToken) NULL) {
+      chan->timer = Tcl_CreateTimerHandler (DELAY, ChannelReady, instanceData);
+    }
   } else {
-    Tcl_DeleteTimerHandler (chan->timer);
+    if (chan->timer != (Tcl_TimerToken) NULL) {
+      Tcl_DeleteTimerHandler (chan->timer);
+    }
     chan->timer = (Tcl_TimerToken) NULL;
   }
+
+  chan->interest = mask;
 }
 
 /*
@@ -480,6 +494,10 @@ ClientData instanceData; /* Channel to query */
 
   chan->timer = (Tcl_TimerToken) NULL;
 
+  if (!chan->interest) {
+    return;
+  }
+
   if (chan->rwLoc >= chan->used)
     mask &= ~TCL_READABLE;
 
@@ -487,7 +505,12 @@ ClientData instanceData; /* Channel to query */
    * This will regenerate the timer too, via 'WatchChannel'.
    */
 
-  Tcl_NotifyChannel (chan->chan, mask);
+  mask &= chan->interest;
+  if (mask) {
+    Tcl_NotifyChannel (chan->chan, mask);
+  } else {
+    chan->timer = Tcl_CreateTimerHandler (DELAY, ChannelReady, instanceData);
+  }
 }
 
 /*
@@ -587,6 +610,7 @@ Tcl_Obj*CONST objv[];		/* Argument objects. */
 
   instance->chan      = chan;
   instance->timer     = (Tcl_TimerToken) NULL;
+  instance->interest  = 0;
 
   Tcl_RegisterChannel  (interp, chan);
   Tcl_SetChannelOption (interp, chan, "-buffering", "none");

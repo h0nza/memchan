@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.5 2000/01/14 23:52:21 aku Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.6 2000/01/15 14:55:42 aku Exp $
 
 #========================================================================
 # Additional variables defined here for convenient access to some
@@ -23,6 +23,7 @@
 MC_TOPDIR	=	$(srcdir)/..
 MC_GENSRCDIR	=	$(MC_TOPDIR)/generic
 MC_DOCDIR	=	$(MC_TOPDIR)/doc
+MC_TOOLDIR	=	$(MC_TOPDIR)/tools
 MC_TESTDIR	=	$(MC_TOPDIR)/tests
 MC_TEATESTDIR	=	$(MC_TOPDIR)/tea.tests
 
@@ -30,7 +31,7 @@ MC_TEATESTDIR	=	$(MC_TOPDIR)/tea.tests
 # This is the (parameterized) name of the library that we are building.
 #========================================================================
 
-lib_BINARIES	=	$(Memchan_LIB_FILE)
+lib_BINARIES	=	$(Memchan_LIB_FILE) $(Buf_STUB_LIB_FILE)
 BINARIES	=	$(lib_BINARIES)
 
 #========================================================================
@@ -38,10 +39,21 @@ BINARIES	=	$(lib_BINARIES)
 # This will be used when a dist target is added to the Makefile.
 #========================================================================
 
-Memchan_SOURCES	=	$(MC_GENSRCDIR)/memchan.c	\
+Memchan_SOURCES	=	\
+			$(MC_GENSRCDIR)/memchan.c	\
 			$(MC_GENSRCDIR)/init.c		\
 			$(MC_GENSRCDIR)/fifo.c		\
-			$(MC_GENSRCDIR)/counter.c
+			$(MC_GENSRCDIR)/fifo2.c		\
+			$(MC_GENSRCDIR)/null.c		\
+			$(MC_GENSRCDIR)/counter.c	\
+			$(MC_GENSRCDIR)/bufStubInit.c	\
+			$(MC_GENSRCDIR)/buf.c		\
+			$(MC_GENSRCDIR)/bufFix.c	\
+			$(MC_GENSRCDIR)/bufExt.c	\
+			$(MC_GENSRCDIR)/bufRange.c	\
+			$(MC_GENSRCDIR)/bufQueue.c
+
+
 
 SOURCES		=	$(Memchan_SOURCES)
 
@@ -52,10 +64,21 @@ SOURCES		=	$(Memchan_SOURCES)
 # above.
 #========================================================================
 
+Buf_STUB_OBJECTS=	bufStubLib.$(OBJEXT)
+
 Memchan_OBJECTS	=	memchan.$(OBJEXT)	\
 			init.$(OBJEXT)		\
 			counter.$(OBJEXT)	\
-			fifo.$(OBJEXT)
+			fifo.$(OBJEXT)		\
+			fifo2.$(OBJEXT)		\
+			null.$(OBJEXT)		\
+			bufStubInit.$(OBJEXT)	\
+			buf.$(OBJEXT)		\
+			bufFix.$(OBJEXT)	\
+			bufExt.$(OBJEXT)	\
+			bufRange.$(OBJEXT)	\
+			bufQueue.$(OBJEXT)	\
+			$(Buf_STUB_OBJECTS)
 
 OBJECTS		=	$(Memchan_OBJECTS)
 
@@ -70,11 +93,22 @@ OBJECTS		=	$(Memchan_OBJECTS)
 Memchan_LIB_FILE		=	@Memchan_LIB_FILE@
 $(Memchan_LIB_FILE)_OBJECTS	=	$(Memchan_OBJECTS)
 
+Buf_STUB_LIB_FILE		=	@Buf_STUB_LIB_FILE@
+$(Buf_STUB_LIB_FILE)_OBJECTS	=	$(Buf_STUB_OBJECTS)
+
 #========================================================================
 # This is a list of header files to be installed
 #========================================================================
 
 GENERIC_HDRS	=
+
+#========================================================================
+# Define a list of files containing the stub declarations.
+#========================================================================
+
+Buf_DECLS = \
+	$(MC_GENSRCDIR)/buf.decls	\
+	$(MC_GENSRCDIR)/bufInt.decls
 
 #========================================================================
 # Add additional lines to handle any additional AC_SUBST cases that
@@ -293,6 +327,33 @@ ttest:
 
 depend:
 
+#
+# Target to regenerate header files and stub files from the *.decls tables.
+#
+
+genstubs:
+	$(TCLSH_PROG)	\
+		$(MC_TOOLDIR)/genStubs.tcl $(MC_GENSRCDIR)	\
+		$(MC_GENSRCDIR)/buf.decls			\
+		$(MC_GENSRCDIR)/bufInt.decls
+
+#
+# Target to check that all exported functions have an entry in the stubs
+# tables.
+#
+
+checkstubs:
+	-@for i in `nm -p $(Buf_LIB_FILE) | awk '$$2 ~ /T/ { print $$3 }' \
+		| sort -n`; do \
+		match=0; \
+		for j in $(Buf_DECLS); do \
+		    if [ `grep -c $$i $$j` -gt 0 ]; then \
+			match=1; \
+		    fi; \
+		done; \
+		if [ $$match -eq 0 ]; then echo $$i; fi \
+	done
+
 #========================================================================
 # Enumerate the names of the object files included in this package.
 # These objects are created and linked into the final library.  In
@@ -310,6 +371,9 @@ $(Memchan_LIB_FILE): $(Memchan_OBJECTS)
 	-rm -f $(Memchan_LIB_FILE)
 	@MAKE_LIB@
 	$(RANLIB) $(Memchan_LIB_FILE)
+
+$(Buf_STUB_LIB_FILE): $(Buf_STUB_OBJECTS)
+	$(AR) cr $@ $(Buf_STUB_OBJECTS)
 
 #========================================================================
 # We need to enumerate the list of .c to .o lines here.
@@ -341,12 +405,41 @@ memchan.$(OBJEXT):	$(MC_GENSRCDIR)/memchan.c
 fifo.$(OBJEXT):		$(MC_GENSRCDIR)/fifo.c
 	$(COMPILE) -c `@CYGPATH@ $(MC_GENSRCDIR)/fifo.c` -o $@
 
+fifo2.$(OBJEXT):	$(MC_GENSRCDIR)/fifo2.c
+	$(COMPILE) -c `@CYGPATH@ $(MC_GENSRCDIR)/fifo2.c` -o $@
+
+null.$(OBJEXT):		$(MC_GENSRCDIR)/null.c
+	$(COMPILE) -c `@CYGPATH@ $(MC_GENSRCDIR)/null.c` -o $@
+
 init.$(OBJEXT):		$(MC_GENSRCDIR)/init.c
 	$(COMPILE) -c `@CYGPATH@ $(MC_GENSRCDIR)/init.c` -o $@
 
 counter.$(OBJEXT):	$(MC_GENSRCDIR)/counter.c
 	$(COMPILE) -c `@CYGPATH@ $(MC_GENSRCDIR)/counter.c` -o $@
 
+#========================================================================
+# Internal library: buffers
+
+bufStubLib.$(OBJEXT):	$(MC_GENSRCDIR)/bufStubLib.c
+	$(COMPILE) -c `@CYGPATH@ $(MC_GENSRCDIR)/bufStubLib.c` -o $@
+
+bufStubInit.$(OBJEXT):	$(MC_GENSRCDIR)/bufStubInit.c
+	$(COMPILE) -c `@CYGPATH@ $(MC_GENSRCDIR)/bufStubInit.c` -o $@
+
+buf.$(OBJEXT):	$(MC_GENSRCDIR)/buf.c
+	$(COMPILE) -c `@CYGPATH@ $(MC_GENSRCDIR)/buf.c` -o $@
+
+bufFix.$(OBJEXT):	$(MC_GENSRCDIR)/bufFix.c
+	$(COMPILE) -c `@CYGPATH@ $(MC_GENSRCDIR)/bufFix.c` -o $@
+
+bufExt.$(OBJEXT):	$(MC_GENSRCDIR)/bufExt.c
+	$(COMPILE) -c `@CYGPATH@ $(MC_GENSRCDIR)/bufExt.c` -o $@
+
+bufRange.$(OBJEXT):	$(MC_GENSRCDIR)/bufRange.c
+	$(COMPILE) -c `@CYGPATH@ $(MC_GENSRCDIR)/bufRange.c` -o $@
+
+bufQueue.$(OBJEXT):	$(MC_GENSRCDIR)/bufQueue.c
+	$(COMPILE) -c `@CYGPATH@ $(MC_GENSRCDIR)/bufQueue.c` -o $@
 
 #========================================================================
 # End of user-definable section

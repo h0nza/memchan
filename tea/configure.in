@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.2 1999/09/12 21:27:34 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.3 1999/09/13 23:04:17 aku Exp $)
 
 #--------------------------------------------------------------------
 # Configure script for package '@mName@', as distributed at @mDate@.
@@ -24,9 +24,12 @@ AC_INIT(../generic/memchan.c)
 #--------------------------------------------------------------------
 
 PACKAGE=Memchan
+PACKAGE_SUB=Buf
 
-MAJOR_VERSION=@mMajor@
-MINOR_VERSION=@mMinor@
+#MAJOR_VERSION=@mMajor@
+#MINOR_VERSION=@mMinor@
+MAJOR_VERSION=10
+MINOR_VERSION=0
 PATCHLEVEL=
 
 VERSION=${MAJOR_VERSION}.${MINOR_VERSION}${PATCHLEVEL}
@@ -234,18 +237,27 @@ case "`uname -s`" in
 	if test "${SHARED_BUILD}" = "1" ; then
 	    SHLIB_LD_LIBS="\"`cygpath -w ${TCL_BIN_DIR}/${TCL_STUB_LIB_FILE}`\" ${TCL_SHLIB_LD_LIBS}"
 	    eval "${PACKAGE}_LIB_FILE=${PACKAGE}${SHARED_LIB_SUFFIX}"
+	    eval "${PACKAGE}_STUB_LIB_FILE=${PACKAGE}stub${UNSHARED_LIB_SUFFIX}"
+	    eval "${PACKAGE_SUB}_STUB_LIB_FILE=${PACKAGE_SUB}stub${UNSHARED_LIB_SUFFIX}"
+
 	    RANLIB=:
 	else
 	    eval "${PACKAGE}_LIB_FILE=${PACKAGE}${UNSHARED_LIB_SUFFIX}"
+	    eval "${PACKAGE}_STUB_LIB_FILE=${PACKAGE}stub${UNSHARED_LIB_SUFFIX}"
+	    eval "${PACKAGE_SUB}_STUB_LIB_FILE=${PACKAGE_SUB}stub${UNSHARED_LIB_SUFFIX}"
 	fi
 	;;
     *)
 	if test "${SHARED_BUILD}" = "1" ; then
 	    SHLIB_LD_LIBS="${TCL_STUB_LIB_SPEC}"
 	    eval "${PACKAGE}_LIB_FILE=lib${PACKAGE}${SHARED_LIB_SUFFIX}"
+	    eval "${PACKAGE}_STUB_LIB_FILE=lib${PACKAGE}stub${UNSHARED_LIB_SUFFIX}"
+	    eval "${PACKAGE_SUB}_STUB_LIB_FILE=lib${PACKAGE_SUB}stub${UNSHARED_LIB_SUFFIX}"
 	    RANLIB=:
 	else
 	    eval "${PACKAGE}_LIB_FILE=lib${PACKAGE}${UNSHARED_LIB_SUFFIX}"
+	    eval "${PACKAGE}_STUB_LIB_FILE=lib${PACKAGE}stub${UNSHARED_LIB_SUFFIX}"
+	    eval "${PACKAGE_SUB}_STUB_LIB_FILE=lib${PACKAGE_SUB}stub${UNSHARED_LIB_SUFFIX}"
 	fi
 	;;
 esac
@@ -255,6 +267,8 @@ esac
 #--------------------------------------------------------------------
 
 AC_SUBST(Memchan_LIB_FILE)
+AC_SUBST(Memchan_STUB_LIB_FILE)
+AC_SUBST(Buf_STUB_LIB_FILE)
 AC_SUBST(SHLIB_LD_LIBS)
 
 #--------------------------------------------------------------------

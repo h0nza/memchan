@@ -24,12 +24,9 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: counter.c,v 1.4 1999/07/27 21:25:17 aku Exp $
+ * CVS: $Id: counter.c,v 1.5 1999/09/13 23:04:16 aku Exp $
  */
 
-
-#include <tcl.h>
-#include <errno.h>
 
 #include "memchanInt.h"
 

@@ -7,7 +7,7 @@
 #
 # Distribution as of @mDate@
 #
-# $Id: Makefile.in,v 1.13 1999/06/28 21:24:03 aku Exp $
+# $Id: Makefile.in,v 1.14 1999/09/14 19:36:50 aku Exp $
 
 EXTENSION	=	Memchan
 VERSION		=	@mFullVersion@
@@ -161,10 +161,21 @@ HEADER		=
 SOURCES		=	$(GENERIC_DIR)/memchan.c	\
 			$(GENERIC_DIR)/init.c		\
 			$(GENERIC_DIR)/fifo.c		\
+			$(GENERIC_DIR)/fifo2.c		\
+			$(GENERIC_DIR)/null.c		\
+			$(GENERIC_DIR)/buf.c		\
+			$(GENERIC_DIR)/bufRange.c	\
+			$(GENERIC_DIR)/bufFixed.c	\
+			$(GENERIC_DIR)/bufExt.c		\
+			$(GENERIC_DIR)/bufQueue.c	\
 			$(GENERIC_DIR)/counter.c
 
-OBJECTS		=	memchan.o init.o counter.o fifo.o
-
+OBJECTS		=	init.o counter.o	\
+			memchan.o fifo.o	\
+			fifo2.o null.o		\
+			buf.o bufQueue.o	\
+			bufRange.o bufExt.o	\
+			bufFixed.o
 
 #-------------------------------------------------------#
 
@@ -231,6 +242,27 @@ memchan.o: $(GENERIC_DIR)/memchan.c
 
 fifo.o: $(GENERIC_DIR)/fifo.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/fifo.c -o $@
+
+fifo2.o: $(GENERIC_DIR)/fifo2.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/fifo2.c -o $@
+
+null.o: $(GENERIC_DIR)/null.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/null.c -o $@
+
+buf.o: $(GENERIC_DIR)/buf.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/buf.c -o $@
+
+bufQueue.o: $(GENERIC_DIR)/bufQueue.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/bufQueue.c -o $@
+
+bufFixed.o: $(GENERIC_DIR)/bufFixed.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/bufFixed.c -o $@
+
+bufExt.o: $(GENERIC_DIR)/bufExt.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/bufExt.c -o $@
+
+bufRange.o: $(GENERIC_DIR)/bufRange.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/bufRange.c -o $@
 
 init.o: $(GENERIC_DIR)/init.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/init.c -o $@
