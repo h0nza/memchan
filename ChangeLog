@@ -1,5 +1,8 @@
 2004-11-10  Pat Thoyts  <patthoyts@users.sourceforge.net>
 
+	* generic/memchan.c:  Fix and test for bug #1060620 which shows a
+	* tests/memchan.test: problem using fileevent on memchan channels
+
 	* generic/fifo2.c: Added special case for attempts to build on
 	threaded tcl 8.2. This version doesn't support Tcl_MutexFinalize
 	and we would leak mutexes from fifo2. Provided error stub

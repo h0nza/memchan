@@ -10,7 +10,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# $Id: memchan.test,v 1.6 1999/05/30 11:50:31 aku Exp $
+# $Id: memchan.test,v 1.7 1999/09/18 13:36:07 aku Exp $
 
 if {[string compare test [info procs test]] == 1} then {source defs}
 
@@ -79,5 +79,30 @@ test memchan-readwrite-1.1 {Write, seek and read} {
 } {12 12 {hello world!}}
 
 
+proc Read {chan} {
+    if {[eof $chan]} {
+        fileevent $chan readable {}
+        lappend ::res eof
+        set ::wait 1
+    }
+    lappend ::res [read $chan 2]
+}
+        
+
+test memchan-2.1 {check fileevent - memchan bug #1060620} {
+    set m [memchan]
+    set ::res {}
+    set ::wait 0
+    puts -nonewline $m data
+    seek $m 0
+    fileevent $m readable [list Read $m]
+    set id [after 400 {set ::wait 2}]
+    vwait ::wait
+    catch {after cancel $id}
+    close $m
+    list $::wait $res
+} {1 {da ta {} eof {}}}
+    
+catch {rename Read {}}
 catch {unset m}
 catch {unset res}

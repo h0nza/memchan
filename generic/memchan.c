@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.22 2004/06/03 19:02:57 andreas_kupries Exp $
+ * CVS: $Id: memchan.c,v 1.23 2004/11/09 23:11:00 patthoyts Exp $
  */
 
 
@@ -528,7 +528,7 @@ ClientData instanceData; /* Channel to query */
     return;
   }
 
-  if (chan->rwLoc >= chan->used)
+  if (chan->rwLoc > chan->used)
     mask &= ~TCL_READABLE;
 
   /* Tell Tcl about the possible events.
