@@ -1,0 +1,7 @@
+# -*- tcl -*-
+# used by the tk-based test interface to load
+# the package to test, here it is 'Memchan'.
+
+lappend auto_path [file join [pwd] ..] ; # top dir of memchan sources
+
+puts Memchan=[package require Memchan]

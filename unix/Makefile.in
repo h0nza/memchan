@@ -7,7 +7,7 @@
 #
 # Distribution as of @mDate@
 #
-# $Id: Makefile.in,v 1.2 1999/03/23 11:24:11 aku Exp $
+# $Id: Makefile.in,v 1.3 1999/03/23 23:04:43 aku Exp $
 
 EXTENSION	=	Memchan
 VERSION		=	@mFullVersion@
@@ -181,6 +181,16 @@ install-lib: $(MEMCHAN_LIB_FILE)
 	@$(INSTALL_DATA) $(MEMCHAN_LIB_FILE) $(LIB_INSTALL_DIR)
 	@$(RANLIB) $(LIB_INSTALL_DIR)/$(MEMCHAN_LIB_FILE)
 	@$(INSTALL_DATA) $(srcdir)/pkgIndex.tcl $(LIB_INSTALL_DIR)/pkgIndex.tcl
+
+test:
+	LD_LIBRARY_PATH="$(srcdir):$(TCL_LIB_DIR)";	export LD_LIBRARY_PATH; \
+	SHLIB_PATH="$LD_LIBRARY_PATH";			export SHLIB_PATH; \
+	wish ../testlib/tester -auto -delay 1
+
+ctest:
+	LD_LIBRARY_PATH="$(srcdir):$(TCL_LIB_DIR)"; \
+	echo lappend auto_path [pwd] \; package require Memchan \; \
+	cd $(srcdir)/tests \; source all | tclsh
 
 #-------------------------------------------------------#
 
