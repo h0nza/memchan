@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.7 1998/06/19 22:12:21 aku Exp $
+ * CVS: $Id: memchan.c,v 1.8 1998/06/21 16:28:27 aku Exp $
  */
 
 
@@ -84,7 +84,7 @@
 
 /* enable use of procedure internal to tcl */
 EXTERN void
-panic _ANSI_ARGS_ ((CONST char* format, ...));
+panic _ANSI_ARGS_ ((char* format, ...));
 
 /*
  * Forward declarations of internal procedures.

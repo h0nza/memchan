@@ -3,7 +3,7 @@ extension memchan {
     author       {Andreas Kupries (a.kupries@westend.com)}
     maintenance  {Andreas Kupries (a.kupries@westend.com)}
 
-    version	   1.5
+    version	   1.6
     copying-policy {BSD-Style, see 'tcl'-license}
     date           {@mDate@}
 
@@ -13,14 +13,15 @@ extension memchan {
     }
 
     primary-urls {
-        ftp://ftp.westend.com/pub/aku/memchan@mFullVersion@.tar.gz
-        ftp://ftp.westend.com/pub/aku/memchan@mDosVersion@.zip
-        ftp://ftp.westend.com/pub/aku/memchan@mFullVersion@.README
-        ftp://ftp.westend.com/pub/aku/mchan@mDosVersion@b.zip
+	http://www.oche.de/~akupries/soft/memchan/memchan@mFullVersion@.tar.gz
+	http://www.oche.de/~akupries/soft/memchan/memchan@mDosVersion@.zip
+	http://www.oche.de/~akupries/soft/memchan/memchan@mFullVersion@.README
+	http://www.oche.de/~akupries/soft/memchan/mchan@mDosVersion@b.zip
     }
 
     dependencies {
 	tcl 7.6 or 8.0. Does not work with 8.0(ab)*
-	Works with tcl 8.1a2, but don't leave channels open before exit.
+	Works with tcl 8.1a2 and 8.1b1, but don't leave channels open
+	before exit.
     }
 }

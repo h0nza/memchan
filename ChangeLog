@@ -1,3 +1,9 @@
+Sun Dec 20 19:54:08 1998  Andreas Kupries  <a.kupries@westend.com>
+
+	* memchan.c: Changed definition of panic to allow co-existence
+	  with tcl8.0.4+. Got information about problems from a
+	  beta-tester of the new plus-patches.
+
 Wed Sep 30 15:43:42 1998  Andreas Kupries  <a.kupries@westend.com>
 
 	* configure.in (TCL_LIB/INCLUDE_DIR): Added some additional
