@@ -7,7 +7,7 @@
 #
 # Distribution as of @mDate@
 #
-# $Id: Makefile.in,v 1.12 1999/05/31 15:28:45 aku Exp $
+# $Id: Makefile.in,v 1.13 1999/06/28 21:24:03 aku Exp $
 
 EXTENSION	=	Memchan
 VERSION		=	@mFullVersion@
@@ -188,6 +188,7 @@ install-lib: $(MEMCHAN_LIB_FILE)
 
 # Important in 'test': Move win/pkgIndex.tcl out of the way, prevent its usage.
 
+check:	test
 test:
 	mv $(TOP_DIR)/win/pkgIndex.tcl $(TOP_DIR)/win/pkgIndex.tclX
 	LD_LIBRARY_PATH="$(srcdir):$(TCL_LIB_DIR)";	export LD_LIBRARY_PATH; \

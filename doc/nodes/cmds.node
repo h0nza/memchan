@@ -36,7 +36,7 @@ node memchan_cmds {
 		for an event-driven application, but the moment additional
 		interfaces come up, allowing me to transfer a channel between
 		threads this concept may find its real use for inter-thread
-		communicaton of bulk information; whose transfer through the
+		communication of bulk information; whose transfer through the
 		currently implemented send-oriented interface (see
 		[afile tclTestThread.c]) is awkward. [cmd fifo]s complement
 		this interface, they don't replace it.

@@ -8,7 +8,7 @@ node memchan_compile {
     parent      memchan_home
 
     menu {
-	memchan_cmac memchan_cunix memchan_cwin
+	memchan_cmac memchan_ctea memchan_cunix memchan_cwin
     }
 
     contents {

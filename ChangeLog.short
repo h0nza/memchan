@@ -25,7 +25,7 @@ Changes from 1.8 to 1.9
 	may work in parallel. This is currently only possible for an event-
 	driven application, but the moment additional interfaces come up
 	allowing me to transfer a channel between threads this concept may
-	find its real use for inter-thread communicaton of bulk information;
+	find its real use for inter-thread communication of bulk information;
 	whose transfer through the currently implemented send-oriented
 	interface (see 'tclTestThread.c') is awkward. 'fifo's complement
 	this interface, they don't replace it.

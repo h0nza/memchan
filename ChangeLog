@@ -230,7 +230,7 @@ Sat Feb 15 20:09:58 1997  Andreas Kupries  <aku@bluepeak.westend.com>
 
 	  Note: 'PREPARE' is an file internal to the package. It contains
 	  tcl-code preparing the package for distribution (removing
-	  inofficial and/or internal files, manpage generation, ...). It
+	  unofficial and/or internal files, manpage generation, ...). It
 	  is not part of the distribution however.
 
 Mon Jan 13 22:21:48 1997  Andreas Kupries  <aku@bluepeak.westend.com>

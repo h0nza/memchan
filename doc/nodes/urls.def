@@ -10,9 +10,12 @@ proc url {code text url} {
 
 # -------------------------------------------------
 
-url tcl       [lang tcl]               http://www.scriptics.com/
-url scriptics Scriptics                http://www.scriptics.com/
-url consortium "Tcl/Tk Consortium"     http://www.tclconsortium.org/
+url tcl        [lang tcl]               http://www.scriptics.com/
+url scriptics  Scriptics                http://www.scriptics.com/
+url consortium "Tcl/Tk Consortium"      http://www.tclconsortium.org/
+url tea        "TEA"               http://www.scriptics.com/products/tcltk/tea/
+url cygnus     Cygnus                   http://www.cygnus.com/
+url cygwin     CygWin                   http://www.cygnus.com/
 
 url tclwiki	"Tcl'ers Wiki"	"http://purl.org/thecliff/tcl/wiki/"
 

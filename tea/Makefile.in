@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.1 1999/09/12 21:24:39 aku Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.2 1999/09/13 23:04:17 aku Exp $
 
 #========================================================================
 # Additional variables defined here for convenient access to some
@@ -255,7 +255,10 @@ install-libraries: libraries
 #========================================================================
 
 install-doc: doc
-	@echo "*Please* read the HTML documentation in ${MC_DOCDIR}/html/"
+	@echo "Information about the usage of this extension can be found"
+	@echo "in the HTML documentation at ${MC_DOCDIR}/html/index.html"
+	@echo "or, more specifically ${MC_DOCDIR}/html/memchan_cmds.html"
+	@echo "Just use your favorite browser to read them."
 
 #	Currently no documentation to install. We have documentation in HTML
 #	format, but there is no agreed upon place for them.
