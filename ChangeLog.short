@@ -1,5 +1,8 @@
 Changes from 1.8
 
+*	New channel type: fifo. Same as memchan, but with fifo
+	characteristics, like sockets and pipes.
+
 *	Made **thread-safe** if compiled against a thread-enabled 8.1.
 	(Mutex around counter used to generate handles).
 

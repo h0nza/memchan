@@ -14,7 +14,7 @@ extension memchan {
 
     primary-urls {
 	http://www.oche.de/%7Eakupries/tcltk.html
-	http://www.oche.de/%7Eakupries/soft/memchan/index.html
+	http://www.oche.de/%7Eakupries/soft/memchan/
 	http://www.oche.de/%7Eakupries/soft/memchan/download/<ARCH>
 	http://www.oche.de/%7Eakupries/soft/memchan/download/mchan@mDosVersion@b.zip
     }

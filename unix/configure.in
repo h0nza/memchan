@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.6 1999/03/23 23:21:31 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.7 1999/04/12 16:08:34 aku Exp $)
 dnl
 AC_INIT(Makefile.in)
 
@@ -119,6 +119,7 @@ AC_CACHE_CHECK(for directory with tcl.h,
 	memchan_cv_path_TCL_INCLUDE_DIR,
 	[memchan_cv_path_TCL_INCLUDE_DIR=""
 	 places="$TCL_INCLUDE_DIR \
+		../../tcl8.1.*/generic \
 		../../tcl8.1/generic \
 		../../tcl8.1b*/generic \
 		../../tcl8.1a*/generic \
@@ -186,6 +187,7 @@ AC_CACHE_CHECK(for tcl library,
 	memchan_cv_lib_TCL_LIB,
 	[memchan_cv_lib_TCL_LIB=""
 	 places="$TCL_LIB_DIR \
+	../../tcl8.1.*/unix \
 	../../tcl8.1/unix \
 	../../tcl8.1b*/unix \
 	../../tcl8.1a*/unix \
@@ -202,7 +204,7 @@ AC_CACHE_CHECK(for tcl library,
         if test -n "$memchan_cv_lib_TCL_LIB"; then
             break
         fi
-        for version in 8.1 8.0.5 8.0.4 8.0.3 8.0 7.6 81 805 804 803 80 76 ""; do
+        for version in 8.1.1 8.1 8.0.5 8.0.4 8.0.3 8.0 7.6 811 81 805 804 803 80 76 ""; do
             if test -n "$memchan_cv_lib_TCL_LIB"; then
                 break
             fi
