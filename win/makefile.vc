@@ -3,7 +3,7 @@
 # See the file "doc/license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# CVS:	$Id: makefile.vc,v 1.1 1999/03/23 10:15:21 aku Exp $
+# CVS:	$Id: makefile.vc,v 1.2 1999/03/23 22:16:05 aku Exp $
 # 
 
 # Does not depend on the presence of any environment variables in
@@ -76,7 +76,7 @@ WINDIR          = $(ROOT)\win
 GENERICDIR	= $(ROOT)\generic
 
 MC_INCLUDES	= -I$(WINDIR) -I$(GENERICDIR) -I$(ROOT) -I$(TCL)\include
-MC_DEFINES	= -nologo -D__WIN32__ -DHAVE_STDLIB_H -DMEMCHAN_VERSION=\"@mFullVersion@\" -DBUILD_memchan
+MC_DEFINES	= -nologo -D__WIN32__ -DHAVE_STDLIB_H -DMEMCHAN_VERSION=\"@mFullVersion@\" -DBUILD_memchan -DDLL_BUILD
 
 #!include <ntwin32.mak> # what is this for?
 

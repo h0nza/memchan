@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.3 1999/03/27 19:29:18 aku Exp $
+ * CVS: $Id: memchan.c,v 1.4 1999/04/12 15:29:26 aku Exp $
  */
 
 
@@ -69,6 +69,8 @@
 #else
 #   define EXPORT(a,b) a b
 #endif
+#else
+#   define EXPORT(a,b) a b
 #endif
 
 
