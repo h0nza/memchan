@@ -1,3 +1,22 @@
+2003-01-20  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* tools/mpexpand: Added new tool. Linux/ix86 starpack containing a
+	  doctools processor.
+
+	* tools/nroff_regen:             Rewritten to use mpexpand for most
+	* tools/manpage_regen:           conversions. The conversion to HTML
+	* tools/rules/manpage.html.site: for the website still relies on the
+          old expand system. Writing a good formatting engine for that,
+	  even if derived from the doctools HTML engine takes more time
+	  than I want to invest right now. Rewriting the rules file
+	  instead. That was less work.
+
+	* doc/fifo.man:    The original contents were written
+	* doc/fifo2.man:   in a precursor format to doctools.
+	* doc/memchan.man: Now rewritten to conform to the
+	* doc/null.man:    doctools specification.
+	* doc/random.man: 
+
 2002-11-06  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* win/makefile.vc (MCOBJS): Updated to list all relevant object

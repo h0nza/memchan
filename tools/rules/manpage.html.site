@@ -37,21 +37,37 @@ proc end_hook {} {}
 ## Backend for *roff markup
 
 
-proc manpage_begin {command section version module shortdesc description} {
+proc manpage_begin {command section version} {
+    global __command ; set __command $command
+    global __section ; set __section $section
+    global __version ; set __version $version
+
     set     hdr ""
-    append  hdr "[ht_comment {}]\n"
-    append  hdr "[ht_comment {Copyright (c) 2000 Andreas Kupries}]\n"
-    append  hdr "[ht_comment {All right reserved}]\n"
     append  hdr "[ht_comment {}]\n"
     append  hdr "[ht_comment "CVS: \$Id\$ $command.$section"]\n"
     append  hdr "[ht_comment {}]\n"
     append  hdr [page_begin mem/mp/$command][nav_link [mem/sf/txt]]<br>[site_xref]<br>[mp_xref]
     append  hdr [page_content]
-    append  hdr "<hr><h2> $module $version -- [string trimleft $command :]($section)</h2>\n"
-    append  hdr "[section NAME]\n"
-    append  hdr "[para] $command - $description"
     return $hdr
 }
+
+##proc moddesc {module} {}
+proc moddesc {shortdesc} {
+    global __command
+    global __section
+    global __version
+    return "<hr><h2> $shortdesc $__version -- [string trimleft $__command :]($__section)</h2>\n"
+}
+proc titledesc {description} {
+    global __command
+    set hdr ""
+    append  hdr "[section NAME]\n"
+    append  hdr "[para] $__command - $description"
+    return $hdr
+}
+
+proc copyright {args} {}
+proc comment {args} {}
 
 proc manpage_end {} {return [page_end]}
 

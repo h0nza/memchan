@@ -10,13 +10,17 @@ touch ../tools/rules/manpages
 for i in `ls *.man`
 do
 	echo $i '-->' manpages
-	../tools/expand -rules ../tools/rules/manpage.list $i  >> ../tools/rules/manpages
+	../tools/mpexpand list $i - | \
+	    awk "{ print \$2 }" | \
+	    sed -e 's|^\(.*\)$|manpage mem/mp/\1 \1 mp.\1.html|' |
+	    cat >> ../tools/rules/manpages
 done
+
 
 # Phase II .. Generate true output ...
 
 for i in `ls *.man`
 do
 	echo $i '-->' `basename $i .man`.n
-	../tools/expand -rules ../tools/rules/manpage.nroff $i > `basename $i .man`.n
+	../tools/mpexpand nroff $i - > `basename $i .man`.n
 done
