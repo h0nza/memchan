@@ -1,6 +1,6 @@
 
 		Memory Channels in Tcl
-		(Version @VERSION@ / @DATE@)
+		(Version @mFullVersion@ / @mDate@)
 
 		Andreas Kupries	(a.kupries@westend.com)
 
@@ -24,16 +24,16 @@ documentation describing the new command.
 Memchan should be available by anonymous ftp from ftp.neosoft.com soon.
 
 Primary Urls are:
-        <ftp://ftp.westend.com/pub/aku/memchan@VERSION@.tar.gz>
-        <ftp://ftp.westend.com/pub/aku/memchan@NODOT_VERSION@.zip>
-        <ftp://ftp.westend.com/pub/aku/memchan@VERSION@.readme>
-        <ftp://ftp.westend.com/pub/aku/mchan@NODOT_VERSION@b.zip>
+        <ftp://ftp.westend.com/pub/aku/memchan@mFullVersion@.tar.gz>
+        <ftp://ftp.westend.com/pub/aku/memchan@mDosVersion@.zip>
+        <ftp://ftp.westend.com/pub/aku/memchan@mFullVersion@.readme>
+        <ftp://ftp.westend.com/pub/aku/mchan@mDosVersion@b.zip>
 
 Secondary Urls:
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.tar.gz>
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@NODOT_VERSION@.zip>
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.readme>
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/mchan@NODOT_VERSION@b.zip>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mFullVersion@.tar.gz>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mDosVersion@.zip>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mFullVersion@.readme>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/mchan@mDosVersion@b.zip>
 
 
 COMPILING/USING Memchan
@@ -53,6 +53,6 @@ or
 REMARKS
 
 This extension was developed on my private computer, a PC running
-Linux 1.2.13 (gcc 2.7.2). If you have problems compiling on a
-particular architecture please mail me your solutions so that I am
-able to integrate them into the base.
+Linux 1.2.13 (gcc 2.7.2), now 2.0.29, gcc 2.7.2.1. If you have
+problems compiling on a particular architecture please mail me
+your solutions so that I am able to integrate them into the base.

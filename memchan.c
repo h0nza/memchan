@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.2 1997/02/15 21:29:32 aku Exp $
+ * CVS: $Id: memchan.c,v 1.3 1997/02/17 17:07:52 aku Exp $
  */
 
 
@@ -636,7 +636,7 @@ Tcl_Interp* interp;
  *------------------------------------------------------*
  */
 
-EXTERN EXPORT (int,Mem_SafeInit) (interp)
+EXTERN EXPORT (int,Memchan_SafeInit) (interp)
 Tcl_Interp* interp;
 {
   return Memchan_Init (interp);

@@ -1,9 +1,9 @@
-# Visual C++ 2.x and 4.0 makefile for memchan @MC_VERSION@ (@DATE@)
+# Visual C++ 2.x and 4.0 makefile for memchan @mFullVersion@ (as of @mDate@)
 #
 # See the file "doc/license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# CVS:	$Id: makefile.vc,v 1.2 1997/02/15 20:03:32 aku Exp $
+# CVS:	$Id: makefile.vc,v 1.3 1997/02/17 17:07:52 aku Exp $
 # 
 
 # Does not depend on the presence of any environment variables in
@@ -48,7 +48,7 @@ NODEBUG=1
 TCLSH		=	$(TCL)\bin\tclsh80.exe
 TCLLIB		=	$(TCL)\bin\tcl80.lib
 
-MC		=	mchan@MC_nodotVERSION@
+MC		=	mchan@mDosVersion@
 MCLIB		=	$(MC).lib
 MCDLL		=	$(MC).dll
 INSTALLDIR	=	$(TCL)\lib\$(MC)
@@ -66,7 +66,7 @@ CP      	= copy
 RM      	= del
 
 MC_INCLUDES	= -I$(ROOT) -I$(TCL)\include
-MC_DEFINES	= -nologo -D__WIN32__ -DHAVE_STDLIB_H -DMEMCHAN_VERSION=\"@MC_VERSION@\"
+MC_DEFINES	= -nologo -D__WIN32__ -DHAVE_STDLIB_H -DMEMCHAN_VERSION=\"@mFullVersion@\"
 
 MC_CFLAGS	=	$(cdebug) $(cflags) $(cvarsdll) $(include32) \
 			$(MC_INCLUDES) $(MC_DEFINES)

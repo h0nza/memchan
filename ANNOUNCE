@@ -1,6 +1,6 @@
 Hello world,
 
-This is release @VERSION@ of the simple extension providing "Memory channels".
+This is release @mFullVersion@ of the simple extension providing "Memory channels".
 
 Changes from 1.1:
 
@@ -20,16 +20,16 @@ Changes from 1.0:
 The package can be found at
 
 primary:
-        <ftp://ftp.westend.com/pub/aku/memchan@VERSION@.tar.gz>
-        <ftp://ftp.westend.com/pub/aku/memchan@NODOT_VERSION@.zip>
-        <ftp://ftp.westend.com/pub/aku/memchan@VERSION@.readme>
-        <ftp://ftp.westend.com/pub/aku/mchan@NODOT_VERSION@b.zip>
+        <ftp://ftp.westend.com/pub/aku/memchan@mFullVersion@.tar.gz>
+        <ftp://ftp.westend.com/pub/aku/memchan@mDosVersion@.zip>
+        <ftp://ftp.westend.com/pub/aku/memchan@mFullVersion@.readme>
+        <ftp://ftp.westend.com/pub/aku/mchan@mDosVersion@b.zip>
 
 secondary:
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.tar.gz>
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@NODOT_VERSION@.zip>
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.readme>
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/mchan@NODOT_VERSION@b.zip>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mFullVersion@.tar.gz>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mDosVersion@.zip>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mFullVersion@.readme>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/mchan@mDosVersion@b.zip>
 
 Enjoy,
 	Andreas Kupries <a.kupries@westend.com>	(private)

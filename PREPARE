@@ -1,57 +1,25 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.4 1997/02/15 19:48:06 aku Exp $
-#
+# CVS:	$Id: PREPARE,v 1.5 1997/02/15 20:03:31 aku Exp $
+
 
 # O. insert various information into some files
 #    (version, patchlevel, current date)
 
-set date       [date now]
-set long_date  [clock format [clock scan $date] -format {%B %d, %Y}]
-set short_date [string toupper [clock format [clock scan $date] -format {%d-%b-%Y}]]
-
-# generate version number without dots.
-regsub -all {\.} ${the-version} {} nodot_version
-
-replace_in_file LSM                  @DATE@ $short_date
-replace_in_file DESCRIPTION          @DATE@ $long_date
-replace_in_file README               @DATE@ $long_date
-
-set major [lindex [split ${the-version} .] 0]
-set minor [lindex [split ${the-version} .] 1]
-
-replace_in_file README               @VERSION@ ${the-patchlevel}
-replace_in_file ANNOUNCE             @VERSION@ ${the-patchlevel}
-replace_in_file LSM                  @VERSION@ ${the-patchlevel}
-replace_in_file DESCRIPTION          @VERSION@ ${the-patchlevel}
-
-replace_in_file README               @NODOT_VERSION@ ${nodot_version}
-replace_in_file ANNOUNCE             @NODOT_VERSION@ ${nodot_version}
-replace_in_file LSM                  @NODOT_VERSION@ ${nodot_version}
-replace_in_file DESCRIPTION          @NODOT_VERSION@ ${nodot_version}
-
-replace_in_file configure.in    @VERSION@       ${the-version}
-replace_in_file configure.in    @MAJOR_VERSION@ $major
-replace_in_file configure.in    @MINOR_VERSION@ $minor
-
-replace_in_file Makefile.in     @MEMCHAN_VERSION@ ${the-version}
-replace_in_file Makefile.in     @DATE@ $long_date
-
-
 file copy pkgIndex.tcl.in pkgIndex.win
-replace_in_file pkgIndex.win @configure_input@ "Distributed at $long_date"
-replace_in_file pkgIndex.win @MEMCHAN_VERSION@  ${the-version}
-replace_in_file pkgIndex.win @MEMCHAN_LIB_FILE@ "mchan${nodot_version}.dll"
+set mInfo(@configure_input@) "Distributed at $mDate"
 
-replace_in_file makefile.vc @MC_VERSION@       ${the-version}
-replace_in_file makefile.vc @MC_nodotVERSION@  $nodot_version
-replace_in_file makefile.vc @DATE@             $long_date
-
+mInsertInfo \
+	LSM DESCRIPTION README ANNOUNCE \
+	configure.in Makefile.in makefile.vc pkgIndex.win
 
 # remove internal directories
-file delete -force patches mails
 
+mExclude patches mails
+#file delete -force patches mails
 
 # generate configure script to be used
-exec autoconf
+mConfigure .
+
+#exec autoconf
 

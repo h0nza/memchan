@@ -1,3 +1,14 @@
+Thu May 29 11:25:56 1997  Andreas Kupries  <aku@bluepeak.westend.com>
+
+	* PREPARE: adapted to new 'makedist' system.
+
+Thu Feb 27 21:49:48 1997  Andreas Kupries  <aku@bluepeak.westend.com>
+
+	* memchan.c (Mem_safeInit): renamed to 'Memchan_SafeInit'. First
+	  bug in this 1.2 Release.
+
+	* -------------------- 1.2 released --------
+	
 Tue Feb 18 18:35:59 1997  Andreas Kupries  <aku@bluepeak.westend.com>
 
 	* -------------------- 1.2 ready for release --------

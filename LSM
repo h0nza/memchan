@@ -1,21 +1,21 @@
 Begin3
 Title:          memchan
-Version:        @VERSION@
-Entered-date:   @DATE@
+Version:        @mFullVersion@
+Entered-date:   @mShortDate@
 Description:    loadable extension, provides commands to create
 		"memory channels". These store their information
 		in main memory, not on disk.
 Keywords:       tcl, channeltypes, memory channel
 Author:         a.kupries@westend.com  (Andreas Kupries)
 Maintained-by:  a.kupries@westend.com  (Andreas Kupries)
-Primary-URL:	ftp://ftp.westend.com/pub/aku/memchan@VERSION@.tar.gz
-	        ftp://ftp.westend.com/pub/aku/memchan@NODOT_VERSION@.zip
-        	ftp://ftp.westend.com/pub/aku/memchan@VERSION@.readme
-	        ftp://ftp.westend.com/pub/aku/mchan@NODOT_VERSION@b.zip
-Secondary-URL:	ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.tar.gz
-		ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@NODOT_VERSION@.zip
-		ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.readme
-	        ftp://ftp.kisters.de/pub/lang/tcl/ext/mchan@NODOT_VERSION@b.zip
+Primary-URL:	ftp://ftp.westend.com/pub/aku/memchan@mFullVersion@.tar.gz
+	        ftp://ftp.westend.com/pub/aku/memchan@mDosVersion@.zip
+        	ftp://ftp.westend.com/pub/aku/memchan@mFullVersion@.readme
+	        ftp://ftp.westend.com/pub/aku/mchan@mDosVersion@b.zip
+Secondary-URL:	ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mFullVersion@.tar.gz
+		ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mDosVersion@.zip
+		ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mFullVersion@.readme
+	        ftp://ftp.kisters.de/pub/lang/tcl/ext/mchan@mDosVersion@b.zip
 Copying-policy: BSDStyle (-> tcl)
 Dependencies:   tcl (7.6 or higher)
 Comments:
