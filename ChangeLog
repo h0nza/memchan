@@ -1,3 +1,20 @@
+Tue May 25 18:35:24 1999  Andreas Kupries  <a.kupries@westend.com>
+
+	* generic/memchanInt.h: Made the header usable for C++ compilers.
+
+	* unix/Makefile.in: See below.
+
+	* win/makefile.vc(5): Added rules for new object files.
+
+	* generic/counter.c: Moved handle generation into separate
+	  file. Added usage of mutexes for thread enabled tcl to make
+	  handle generation safe.
+
+	* generic/memchan.c: Moved declarations and initialization code
+	  into separate files (memchanInt.h, init.c).
+
+	* doc/nodes/cmds.node: Added description of the provided command.
+
 Tue May 11 22:29:18 1999  Andreas Kupries  <a.kupries@westend.com>
 
 	* ---------------- Ready to release 1.8 --------------------

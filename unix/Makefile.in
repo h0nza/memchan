@@ -7,7 +7,7 @@
 #
 # Distribution as of @mDate@
 #
-# $Id: Makefile.in,v 1.7 1999/05/11 20:27:22 aku Exp $
+# $Id: Makefile.in,v 1.8 1999/05/11 20:28:55 aku Exp $
 
 EXTENSION	=	Memchan
 VERSION		=	@mFullVersion@
@@ -158,8 +158,10 @@ DEFINES		=	$(PROTO_FLAGS) $(MEM_DEBUG_FLAGS) @DEFS@ @TCL_DEFS@
 
 HEADER		=	
 
-SOURCES		=	$(GENERIC_DIR)/memchan.c
-OBJECTS		=	memchan.o
+SOURCES		=	$(GENERIC_DIR)/memchan.c	\
+			$(GENERIC_DIR)/init.c		\
+			$(GENERIC_DIR)/counter.c
+OBJECTS		=	memchan.o init.o counter.o
 
 
 #-------------------------------------------------------#
@@ -223,6 +225,12 @@ TAGS:
 
 memchan.o: $(GENERIC_DIR)/memchan.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/memchan.c -o $@
+
+init.o: $(GENERIC_DIR)/init.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/init.c -o $@
+
+counter.o: $(GENERIC_DIR)/counter.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/counter.c -o $@
 
 #-------------------------------------------------------#
 

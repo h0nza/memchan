@@ -15,6 +15,7 @@ node memchan_home {
     }
 
     menu {
+	memchan_cmds
 	memchan_where
 	memchan_ack
     }

@@ -1,0 +1,29 @@
+# -*- tcl -*-
+# commands in the extension
+
+node memchan_cmds {
+    title       "Memchan: Commands"
+    shortTitle  "Commands"
+    description "Description of the provided commands"
+    parent      memchan_home
+
+    contents {
+	p "This extension provides one new command and influences the
+	kernel command [cmd fconfigure].
+	"
+
+	cmdtable {::} {
+	    cmdrow  memchan {} {
+		p "
+		Command to create a new memory channel. No arguments,
+		no options. Returns the handle of the created channel.
+		"
+	    }
+	    cmdrow fconfigure {... -length ...} {
+		p "Memory channels support a single read-only option,
+		[opt -length]. Reading it via [cmd fconfigure] retrieves
+		the number of bytes currently stored in the channel.
+	    }
+	}
+    }
+}

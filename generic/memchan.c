@@ -3,7 +3,7 @@
  *
  *	Implementation of a memory channel.
  *
- * Copyright (C) 1996, 1997 Andreas Kupries (a.kupries@westend.com)
+ * Copyright (C) 1996-1999 Andreas Kupries (a.kupries@westend.com)
  * All rights reserved.
  *
  * Permission is hereby granted, without written agreement and without
@@ -23,85 +23,16 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.4 1999/04/12 15:29:26 aku Exp $
+ * CVS: $Id: memchan.c,v 1.5 1999/04/12 15:33:34 aku Exp $
  */
 
 
 #include <tcl.h>
 #include <errno.h>
 
-/*
- * Definitions to enable the generation of a DLL under Windows.
- * Taken from 'ftp://ftp.sunlabs.com/pub/tcl/example.zip(example.c)'
- */
-
-#if defined(__WIN32__)
-#   define WIN32_LEAN_AND_MEAN
-#   include <windows.h>
-#   undef WIN32_LEAN_AND_MEAN
-
-/*
- * VC++ has an alternate entry point called DllMain, so we need to rename
- * our entry point.
- */
-
-#ifdef TCL_STORAGE_CLASS
-# undef TCL_STORAGE_CLASS
-#endif
-#ifdef BUILD_memchan
-# define TCL_STORAGE_CLASS DLLEXPORT
-#else
-# define TCL_STORAGE_CLASS DLLIMPORT
-#endif
-
-#ifndef STATIC_BUILD
-#   if defined(_MSC_VER)
-#       undef EXPORT
-#	define EXPORT(a,b) TCL_STORAGE_CLASS a b
-#	define DllEntryPoint DllMain
-#   else
-#	if defined(__BORLANDC__)
-#	    define EXPORT(a,b) a _export b
-#	else
-#	    define EXPORT(a,b) a b
-#	endif
-#   endif
-#else
-#   define EXPORT(a,b) a b
-#endif
-#else
-#   define EXPORT(a,b) a b
-#endif
+#include "memchanInt.h"
 
 
-/*
- * Number of bytes used to extend a storage area found to small.
- */
-
-#define INCREMENT (512)
-
-/*
- * Number of milliseconds to wait between polls of channel state,
- * e.g. generation of readable/writable events.
- *
- * Relevant for only Tcl 8.0 and beyond.
- */
-
-#define DELAY (5)
-
-/* Detect Tcl 8.1 and beyond => Stubs, panic <-> Tcl_Panic
- */
-
-#define GT81 ((TCL_MAJOR_VERSION > 8) || \
-	      ((TCL_MAJOR_VERSION == 8) && \
-	       (TCL_MINOR_VERSION >= 1)))
-
-#if ! (GT81)
-/* enable use of procedure internal to tcl */
-EXTERN void
-panic _ANSI_ARGS_ ((char* format, ...));
-#endif
-
 /*
  * Forward declarations of internal procedures.
  */
@@ -122,26 +53,24 @@ static void	WatchChannel _ANSI_ARGS_((ClientData instanceData, int mask));
 
 
 #if (TCL_MAJOR_VERSION < 8)
-static int	GetOption _ANSI_ARGS_((
-		    ClientData instanceData, char *optionName,
-                    Tcl_DString *dsPtr));
+static int	GetOption _ANSI_ARGS_((ClientData instanceData,
+				       char *optionName,
+				       Tcl_DString *dsPtr));
 
 static int	ChannelReady _ANSI_ARGS_((ClientData instanceData, int mask));
 static Tcl_File GetFile      _ANSI_ARGS_((ClientData instanceData, int mask));
+
 #else
-static int	GetOption _ANSI_ARGS_((
-		    ClientData instanceData, Tcl_Interp* interp,
-		    char *optionName, Tcl_DString *dsPtr));
+
+static int	GetOption _ANSI_ARGS_((ClientData instanceData,
+				       Tcl_Interp* interp, char *optionName,
+				       Tcl_DString *dsPtr));
 
 static void	ChannelReady _ANSI_ARGS_((ClientData instanceData));
-static int      GetFile      _ANSI_ARGS_((ClientData instanceData, int direction,
+static int      GetFile      _ANSI_ARGS_((ClientData instanceData,
+					  int direction,
 					  ClientData* handlePtr));
-
 #endif
-
-static int      MemoryChannelCmd _ANSI_ARGS_ ((ClientData notUsed,
-					       Tcl_Interp* interp,
-					       int argc, char** argv));
 
 /*
  * This structure describes the channel type structure for in-memory channels:
@@ -194,7 +123,7 @@ typedef struct ChannelInstance {
  *	------------------------------------------------*
  *	This procedure is called from the generic IO
  *	level to perform channel-type-specific cleanup
- *	when a in-memory channel is closed.
+ *	when an in-memory channel is closed.
  *	------------------------------------------------*
  *
  *	Sideeffects:
@@ -318,8 +247,8 @@ int*       errorCodePtr;	/* Location of error flag. */
 
   if ((chan->rwLoc + toWrite) > chan->allocated) {
     /*
-     * We are writing beyond the end of the allocated area.
-     * It is necessary to extend it. Try to use a fixed
+     * We are writing beyond the end of the allocated area,
+     * it is necessary to extend it. Try to use a fixed
      * increment first and adjust if that is not enough.
      */
 
@@ -391,11 +320,7 @@ int*       errorCodePtr;	/* Location of error flag. */
     break;
 
   default:
-#if GT81
     Tcl_Panic ("illegal seek-mode specified");
-#else
-    panic ("illegal seek-mode specified");
-#endif
     return -1;
   }
 
@@ -718,8 +643,8 @@ ClientData* handlePtr;          /* Space to the handle into */
  *------------------------------------------------------*
  */
 	/* ARGSUSED */
-static int
-MemoryChannelCmd (notUsed, interp, argc, argv)
+int
+MemchanCmd (notUsed, interp, argc, argv)
 ClientData  notUsed;		/* Not used. */
 Tcl_Interp* interp;		/* Current interpreter. */
 int         argc;		/* Number of arguments. */
@@ -727,18 +652,12 @@ char**      argv;		/* Argument strings. */
 {
   Tcl_Channel      chan;
   ChannelInstance* instance;
-  char             channelName [50];
 
-  /*
-   * count number of generated memory channels,
-   * used for id generation. Ids are never reclaimed
-   * and there is no dealing with wrap around. On the
-   * other hand, "unsigned long" should be big enough
-   * except for absolute longrunners (generate 100 ids
-   * per second => overflow will occur in 1 1/3 years).
-   */
-
-  static unsigned long memCounter = 0;
+#if TCL_MAJOR_VERSION < 8
+  char* channelHandle;
+#else
+  Tcl_Obj* channelHandle;
+#endif
 
   if (argc != 1) {
     Tcl_AppendResult (interp,
@@ -753,13 +672,20 @@ char**      argv;		/* Argument strings. */
   instance->used      = 0;
   instance->data      = (VOID*) NULL;
 
-  sprintf (channelName, "mem%lu", memCounter);
-  memCounter ++;
+  channelHandle = MemchanGenHandle ("mem");
 
+#if TCL_MAJOR_VERSION < 8
   chan = Tcl_CreateChannel (&channelType,
-			    channelName,
+			    channelHandle,
 			    (ClientData) instance,
 			    TCL_READABLE | TCL_WRITABLE);
+#else
+  chan = Tcl_CreateChannel (&channelType,
+			    Tcl_GetStringFromObj (channelHandle, NULL),
+			    (ClientData) instance,
+			    TCL_READABLE | TCL_WRITABLE);
+#endif
+
   instance->chan      = chan;
 
 #if (TCL_MAJOR_VERSION >= 8)
@@ -769,72 +695,12 @@ char**      argv;		/* Argument strings. */
   Tcl_RegisterChannel  (interp, chan);
   Tcl_SetChannelOption (interp, chan, "-buffering", "none");
   Tcl_SetChannelOption (interp, chan, "-blocking",  "0");
+
+#if TCL_MAJOR_VERSION < 8
   Tcl_AppendResult     (interp, channelName, (char*) NULL);
-
-  return TCL_OK;
-}
-
-/*
- *------------------------------------------------------*
- *
- *	Memchan_Init --
- *
- *	------------------------------------------------*
- *	Standard procedure required by 'load'. 
- *	Initializes this extension.
- *	------------------------------------------------*
- *
- *	Sideeffects:
- *		As of 'MemGetRegistry'.
- *
- *	Result:
- *		A standard Tcl error code.
- *
- *------------------------------------------------------*
- */
-
-EXPORT (int,Memchan_Init) (interp)
-Tcl_Interp* interp;
-{
-#if GT81
-  if (Tcl_InitStubs(interp, "8.1", 0) == NULL) {
-    return TCL_ERROR;
-  }
+#else
+  Tcl_SetObjResult     (interp, channelHandle);
 #endif
-
-  Tcl_CreateCommand (interp, "memchan",
-		     &MemoryChannelCmd,
-		     (ClientData) NULL,
-		     (Tcl_CmdDeleteProc*) NULL);
-
-  /* register memory channels as available package */
-  Tcl_PkgProvide (interp, "Memchan", MEMCHAN_VERSION);
-
   return TCL_OK;
-}
-
-/*
- *------------------------------------------------------*
- *
- *	Memchan_SafeInit --
- *
- *	------------------------------------------------*
- *	Standard procedure required by 'load'. 
- *	Initializes this extension for a safe interpreter.
- *	------------------------------------------------*
- *
- *	Sideeffects:
- *		As of 'Memchan_Init'
- *
- *	Result:
- *		A standard Tcl error code.
- *
- *------------------------------------------------------*
- */
-
-EXPORT (int,Memchan_SafeInit) (interp)
-Tcl_Interp* interp;
-{
-  return Memchan_Init (interp);
 }
 
