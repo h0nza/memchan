@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.5 2000/01/14 23:52:21 aku Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.6 2000/01/15 14:55:42 aku Exp $
 
 #========================================================================
 # Additional variables defined here for convenient access to some
@@ -20,7 +20,7 @@
 # from everything else which was predefined by TEA.
 #========================================================================
 
-MC_TOPDIR	=	$(srcdir)/..
+MC_TOPDIR	=	$(srcdir)
 MC_GENSRCDIR	=	$(MC_TOPDIR)/generic
 MC_DOCDIR	=	$(MC_TOPDIR)/doc
 MC_TESTDIR	=	$(MC_TOPDIR)/tests
@@ -244,11 +244,13 @@ install-binaries: binaries install-lib-binaries install-bin-binaries
 
 install-libraries: libraries
 	$(mkinstalldirs) $(includedir)
-	@echo "Installing header files in $(includedir)"
-	@for i in $(GENERIC_HDRS) ; do \
-	    echo "Installing $$i" ; \
-	    $(INSTALL_DATA) $$i $(includedir) ; \
-	done;
+
+# No headers to install ...
+#	@echo "Installing header files in $(includedir)"
+#	@for i in $(GENERIC_HDRS) ; do \
+#	    echo "Installing $$i" ; \
+#	    $(INSTALL_DATA) $$i $(includedir) ; \
+#	done;
 
 #========================================================================
 # Install documentation.  Unix manpages should go in the $(mandir)
@@ -406,7 +408,7 @@ install-lib-binaries: installdirs
 	  else :; fi; \
 	done
 	if test "x$(MAKE_LIB)" = "x$(MAKE_SHARED_LIB)"; then \
-	  $(TCLSH_PROG) mkIndex.tcl; \
+	  $(TCLSH_PROG) mkIndex.tcl $(lib_BINARIES); \
 	fi
 
 #========================================================================

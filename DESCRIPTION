@@ -3,7 +3,7 @@ extension memchan {
     author       {Andreas Kupries (a.kupries@westend.com)}
     maintenance  {Andreas Kupries (a.kupries@westend.com)}
 
-    version	   2.1p2
+    version	   2.1p3
     copying-policy {BSD-Style, see 'tcl'-license}
     date           {@mDate@}
 

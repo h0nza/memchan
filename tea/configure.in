@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.2 1999/09/12 21:27:34 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.3 1999/09/13 23:04:17 aku Exp $)
 
 #--------------------------------------------------------------------
 # Configure script for package '@mName@', as distributed at @mDate@.
@@ -14,7 +14,7 @@ AC_REVISION($Id: configure.in,v 1.2 1999/09/12 21:27:34 aku Exp $)
 # this package.
 #--------------------------------------------------------------------
 
-AC_INIT(../generic/memchan.c)
+AC_INIT(./generic/memchan.c)
 
 #--------------------------------------------------------------------
 # Setting our package name and version numbers.  The NODOT_VERSION is
@@ -265,16 +265,7 @@ AC_SUBST(SHLIB_LD_LIBS)
 # bugs in the pkg_mkIndex routine.
 #--------------------------------------------------------------------
 
-AC_PATH_PROGS(TCLSH_PROG,
-	tclsh8.2${EXEEXT} tclsh82${EXEEXT} tclsh${EXEEXT},
-	:,
-	${exec_prefix}/bin:${prefix}/bin:${PATH})
-
-if test "x${TCLSH_PROG}" = "x:" ; then
-    AC_MSG_WARN(No tclsh executable found.  You will have to build the pkgIndex.tcl file manually.)
-fi
-AC_SUBST(TCLSH_PROG)
-
+SC_PROG_TCLSH
 
 #--------------------------------------------------------------------
 # Finally, substitute all of the various values into the Makefile.

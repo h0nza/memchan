@@ -1,3 +1,21 @@
+2001-03-27  Tcl Project  <a.kupries@westend.com>
+
+	* DEPENDENCIES: 
+	* BUILDINFO: New file, integration into TclPro buildsystem.
+
+	* tea/tcl.m4: 
+	* tea/mkIndex.tcl.in: Upgraded to newer file from the sample
+	  extension.
+
+	* tea/configure.in: Adapted to new final location, to usage of
+	  newer tcl.m4.
+
+	* tea/Makefile.in: Adapted to new final location, also to usage of
+	  new mkIndex.tcl.in.
+
+	* PREPARE: Changed to move the contents of 'tea' directory into
+	  the toplevel.
+
 Wed Oct  4 20:00:25 2000  Andreas Kupries  <a.kupries@westend.com>
 
 	* Fixed problem with use of version information in

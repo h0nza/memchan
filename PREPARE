@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.20 1999/08/01 14:33:08 aku Exp $
+# CVS:	$Id: PREPARE,v 1.21 1999/09/12 21:24:21 aku Exp $
 
 # Exclude older binary distributions, they are made available through the 1.9 site.
 
@@ -100,3 +100,8 @@ cd ..
 
 # create the file required by the NeoSoft CSA
 file copy ChangeLog.short CHANGES
+
+# Move contents of TEA directory into the toplevel.
+
+file rename         tea/README README.tea
+eval file rename -- [glob tea/*] [pwd]

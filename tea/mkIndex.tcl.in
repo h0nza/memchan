@@ -2,7 +2,7 @@
 #
 #	This script generates a pkgIndex.tcl file for an installed extension.
 #
-# Copyright (c) 1999 Scriptics Corporation.
+# Copyright (c) 1999-2000 Ajuba Solutions
 #
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
@@ -54,6 +54,10 @@ if {[catch {package require Tcl 8.2} msg]} {
     exit 0
 }
 
+# The name of the library(s) should be passed in as arguments.
+
+set libraryList $argv
+
 # Nativepath --
 #
 #	Convert a Cygnus style path to a native path
@@ -70,10 +74,10 @@ proc Nativepath {pathName} {
     global tcl_platform
 
     if {![string match $tcl_platform(platform) unix]} {
-	if {[regexp {//(.)/(.*)} $pathName null driveLetter pathRemains]} {
-	    set pathName $driveLetter:/$pathRemains
-	}
+	regsub -nocase {^//([a-z])/(.*)$} $pathName {\1:/\2} pathName
+	regsub -nocase {^/cygdrive/([a-z])/(.*)$} $pathName {\1:/\2} pathName
     }
+
     return $pathName
 }
 
@@ -84,12 +88,34 @@ set exec_prefix [Nativepath $exec_prefix]
 
 set libdir @libdir@
 set package @PACKAGE@
+set version @VERSION@
 
 cd $libdir
 puts "Making pkgIndex.tcl in [file join [pwd] $package]"
 
 if {$tcl_platform(platform) == "unix"} {
-    pkg_mkIndex $package [file join .. lib${package}*[info sharedlibextension]] *.tcl
+    if {[llength $libraryList] > 0} {
+	set libraryPathList {}
+	foreach lib $libraryList {
+	    lappend libraryPathList [file join .. $lib]
+
+	    # Hack because HP-UX must have executable DLLs
+
+	    if {[string match *HP-UX* $tcl_platform(os)]} {
+		puts "Setting execute permission: pwd [pwd] path $lib"
+		exec chmod a+x $lib
+	    }
+	}
+	puts "eval pkg_mkIndex -verbose $package $libraryPathList *.tcl"
+	eval pkg_mkIndex -verbose $package $libraryPathList *.tcl
+    }
 } else {
-    pkg_mkIndex $package [file join .. .. bin *[info sharedlibextension]]
+    if {[llength $libraryList] > 0} {
+	set libraryPathList {}
+	foreach lib $libraryList {
+	    lappend libraryPathList [file join .. .. bin $lib]
+	}
+	puts "eval pkg_mkIndex -verbose $package$version $libraryPathList *.tcl"
+	eval pkg_mkIndex -verbose $package$version $libraryPathList *.tcl
+    }
 }
