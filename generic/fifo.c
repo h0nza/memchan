@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.6 1999/05/25 18:10:56 aku Exp $
+ * CVS: $Id: fifo.c,v 1.1 1999/05/25 22:26:47 aku Exp $
  */
 
 
@@ -253,6 +253,8 @@ int*       errorCodePtr;	/* Location of error flag */
     toRead = chan->length;
   }
 
+  required = toRead;
+
   while (required > 0) {
     /* Iterate over the chain until the request is satisfied.
      * Releases all buffers which were completely consumed.
@@ -355,7 +357,7 @@ int*       errorCodePtr;	/* Location of error flag. */
   cbuf->bufLength   = toWrite;
   cbuf->nextPtr     = chan->last;
 
-  memcpy ((VOID*) ((char*) cbuf->buf, (VOID*) buf, toWrite);
+  memcpy ((VOID*) cbuf->buf, (VOID*) buf, toWrite);
 
   if (chan->first == (ChannelBuffer*) NULL) {
     chan->first = cbuf;
@@ -697,7 +699,7 @@ Tcl_Obj**   objv;		/* Argument objects. */
   Tcl_Obj* channelHandle;
 #endif
 
-  if (argc != 1) {
+  if (ARGC != 1) {
     Tcl_AppendResult (interp,
 		      "wrong # args: should be \"fifo\"",
 		      (char*) NULL);
@@ -706,8 +708,8 @@ Tcl_Obj**   objv;		/* Argument objects. */
 
   instance = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
   instance->length = 0;
-  instance->first  = (ChannelBuffer) NULL;
-  instance->last   = (ChannelBuffer) NULL;
+  instance->first  = (ChannelBuffer*) NULL;
+  instance->last   = (ChannelBuffer*) NULL;
 
   channelHandle = MemchanGenHandle ("fifo");
 
