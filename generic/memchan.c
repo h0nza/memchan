@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.9 1998/12/20 18:56:47 aku Exp $
+ * CVS: $Id: memchan.c,v 1.1 1999/03/23 10:15:08 aku Exp $
  */
 
 
@@ -81,7 +81,7 @@
 	      ((TCL_MAJOR_VERSION == 8) && \
 	       (TCL_MINOR_VERSION >= 1)))
 
-if ! (GT81)
+#if ! (GT81)
 /* enable use of procedure internal to tcl */
 EXTERN void
 panic _ANSI_ARGS_ ((char* format, ...));
