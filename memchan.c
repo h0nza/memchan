@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.6 1997/07/06 12:36:36 aku Exp $
+ * CVS: $Id: memchan.c,v 1.7 1998/06/19 22:12:21 aku Exp $
  */
 
 
@@ -81,19 +81,6 @@
 	      ((TCL_MAJOR_VERSION == 8) && \
 	       (TCL_MINOR_VERSION >= 1)))
 
-#define ASSOC_KEY "aku:Memchan"
-
-#if GT81
-#ifdef TCL_THREADS
-#define TCL_DECLARE_MUTEX(name) static Tcl_Mutex name;
-#else
-#define TCL_DECLARE_MUTEX(name)
-#endif
-
-TCL_DECLARE_MUTEX(memchanMutex)
-static Tcl_HashTable* chanTable = NULL;
-#endif
-
 
 /* enable use of procedure internal to tcl */
 EXTERN void
@@ -134,9 +121,6 @@ static void	ChannelReady _ANSI_ARGS_((ClientData instanceData));
 static int      GetFile      _ANSI_ARGS_((ClientData instanceData, int direction,
 					  ClientData* handlePtr));
 
-#if GT81
-static void     MemchanExit _ANSI_ARGS_ ((ClientData clientData));
-#endif
 #endif
 
 static int      MemoryChannelCmd _ANSI_ARGS_ ((ClientData notUsed,
@@ -212,10 +196,6 @@ ClientData  instanceData;    /* The instance information of the channel to
 			      * close */
 Tcl_Interp* interp;          /* unused */
 {
-#if GT81
-  Tcl_HashEntry*     hPtr;
-#endif
-
   ChannelInstance* chan;
 
   chan = (ChannelInstance*) instanceData;
@@ -223,20 +203,6 @@ Tcl_Interp* interp;          /* unused */
   if (chan->data != (char*) NULL) {
     Tcl_Free ((char*) chan->data);
   }
-
-#if GT81
-  /* Update tracker table now that the channel is gone.
-   */
-
-  Tcl_MutexLock (&memchanMutex);
-
-  hPtr = Tcl_FindHashEntry (chanTable,
-			    (char*) Tcl_GetChannelName (chan->chan));
-
-  Tcl_DeleteHashEntry (hPtr);
-
-  Tcl_MutexUnlock (&memchanMutex);
-#endif
 
   Tcl_Free ((char*) chan);
 
@@ -742,10 +708,6 @@ char**      argv;		/* Argument strings. */
   Tcl_Channel      chan;
   ChannelInstance* instance;
   char             channelName [50];
-#if GT81
-  Tcl_HashEntry* hPtr;
-  int            new;
-#endif
 
   /*
    * count number of generated memory channels,
@@ -782,19 +744,6 @@ char**      argv;		/* Argument strings. */
 
 #if (TCL_MAJOR_VERSION >= 8)
   instance->timer     = (Tcl_TimerToken) NULL;
-#endif
-
-#if GT81
-  /* Keep track of the new channel.
-   */
-
-  Tcl_MutexLock (&memchanMutex);
-
-  hPtr = Tcl_CreateHashEntry (chanTable, (char*) channelName, &new);
-
-  Tcl_SetHashValue (hPtr, chan);
-
-  Tcl_MutexUnlock (&memchanMutex);
 #endif
 
   Tcl_RegisterChannel  (interp, chan);
@@ -835,28 +784,9 @@ Tcl_Interp* interp;
   /* register memory channels as available package */
   Tcl_PkgProvide (interp, "Memchan", MEMCHAN_VERSION);
 
-#if GT81
-  /* Keep track of the created memory channels, to allow their destruction
-   * before the library is unloaded. This requires a global Exithandler too.
-   */
-
-  Tcl_MutexLock (&memchanMutex);
-
-  if (chanTable == (Tcl_HashTable*) NULL) {
-    chanTable = (Tcl_HashTable*) Tcl_Alloc (sizeof (Tcl_HashTable));
-
-    Tcl_InitHashTable (chanTable, TCL_STRING_KEYS);
-
-    Tcl_CreateExitHandler (MemchanExit, (ClientData) NULL);
-  }
-
-  Tcl_MutexUnlock (&memchanMutex);
-#endif
-
   return TCL_OK;
 }
 
-#if GT81
 /*
  *------------------------------------------------------*
  *
@@ -882,50 +812,3 @@ Tcl_Interp* interp;
   return Memchan_Init (interp);
 }
 
-/*
- *------------------------------------------------------*
- *
- *	MemchanExit --
- *
- *	------------------------------------------------*
- *	Called just before the unloading of this library.
- *	Destroys all memory channels still open.
- *	------------------------------------------------*
- *
- *	Sideeffects:
- *		As of 'Close', frees memory.
- *
- *	Result:
- *		A standard Tcl error code.
- *
- *------------------------------------------------------*
- */
-
-static void
-MemchanExit (clientData)
-ClientData clientData;
-{
-  Tcl_HashEntry* hPtr;
-  Tcl_HashSearch hSearch;
-  Tcl_Channel    chan;
-
-  Tcl_MutexLock (&memchanMutex);
-
-  if (chanTable != (Tcl_HashTable*) NULL) {
-
-    for (hPtr = Tcl_FirstHashEntry (chanTable, &hSearch);
-	 hPtr != (Tcl_HashEntry*) NULL;
-	 hPtr = Tcl_NextHashEntry (&hSearch)) {
-      
-      chan = (Tcl_Channel) Tcl_GetHashValue (hPtr);
-      Tcl_Close (chan);
-    }
-
-    Tcl_DeleteHashTable (chanTable);
-    Tcl_Free (chanTable);
-    chanTable = (Tcl_HashTable*) NULL;
-  }
-
-  Tcl_MutexUnlock (&memchanMutex);
-}
-#endif /* GT81 */
