@@ -2,20 +2,9 @@ Hello world,
 
 This is release @mFullVersion@ of the simple extension providing "Memory channels".
 
-Changes from 1.1:
+Changes from 1.3:
 
-*	Added support for Windows.
-*	Source distribution now available as zip-file too.
-*	Binary distribution available for Windows (used MSVC++ 4.2)
-
-
-Changes from 1.0:
-
-*	cleaned up configuration and removed misleading info (7.5)
-*	configure is now aware of tcl 8.0*
-*	changed search order used by configure.
-
-*	No, no changes in functionality :-)
+*	No changes in functionality, just updated to API changes in tcl 8.0b2
 
 The package can be found at
 

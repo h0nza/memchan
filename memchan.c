@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.4 1997/05/29 09:29:23 aku Exp $
+ * CVS: $Id: memchan.c,v 1.5 1997/05/29 12:02:08 aku Exp $
  */
 
 
@@ -94,16 +94,21 @@ static int	Output _ANSI_ARGS_((ClientData instanceData,
 static int	Seek _ANSI_ARGS_((ClientData instanceData,
 		    long offset, int mode, int *errorCodePtr));
 
+static void	WatchChannel _ANSI_ARGS_((ClientData instanceData, int mask));
+
+
+#if (TCL_MAJOR_VERSION < 8)
 static int	GetOption _ANSI_ARGS_((
 		    ClientData instanceData, char *optionName,
                     Tcl_DString *dsPtr));
 
-static void	WatchChannel _ANSI_ARGS_((ClientData instanceData, int mask));
-
-#if (TCL_MAJOR_VERSION < 8)
 static int	ChannelReady _ANSI_ARGS_((ClientData instanceData, int mask));
 static Tcl_File GetFile      _ANSI_ARGS_((ClientData instanceData, int mask));
 #else
+static int	GetOption _ANSI_ARGS_((
+		    ClientData instanceData, Tcl_Interp* interp,
+		    char *optionName, Tcl_DString *dsPtr));
+
 static void	ChannelReady _ANSI_ARGS_((ClientData instanceData));
 static int      GetFile      _ANSI_ARGS_((ClientData instanceData, int direction,
 					  ClientData* handlePtr));
@@ -387,11 +392,20 @@ int*       errorCodePtr;	/* Location of error flag. */
  *------------------------------------------------------*
  */
 
+#if (TCL_MAJOR_VERSION < 8)
 static int
 GetOption (instanceData, optionName, dsPtr)
 ClientData   instanceData;	/* Channel to query */
 char*        optionName;	/* Name of reuqested option */
 Tcl_DString* dsPtr;		/* String to place the result into */
+#else
+static int
+GetOption (instanceData, interp, optionName, dsPtr)
+ClientData   instanceData;	/* Channel to query */
+Tcl_Interp*  interp;		/* Interpreter to leave error messages in */
+char*        optionName;	/* Name of reuqested option */
+Tcl_DString* dsPtr;		/* String to place the result into */
+#endif
 {
   /*
    * In-memory channels provide a channel type specific,
@@ -407,7 +421,11 @@ Tcl_DString* dsPtr;		/* String to place the result into */
 
   if ((optionName != (char*) NULL) && (0 != strcmp (optionName, "-length"))) {
     Tcl_SetErrno (EINVAL);
+#if (TCL_MAJOR_VERSION < 8)
     return TCL_ERROR;
+#else
+    return Tcl_BadChannelOption (interp, optionName, "length");
+#endif
   }
 
 

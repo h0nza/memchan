@@ -17,6 +17,6 @@ Secondary-URL:	ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mFullVersion@.tar.g
 		ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mFullVersion@.readme
 	        ftp://ftp.kisters.de/pub/lang/tcl/ext/mchan@mDosVersion@b.zip
 Copying-policy: BSDStyle (-> tcl)
-Dependencies:   tcl (7.6 or higher)
+Dependencies:   tcl (7.6 or 8.0b2)
 Comments:
 End
