@@ -1,3 +1,9 @@
+2001-11-15  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* tea/Makefile.in (install-doc): Added invokations of `basename`
+	  to keep absolute paths to the source out of the destination for
+	  the copy operation.
+
 2001-11-12  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* tea/configure.in:

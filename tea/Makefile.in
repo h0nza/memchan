@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.9 2001/11/05 06:02:27 andreas_kupries Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.10 2001/11/13 01:36:37 andreas_kupries Exp $
 
 #========================================================================
 # Additional variables defined here for convenient access to some
@@ -293,10 +293,10 @@ install-doc: doc
 	$(mkinstalldirs) $(mandir)/mann
 	@for i in $(srcdir)/doc/*.n; \
 	    do \
-	    echo "Installing $$i"; \
-	    rm -f $(mandir)/mann/$$i; \
-	    $(INSTALL_DATA) $$i $(mandir)/mann/$$i ; \
-	    chmod 444 $(mandir)/mann/$$i; \
+	    echo "Installing `basename $$i`"; \
+	    rm -f $(mandir)/mann/`basename $$i`; \
+	    $(INSTALL_DATA) $$i $(mandir)/mann/`basename $$i` ; \
+	    chmod 444 $(mandir)/mann/`basename $$i`; \
 	done
 
 #	@echo "Information about the usage of this extension can be found"
