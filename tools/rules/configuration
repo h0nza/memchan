@@ -1,0 +1,9 @@
+# -*- tcl -*-
+# Configuration data
+
+proc bgcolor {} {return lightsteelblue}
+proc project {} {return Memchan}
+proc author  {} {return "\"Andreas Kupries,,,\""}
+proc border  {} {return border=0}
+proc memgroup {} {return 34191}
+

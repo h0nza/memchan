@@ -1,0 +1,22 @@
+[header "Images"][memchan_open]
+
+[nav_begin]
+	[nav_link [mem/home]]
+	[nav_link [mem/anim]]
+[nav_end]
+
+[p] This page displays a series of images all containing the [mem/txt]
+logo in various sizes.
+
+[p] For the two smaller image animated gif are provided, but on a
+separate [mem/anim] page. The reason for the separation are the sizes
+of these two images, 230 and 512 K resp.
+
+<hr>
+
+[table][trtop][td] 43 x 64 </td>[td] 68 x 100 </td>[td] 354 x 520
+</td></tr>[trtop][td][mem/logo/64]</td>[td][mem/logo/100]</td>[td]
+[mem/logo/520]</td></tr></table>
+
+[memchan_close][trailer]
+

@@ -1,0 +1,18 @@
+[header "Documentation"][memchan_open]
+
+[nav_begin]
+	[nav_link [mem/sf/txt]]
+	<br>
+	[nav_link [mem/home]]
+	[nav_link [mem/releases]]
+	[nav_link [mem/images]]
+	[nav_link [mem/anim]]
+[nav_end]
+
+[p] Currently only the [mem/txt/old/2] carries documentation.
+
+[p] When the manpages and/or TMML documentation are written they will
+be integrated into this site using some automated conversion to keep
+the raw documentation and the web in sync.
+
+[memchan_close][trailer]

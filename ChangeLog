@@ -1,3 +1,15 @@
+2001-08-30 Andreas Kupries  <akupries@home.com>
+
+	* htdocs: Sources of the new website.
+	* tools/htdocs/*:
+	* tools/expand:
+	* tools/watch_cvs:
+	* tools/crontab.sourceforge:
+	* tools/rules/: New scripts and supporting files to generate the
+	  website from the raw data files in htdocs. Additional tools to
+	  watch the cvs for changes and to update the website when such
+	  happens.
+
 Fri May  5 00:19:45 2000  Andreas Kupries  <a.kupries@westend.com>
 
 	* generic/fifo2.c: Added bi-directional fifo.

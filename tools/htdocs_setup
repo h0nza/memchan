@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# Called in response to changes in the cvs repository of memchan
+# Assumes that the changed files were already retrieved. Uses them to
+# regenerate the whole website.
+
+# pwd = /home/groups/m/me/memchan/
+
+cp -r memchan/tools/*  tools/
+cp -r memchan/htdocs/* htdocs/
+
+cd htdocs
+
+../tools/htdocs_refresh
+
+exit

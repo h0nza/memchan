@@ -1,0 +1,21 @@
+#!/bin/sh
+# Watch the CVS repository for changes in memchan, retrieve the
+# changed files and invoke the handler script which propagate the
+# changes to other parts of the system.
+
+cd `dirname $0`/..
+
+export CVSROOT
+CVSROOT=:pserver:anonymous@cvs.memchan.sourceforge.net:/cvsroot/memchan
+
+if cvs diff memchan >/dev/null 2>&1
+then
+	out=$HOME/logs/memchan
+	mkdir -p `dirname $out`
+
+	cvs co memchan > $out
+	mkdir -p memchan/htdocs/state
+
+	./tools/htdocs_setup
+fi
+exit
