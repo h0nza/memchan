@@ -1,3 +1,9 @@
+2001-11-12  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* tea/configure.in:
+	* tea/Makefile.in: Changed to expect the toplevel directory as
+	  source directory.
+
 2001-11-04  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* tea/Makefile.in (install-libraries): Removed code trying to

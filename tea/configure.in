@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.4 2000/09/26 20:52:59 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.5 2000/09/26 21:40:05 aku Exp $)
 
 #--------------------------------------------------------------------
 # Configure script for package '@mName@', as distributed at @mDate@.
@@ -14,7 +14,7 @@ AC_REVISION($Id: configure.in,v 1.4 2000/09/26 20:52:59 aku Exp $)
 # this package.
 #--------------------------------------------------------------------
 
-AC_INIT(../generic/memchan.c)
+AC_INIT(./generic/memchan.c)
 
 #--------------------------------------------------------------------
 # Setting our package name and version numbers.  The NODOT_VERSION is

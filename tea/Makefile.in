@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.8 2001/09/12 04:55:58 andreas_kupries Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.9 2001/11/05 06:02:27 andreas_kupries Exp $
 
 #========================================================================
 # Additional variables defined here for convenient access to some
@@ -20,7 +20,7 @@
 # from everything else which was predefined by TEA.
 #========================================================================
 
-MC_TOPDIR	=	$(srcdir)/..
+MC_TOPDIR	=	$(srcdir)
 MC_GENSRCDIR	=	$(MC_TOPDIR)/generic
 MC_DOCDIR	=	$(MC_TOPDIR)/doc
 MC_TOOLDIR	=	$(MC_TOPDIR)/tools
