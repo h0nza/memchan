@@ -17,8 +17,12 @@ There are 2 sets of files for building memchan on Unix-like system.
 2)	The older set has no specific name and resides in the 'unix'
 	subdirectory of the memchan source distribution.
 
-	Use this set when compiling memchan against a Tcl core of
-	version 8.2 or higher.
+	Use this set when compiling memchan against a Tcl core less
+	than 8.2, but greater or equal to 8.0.
+
+	Version of tthe tcl core below version 8.0 of the core are not
+	supported.
+
 
 The standard usage of both sets is identical:
 
@@ -31,7 +35,13 @@ The standard usage of both sets is identical:
 WIN*
 ====
 
-There are three makefiles for windows.
+People having a cygwin environment and a VC++ compile can use the TEA
+build system in the toplevel directory to compile memchan (provided
+that a tcl core of version 8.2 or higher is used). It will be
+necessary to set CC=cl to enforce the usage of the MS VC++ compiler.
+
+For all other situations there are three makefiles for windows, all
+residing in the subdirectory "win" of the memchan distribution.
 
 1)	makefile.vc	Use this with MS VC++ 6 IDE.
 2)	makefile.vc5	Use this with MS VC++ 5 IDE.

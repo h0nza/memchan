@@ -1,3 +1,12 @@
+2002-04-25  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* tea/Makefile.in (install-lib-binaries): Added a missing ;. Bug
+	  was introduced by ysterdays change to install a hand-crafted
+	  package index file.
+
+	* README.install: Cleared up confusion in the listing which build
+	  system goes with which version of the tcl core.
+
 2002-04-24  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* tea/pkgIndex.tcl: New, manually generated package index.
