@@ -1,4 +1,11 @@
-2004-05-31  Andreas Kupries  <andreask@pliers.activestate.com>
+2004-06-03  Andreas Kupries  <andreask@activestate.com>
+
+	* generic/memchan.c: Added include of <stdio.h>. This does not
+	  hurt compilation against 8.4, and makes compilation against 8.5
+	  possible again after its header reform. We need it to get the
+	  SEEK_ constants.
+
+2004-05-31  Andreas Kupries  <andreask@activestate.com>
 
 	* generic/random.c: Added empty BMP. Also removed references to
 	  the 'null' channel, changed them into 'random'.
