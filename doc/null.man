@@ -6,7 +6,7 @@
 The command described here is only available in a not-yet released
 version of the package. Use the CVS to get the sources.
 
-[list_begin bullet]
+[list_begin definitions]
 
 [call [cmd null]]
 

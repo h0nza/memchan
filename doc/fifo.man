@@ -2,7 +2,7 @@
 [require Tcl]
 [require memchan]
 [description]
-[list_begin bullet]
+[list_begin definitions]
 
 [call [cmd fifo]]
 
@@ -27,7 +27,7 @@ Memory channels created by [cmd fifo] provide two read-only options
 which can be queried via the standard [cmd fconfigure] command. These
 are
 
-[list_begin bullet]
+[list_begin definitions]
 	[lst_item -length]
 
 	The value of this option is the number of bytes currently

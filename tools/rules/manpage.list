@@ -24,10 +24,12 @@ proc para        {}                 {}
 proc call        {cmd args}         {}
 proc list_begin  {what}             {}
 proc list_end    {}                 {}
-proc lst_item    {{text {}}}        {}
+proc lst_item    {text}             {}
 proc see_also    {args}             {}
 proc keywords    {args}             {}
 proc nl          {}                 {}
+proc bullet      {}                 {}
+proc enum        {}                 {}
 proc arg         {text}             {}
 proc cmd         {text}             {}
 proc emph        {text}             {}

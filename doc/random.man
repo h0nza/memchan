@@ -5,7 +5,7 @@
 [para]
 The command described here is in the planning stages and not available yet.
 
-[list_begin bullet]
+[list_begin definitions]
 
 [call [cmd random]]
 

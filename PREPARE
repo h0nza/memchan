@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.21 1999/09/12 21:24:21 aku Exp $
+# CVS:	$Id: PREPARE,v 1.22 2001/09/08 20:34:34 andreas_kupries Exp $
 
 # Exclude older binary distributions, they are made available through the 1.9 site.
 
@@ -10,7 +10,8 @@ mExclude \
 	win/bdist/vc6.ak.19.1     \
 	unix/bdist/ak.1           \
 	unix/bdist/ak.2           \
-	unix/bdist/ak.3
+	unix/bdist/ak.3 \
+	doc/nodes doc/manual
 
 
 
@@ -24,8 +25,7 @@ eval mInsertInfo \
 	README win/README win/README.VC mac/README \
 	unix/configure.in unix/Makefile.in \
 	tea/configure.in tea/Makefile.in \
-	[glob win/makefile.vc*] win/Makefile.gnu win/mc.rc \
-	[glob doc/nodes/*.node] [glob doc/nodes/*.def]
+	[glob win/makefile.vc*] win/Makefile.gnu win/mc.rc
 
 mGetDescription
 mExpandUrls
@@ -68,8 +68,12 @@ eval file rename [glob tg*] testlib
 # Now generate documentation for linkage into my
 # site and standalone distribution
 
+cd doc
+exec ../tools/manpage_regen > /dev/null 2>/dev/null
+
+
 #mHandleBinaryDistributions
-mHandleBinaryDistributions doc/license.terms README
+#mHandleBinaryDistributions doc/license.terms README
 
 # create the file required by the NeoSoft CSA
 file copy ChangeLog.short CHANGES

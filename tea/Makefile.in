@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.6 2000/01/15 14:55:42 aku Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.7 2000/09/26 20:52:58 aku Exp $
 
 #========================================================================
 # Additional variables defined here for convenient access to some
@@ -290,10 +290,19 @@ install-libraries: libraries
 #========================================================================
 
 install-doc: doc
-	@echo "Information about the usage of this extension can be found"
-	@echo "in the HTML documentation at ${MC_DOCDIR}/html/index.html"
-	@echo "or, more specifically ${MC_DOCDIR}/html/memchan_cmds.html"
-	@echo "Just use your favorite browser to read them."
+	$(mkinstalldirs) $(mandir)/mann
+	@for i in $(srcdir)/doc/*.n; \
+	    do \
+	    echo "Installing $$i"; \
+	    rm -f $(mandir)/mann/$$i; \
+	    $(INSTALL_DATA) $$i $(mandir)/mann/$$i ; \
+	    chmod 444 $(mandir)/mann/$$i; \
+	done
+
+#	@echo "Information about the usage of this extension can be found"
+#	@echo "in the HTML documentation at ${MC_DOCDIR}/html/index.html"
+#	@echo "or, more specifically ${MC_DOCDIR}/html/memchan_cmds.html"
+#	@echo "Just use your favorite browser to read them."
 
 #	Currently no documentation to install. We have documentation in HTML
 #	format, but there is no agreed upon place for them.

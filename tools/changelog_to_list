@@ -11,8 +11,8 @@ proc main {} {
     set in [lindex $argv 0]
     set out [cl:parse [read [set fh [open $in r]]][close $fh]]
 
-    puts [join $out \n]
-    exit
+    #puts [join $out \n] -- Test code
+    #exit
     puts $out
 }
 

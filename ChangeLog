@@ -1,4 +1,23 @@
+2001-09-11  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* tea/Makefile.in (install-doc): Added installation of the memchan
+	  manpages.
+
+	* PREPARE: Removed vestiges of doc/nodes, added generation of the
+	  new manpages.
+
+	* doc/fifo.man:
+	* doc/fifo2.man:
+	* doc/memchan.man:
+	* doc/null.man:
+	* doc/random.man: Adapted to new manpage specification.
+
 2001-09-10  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* tools/rules/manpage.api: Added commands for [bullet] and [enum].
+
+	* doc/manpages.man: New manpage describing the manpage markup
+	  format itself.
 
 	* htdocs/raw/documentation.exp: Added TMML bundles to table.
 

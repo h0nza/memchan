@@ -9,18 +9,18 @@ channels which can utilized to
 
 [list_begin bullet]
 
-	[lst_item]
+	[bullet]
 	capture stream-like information in a natural way instead of using
 	[cmd set] and [cmd append] to manipulate strings
 
-	[lst_item]
+	[bullet]
 	or to transfer data between interpreters, in the same thread or not.
 
 [list_end]
 
 [section COMMAND]
 [para]
-[list_begin bullet]
+[list_begin definitions]
 
 [call [cmd memchan] [opt "-initial-size [arg len]"]]
 
@@ -41,7 +41,7 @@ Memory channels created by [cmd memchan] provide two read-only options
 which can be queried via the standard [cmd fconfigure] command. These
 are
 
-[list_begin bullet]
+[list_begin definitions]
 	[lst_item -length]
 
 	The value of this option is the number of bytes currently

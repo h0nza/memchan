@@ -21,6 +21,7 @@ proc begin_hook {} {
     # Reset the syn flag
     global state
     set state(syn) 0
+    return
 }
 
 # Called after the last output.
@@ -106,12 +107,13 @@ proc list_begin  {what} {
     global list_state
 
     switch -exact -- $what {
-	enum - bullet {}
+	enum - bullet - definitions {}
 	default {return -code error "Unknown list type $what"}
     }
 
     incr list_state(level)
     set  list_state(l,$list_state(level)) $what
+    set  list_state(l,$list_state(level),id) 0
 
     if {$list_state(level) > 0} {
 	return [nr_in]
@@ -123,6 +125,7 @@ proc list_begin  {what} {
 proc list_end {} {
     global list_state
     catch {unset list_state(l,$list_state(level))}
+    catch {unset list_state(l,$list_state(level),id)}
 
     incr list_state(level) -1
 
@@ -133,19 +136,28 @@ proc list_end {} {
     }
 }
 
-proc lst_item {{text {}}} {
+proc bullet {} {
     global list_state
-
     switch -exact -- $list_state(l,$list_state(level)) {
-	enum   {set cmd nr_enum}
-	bullet {set cmd nr_blt}
+	bullet  {return ".TP\n*"}
+	default {return -code error "Illegal use of bullet in non-bullet list"}
     }
-    if {$text == {}} {
-	set cmd  nr_enum
-	set text *
-    }
+}
 
-    $cmd $text
+proc enum {} {
+    global list_state
+    switch -exact -- $list_state(l,$list_state(level)) {
+	enum    {return ".IP \[[incr list_state(l,$list_state(level),id)]\]\n"}
+	default {return -code error "Illegal use of bullet in non-bullet list"}
+    }
+}
+
+proc lst_item {text} {
+    global list_state
+    switch -exact -- $list_state(l,$list_state(level)) {
+	definitions {return ".TP\n$text"}
+	default     {return -code error "Illegal use of bullet in non-bullet list"}
+    }
 }
 
 ################################################################

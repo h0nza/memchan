@@ -6,7 +6,7 @@
 The command described here is only available in a not-yet released
 version of the package. Use the CVS to get the sources.
 
-[list_begin bullet]
+[list_begin definitions]
 
 [call [cmd fifo2]]
 
@@ -34,7 +34,7 @@ Memory channels created by [cmd fifo2] provide two read-only options
 which can be queried via the standard [cmd fconfigure] command. These
 are
 
-[list_begin bullet]
+[list_begin definitions]
 	[lst_item -rlength]
 
 	The value of this option is the number of bytes currently

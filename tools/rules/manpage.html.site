@@ -117,9 +117,10 @@ proc list_begin  {what} {
     global list_state
 
     switch -exact -- $what {
-	enum   {set result <ol>}
-	bullet {set result <ul>}
-	default {return -code error "Unknown list type $what"}
+	enum        {set result <ol>}
+	bullet      {set result <ul>}
+	definitions {set result <dl>}
+	default     {return -code error "Unknown list type $what"}
     }
 
     incr list_state(level)
@@ -137,19 +138,16 @@ proc list_end {} {
     incr list_state(level) -1
 
     switch -exact -- $what {
-	enum   {set result </ol>}
-	bullet {set result </ul>}
+	enum        {set result </ol>}
+	bullet      {set result </ul>}
+	definitions {set result </dl>}
     }
     return $result
 }
 
-proc lst_item {{text {}}} {
-    if {$text != {}} {
-	return <li>$text<br>
-    } else {
-	return <li>
-    }
-}
+proc lst_item {text} {return <dt>$text<dd>}
+proc bullet {} {return <li>}
+proc enum {} {return <li>}
 
 ################################################################
 

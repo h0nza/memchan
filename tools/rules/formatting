@@ -76,7 +76,9 @@ proc changelog_items {items} {
     set dlopen  0
     set onlykey 0
 
+    set html ""
     foreach item $items {
+	set key [set com {}]
 	foreach {key com} $item break
 
 	if {$key != {}} {

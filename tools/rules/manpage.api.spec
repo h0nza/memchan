@@ -57,3 +57,27 @@ arguments. This should better be done through a command. This command
 is "opt". _Not_ "optarg" as it may span several arguments.
 
 ======================================================================
+
+   [list_begin "bullet"] --
+    	Starts a bulleted (unordered) list.
+    [bullet] --
+    	Starts a new item in a bulleted list.
+
+    [list_begin "enum"] --
+    	Starts a numbered list.
+    [enum] --
+    	Starts a new item in a numbered (ordered) list.  Successive list
+	items are numbered [1], [2],  ... etc.
+
+    [list_begin "definitions"] --
+    	Starts a definition list.
+    [lst_item _text_] --
+    	Starts a new entry in a definition list.  _text_ is
+	the list item header.
+
+    [list_begin commands] --
+    	Starts a command list, for describing the syntax of a
+	command and its arguments.
+    [call _cmd_ ? _arg_ _arg_ ... ? ] --
+    	Starts an entry in a command list.  In addition, adds the
+	command syntax summary "_cmd_ _args_..." to the SYNOPSIS section.
