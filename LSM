@@ -9,6 +9,7 @@ Keywords:       tcl, channeltypes, memory channel
 Author:         a.kupries@westend.com  (Andreas Kupries)
 Maintained-by:  a.kupries@westend.com  (Andreas Kupries)
 Primary-URL:	ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.tar.gz
+		ftp.kisters.de/pub/lang/tcl/ext/memchan@NODOT_VERSION@.zip
 		ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.readme
 Copying-policy: BSDStyle (-> tcl)
 Dependencies:   tcl (7.6 or higher)
