@@ -14,9 +14,6 @@ extension memchan {
 
     primary-urls {
 	http://www.oche.de/%7Eakupries/soft/memchan/<ARCH>
-	http://www.oche.de/%7Eakupries/soft/memchan/memchan@mFullVersion@.tar.gz
-	http://www.oche.de/%7Eakupries/soft/memchan/memchan@mDosVersion@.zip
-	http://www.oche.de/%7Eakupries/soft/memchan/memchan@mFullVersion@.README
 	http://www.oche.de/%7Eakupries/soft/memchan/mchan@mDosVersion@b.zip
     }
 
