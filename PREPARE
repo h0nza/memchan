@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.21.2.1 2001/03/27 19:36:36 tcl Exp $
+# CVS:	$Id: PREPARE,v 1.21.2.2 2001/03/27 19:41:58 tcl Exp $
 
 # Exclude older binary distributions, they are made available through the 1.9 site.
 
@@ -11,7 +11,7 @@ mExclude \
 	unix/bdist/ak.1           \
 	unix/bdist/ak.2           \
 	unix/bdist/ak.3
-
+mExclude win/bdist unix/bdist
 
 
 # O. insert various information into some files
