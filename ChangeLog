@@ -1,3 +1,14 @@
+Sat Sep 18 15:06:07 1999  Andreas Kupries  <a.kupries@westend.com>
+
+	* generic/fifo.c (GetOption): See below, '-allocated'.
+
+	* generic/memchan.c (MemchanCmd): Added option '-initial-size',
+	  proposed by <Petteri.Kettunen@picker.fi>. If specified the
+	  channel will preallocate some buffer space, making the first
+	  write accesses a bit faster.
+	  (GetOption): Added '-allocated' to query the size of the
+	  allocated buffers, not the used number of bytes.
+
 Tue Sep 14 00:42:11 1999  Andreas Kupries  <a.kupries@westend.com>
 
 	* generic/memchan.c, fifo.c, counter.c: Changed to use LTOA
