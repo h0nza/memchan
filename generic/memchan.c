@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.21 2004/05/21 20:24:44 andreas_kupries Exp $
+ * CVS: $Id: memchan.c,v 1.22 2004/06/03 19:02:57 andreas_kupries Exp $
  */
 
 
@@ -68,7 +68,7 @@ static int	BlockMode _ANSI_ARGS_((ClientData instanceData,
 
 static Tcl_ChannelType channelType = {
   "memory",		/* Type name.                                    */
-  BlockMode,		/* Set blocking/nonblocking behaviour. */
+  (Tcl_ChannelTypeVersion)BlockMode, /* Set blocking behaviour.          */
   Close,		/* Close channel, clean instance data            */
   Input,		/* Handle read request                           */
   Output,		/* Handle write request                          */
@@ -577,6 +577,60 @@ ClientData* handlePtr;          /* Space to the handle into */
 }
 
 /*
+ * ----------------------------------------------------------------------
+ *
+ * Memchan_CreateMemoryChannel -
+ *
+ *	Creates a new 'memchan' channel.
+ *
+ * Results:
+ *	Returns the newly minted channel
+ *
+ * Side effects:
+ *	A new 'memchan' channel is registered in the current interpreter.
+ *
+ * ----------------------------------------------------------------------
+ */
+
+Tcl_Channel
+Memchan_CreateMemoryChannel(interp, initialSize)
+     Tcl_Interp *interp;        /* current interpreter */
+     int         initialSize;	/* buffer size to pre-allocate */
+{
+    Tcl_Obj*         channelHandle;
+    Tcl_Channel      chan;
+    ChannelInstance* instance;
+    
+    instance = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
+    instance->rwLoc     = 0;
+    instance->used      = 0;
+    instance->allocated = initialSize;
+    
+    if (initialSize > 0) {
+	instance->data      = (VOID*) Tcl_Alloc (initialSize);
+    } else {
+	instance->data      = (VOID*) NULL;
+    }
+    
+    channelHandle = MemchanGenHandle ("mem");
+    
+    chan = Tcl_CreateChannel (&channelType,
+	Tcl_GetStringFromObj (channelHandle, NULL),
+	(ClientData) instance,
+	TCL_READABLE | TCL_WRITABLE);
+    
+    instance->chan      = chan;
+    instance->timer     = (Tcl_TimerToken) NULL;
+    instance->interest  = 0;
+    
+    Tcl_RegisterChannel  (interp, chan);
+    Tcl_SetChannelOption (interp, chan, "-buffering", "none");
+    Tcl_SetChannelOption (interp, chan, "-blocking",  "0");
+    
+    return chan;
+}
+
+/*
  *------------------------------------------------------*
  *
  *	MemchanCmd --
@@ -597,62 +651,35 @@ ClientData* handlePtr;          /* Space to the handle into */
 	/* ARGSUSED */
 int
 MemchanCmd (notUsed, interp, objc, objv)
-ClientData    notUsed;		/* Not used. */
-Tcl_Interp*   interp;		/* Current interpreter. */
-int           objc;		/* Number of arguments. */
-Tcl_Obj*CONST objv[];		/* Argument objects. */
+     ClientData    notUsed;		/* Not used. */
+     Tcl_Interp*   interp;		/* Current interpreter. */
+     int           objc;		/* Number of arguments. */
+     Tcl_Obj*CONST objv[];		/* Argument objects. */
 {
-  Tcl_Obj*         channelHandle;
-  Tcl_Channel      chan;
-  ChannelInstance* instance;
-  int              initialSize = 0;
+    Tcl_Channel chan;
+    int initialSize = 0;
 
-  if ((objc != 1) && (objc != 3)) {
-    goto argerr;
-  } else if (objc == 3) {
-    int   len;
-    char* buf = Tcl_GetStringFromObj (objv [1], &len);
-
-    if (0 != strncmp (buf, "-initial-size", len)) {
-      goto argerr;
-    } else if (TCL_OK != Tcl_GetIntFromObj (interp, objv [2], &initialSize)) {
-      goto argerr;
+    if ((objc != 1) && (objc != 3)) {
+	goto argerr;
+    } else if (objc == 3) {
+	int   len;
+	char* buf = Tcl_GetStringFromObj (objv [1], &len);
+	
+	if (0 != strncmp (buf, "-initial-size", len)) {
+	    goto argerr;
+	} else if (TCL_OK != Tcl_GetIntFromObj (interp, objv [2], &initialSize)) {
+	    goto argerr;
+	}
     }
-  }
-
-  instance = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
-  instance->rwLoc     = 0;
-  instance->used      = 0;
-  instance->allocated = initialSize;
-
-  if (initialSize > 0) {
-    instance->data      = (VOID*) Tcl_Alloc (initialSize);
-  } else {
-    instance->data      = (VOID*) NULL;
-  }
-
-  channelHandle = MemchanGenHandle ("mem");
-
-  chan = Tcl_CreateChannel (&channelType,
-			    Tcl_GetStringFromObj (channelHandle, NULL),
-			    (ClientData) instance,
-			    TCL_READABLE | TCL_WRITABLE);
-
-  instance->chan      = chan;
-  instance->timer     = (Tcl_TimerToken) NULL;
-  instance->interest  = 0;
-
-  Tcl_RegisterChannel  (interp, chan);
-  Tcl_SetChannelOption (interp, chan, "-buffering", "none");
-  Tcl_SetChannelOption (interp, chan, "-blocking",  "0");
-
-  Tcl_SetObjResult     (interp, channelHandle);
-  return TCL_OK;
-
-argerr:
-  Tcl_AppendResult (interp,
-		    "wrong # args: should be \"memchan ?-initial-size number?\"",
-		    (char*) NULL);
-  return TCL_ERROR;
+    
+    chan = Memchan_CreateMemoryChannel(interp, initialSize);
+    Tcl_AppendResult(interp, Tcl_GetChannelName(chan), (char *)NULL);
+    return TCL_OK;
+    
+ argerr:
+    Tcl_AppendResult (interp,
+	"wrong # args: should be \"memchan ?-initial-size number?\"",
+	(char*) NULL);
+    return TCL_ERROR;
 }
 

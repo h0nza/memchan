@@ -27,7 +27,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: zero.c,v 1.1 2004/06/03 23:39:13 patthoyts Exp $
+ * CVS: $Id: zero.c,v 1.2 2004/06/04 14:09:11 patthoyts Exp $
  */
 
 
@@ -466,6 +466,47 @@ GetOption (instanceData, interp, optionName, dsPtr)
 }
 
 /*
+ *------------------------------------------------------
+ *
+ * Memchan_CreateZeroChannel -
+ *
+ * 	Mint a new zero channel.
+ *
+ * Result:
+ *	Returns the new channel.
+ *
+ *------------------------------------------------------
+ */
+
+Tcl_Channel
+Memchan_CreateZeroChannel(interp)
+     Tcl_Interp *interp;	/* current interpreter */
+{
+    Tcl_Channel      chan;
+    Tcl_Obj         *channelHandle;
+    ChannelInstance *instance;
+
+    instance      = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
+    channelHandle = MemchanGenHandle ("zero");
+
+    chan = Tcl_CreateChannel (&channelType,
+	Tcl_GetStringFromObj (channelHandle, NULL),
+	(ClientData) instance,
+	TCL_READABLE | TCL_WRITABLE);
+
+    instance->chan      = chan;
+    instance->timer     = (Tcl_TimerToken) NULL;
+    instance->delay     = DELAY;
+
+    Tcl_RegisterChannel  (interp, chan);
+    Tcl_SetChannelOption (interp, chan, "-buffering", "none");
+    Tcl_SetChannelOption (interp, chan, "-blocking",  "0");
+    Tcl_SetChannelOption (interp, chan, "-encoding",  "binary");
+
+    return chan;
+}
+
+/*
  *------------------------------------------------------*
  *
  *	MemchanZeroCmd --
@@ -491,34 +532,15 @@ MemchanZeroCmd (notUsed, interp, objc, objv)
      int           objc;		/* Number of arguments. */
      Tcl_Obj*CONST objv[];		/* Argument objects. */
 {
-    Tcl_Obj*         channelHandle;
-    Tcl_Channel      chan;
-    ChannelInstance* instance;
+    Tcl_Channel chan;
 
     if (objc != 1) {
-	Tcl_AppendResult (interp,
-	    "wrong # args: should be \"zero\"",
+	Tcl_AppendResult (interp, "wrong # args: should be \"zero\"", 
 	    (char*) NULL);
 	return TCL_ERROR;
     }
-
-    instance      = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
-    channelHandle = MemchanGenHandle ("zero");
-
-    chan = Tcl_CreateChannel (&channelType,
-	Tcl_GetStringFromObj (channelHandle, NULL),
-	(ClientData) instance,
-	TCL_READABLE | TCL_WRITABLE);
-
-    instance->chan      = chan;
-    instance->timer     = (Tcl_TimerToken) NULL;
-    instance->delay     = DELAY;
-
-    Tcl_RegisterChannel  (interp, chan);
-    Tcl_SetChannelOption (interp, chan, "-buffering", "none");
-    Tcl_SetChannelOption (interp, chan, "-blocking",  "0");
-    Tcl_SetChannelOption (interp, chan, "-encoding",  "binary");
-
-    Tcl_SetObjResult     (interp, channelHandle);
+    
+    chan = Memchan_CreateZeroChannel(interp);
+    Tcl_AppendResult(interp, Tcl_GetChannelName(chan), (char *)NULL);
     return TCL_OK;
 }

@@ -18,10 +18,10 @@
 # Copyright (c) 2003 Pat Thoyts
 #
 #-------------------------------------------------------------------------
-# RCS: @(#)$Id: makefile.vc,v 1.13 2004/06/03 23:39:13 patthoyts Exp $
+# RCS: @(#)$Id: makefile.vc,v 1.14 2004/06/04 14:06:40 patthoyts Exp $
 #-------------------------------------------------------------------------
 
-!if  !defined(MSDEVDIR) && !defined(MSVCDIR) && !defined(VCToolkitInstallDir)
+!if !defined(MSDEVDIR) && !defined(MSVCDIR) && !defined(VCToolkitInstallDir)
 MSG = ^
 You will need to run vcvars32.bat from Developer Studio, first, to setup^
 the environment.  Jump to this line to read the new instructions.
@@ -156,8 +156,8 @@ Please `cd` to its location first.
 PROJECT = Memchan
 !include "rules.vc"
 
-DOTVERSION      = 2.2.0
-MEMCHAN_VERSION = 2.2.0
+DOTVERSION      = 2.2.1
+MEMCHAN_VERSION = 2.2.1
 VERSION         = $(DOTVERSION:.=)
 STUBPREFIX      = $(PROJECT)stub
 
@@ -178,9 +178,12 @@ DLLOBJS	= \
 	$(TMP_DIR)\bufStubInit.obj \
 	$(TMP_DIR)\bufStubLib.obj \
 	$(TMP_DIR)\dllEntry.obj \
-	$(TMP_DIR)\randport.obj
+	$(TMP_DIR)\randport.obj \
+	$(TMP_DIR)\memchanStubInit.obj \
+	$(TMP_DIR)\memchanStubLib.obj
 
 PRJSTUBOBJS = \
+	$(TMP_DIR)\memchanStubLib.obj \
 	$(TMP_DIR)\bufStubLib.obj
 
 PRJDOCS = \
@@ -192,6 +195,10 @@ PRJDOCS = \
 	$(OUT_DIR)\random.html
 
 DLLRES = $(TMP_DIR)\mc.res
+
+PRJHDRS = \
+	$(GENERICDIR)\memchan.h \
+	$(GENERICDIR)\memchanDecls.h
 
 #-------------------------------------------------------------------------
 # Target names and paths ( shouldn't need changing )
@@ -207,12 +214,17 @@ PRJLIB		= $(OUT_DIR)\$(PRJLIBNAME)
 PRJSTUBLIBNAME	= $(STUBPREFIX)$(VERSION).lib
 PRJSTUBLIB	= $(OUT_DIR)\$(PRJSTUBLIBNAME)
 
+CHANTEST        = $(OUT_DIR)\Chantest$(SUFX).$(EXT)
+CHANTESTOBJ     = $(TMP_DIR)\chantest.obj
+
 ### Make sure we use backslash only.
-LIB_INSTALL_DIR		= $(_INSTALLDIR)\lib
-BIN_INSTALL_DIR		= $(_INSTALLDIR)\bin
-DOC_INSTALL_DIR		= $(_INSTALLDIR)\doc
-SCRIPT_INSTALL_DIR	= $(_INSTALLDIR)\lib\$(PROJECT)$(DOTVERSION)
-INCLUDE_INSTALL_DIR	= $(_INSTALLDIR)\include
+PRJ_INSTALL_DIR         = $(_INSTALLDIR)\$(PROJECT)$(DOTVERSION)
+BIN_INSTALL_DIR		= $(PRJ_INSTALL_DIR)
+DOC_INSTALL_DIR		= $(PRJ_INSTALL_DIR)
+SCRIPT_INSTALL_DIR	= $(PRJ_INSTALL_DIR)
+DEMO_INSTALL_DIR	= $(PRJ_INSTALL_DIR)
+INCLUDE_INSTALL_DIR	= $(_TCLDIR)\include
+LIB_INSTALL_DIR		= $(_TCLDIR)\lib
 
 ### The following paths CANNOT have spaces in them.
 GENERICDIR	= $(ROOT)\generic
@@ -222,11 +234,6 @@ DOCDIR		= $(ROOT)\doc
 TOOLSDIR	= $(ROOT)\tools
 COMPATDIR	= $(ROOT)\compat
 ISAACDIR	= $(ROOT)\isaac
-
-### Find a tclsh for testing and installation.
-!if !exist("$(TCLSH)")
-TCLSH           = $(BIN_INSTALL_DIR)\tclsh$(TCL_VERSION).exe
-!endif
 
 #---------------------------------------------------------------------
 # Compile flags
@@ -241,9 +248,9 @@ cdebug	=
 !endif
 !else if "$(MACHINE)" == "IA64"
 ### Warnings are too many, can't support warnings into errors.
-cdebug	= -Z7 -Od
+cdebug	= -Z7 -Od -GZ
 !else
-cdebug	= -Z7 -Od #-WX
+cdebug	= -Z7 -Od -GZ -WX
 !endif
 
 ### Declarations common to all compiler options
@@ -272,12 +279,12 @@ crt = -MT
 !endif
 
 INCLUDES	= $(TCL_INCLUDES) -I"$(WINDIR)" -I"$(GENERICDIR)" -I"$(ISAACDIR)"
-BASE_CLFAGS	= $(cflags) $(cdebug) $(crt) $(INCLUDES)
+BASE_CFLAGS	= $(cflags) $(cdebug) $(crt) $(INCLUDES)
 CON_CFLAGS	= $(cflags) $(cdebug) $(crt) -DCONSOLE
 MC_CFLAGS	= -DHAVE_STDLIB_H -DMEMCHAN_VERSION=\"$(MEMCHAN_VERSION)\" \
 		  -DBUILD_Memchan  -DDLL_BUILD -DHAVE_LTOA -D__WIN32__
 TCL_CFLAGS	= -DUSE_TCL_STUBS -DVERSION="\"$(DOTVERSION)\"" \
-		  $(BASE_CLFAGS) $(OPTDEFINES) $(MC_CFLAGS)
+		  $(BASE_CFLAGS) $(OPTDEFINES) $(MC_CFLAGS)
 
 #---------------------------------------------------------------------
 # Link flags
@@ -326,17 +333,38 @@ TESTFLAGS = -file $(TESTPAT)
 #---------------------------------------------------------------------
 
 all:	    setup $(PROJECT)
+stubs:      setup $(PRJSTUBLIB)
 $(PROJECT): setup $(PRJLIB) $(PRJSTUBLIB)
+chantest:   stubs $(CHANTEST)
 doc:        setup $(PRJDOCS)
 install:    install-binaries install-libraries install-docs
 
+# Tests need to ensure we load the right dll file we
+# have to handle the output differently on Win9x.
+#
+!if "$(OS)" == "Windows_NT"  || "$(MSVCDIR)" == "IDE"
 test: setup $(PROJECT)
-	set TCL_LIBRARY=$(ROOT)/library
-	$(TCLSH) <<
-		load $(PRJLIB:\=/)
-		cd $(ROOT)/tests
-		source all
+        $(TCLSH) <<
+load $(PRJLIB:\=/)
+cd "$(ROOT)/tests"
+set argv "$(TESTFLAGS)"
+source all
 <<
+!else
+test: setup $(PROJECT)
+        echo Please wait while the test results are collected
+        $(TCLSH) << >tests.log
+load $(PRJLIB:\=/)
+cd "$(ROOT)/tests"
+set argv "$(TESTFLAGS)"
+source all
+<<
+        type tests.log | more
+!endif
+
+$(CHANTEST): $(CHANTESTOBJ)
+	$(link32) $(dlllflags) -out:$@ $** $(PRJSTUBLIB) $(baselibs)
+	-@del $*.exp
 
 setup:
 	@if not exist $(OUT_DIR)\nul mkdir $(OUT_DIR)
@@ -350,6 +378,10 @@ $**
 
 $(PRJSTUBLIB): $(PRJSTUBOBJS)
 	$(lib32) -nologo -out:$@ $(PRJSTUBOBJS)
+
+$(TMP_DIR)\chantest.obj: $(GENERICDIR)\chantest.c
+    $(cc32) -nologo -DUSE_TCL_STUBS -DUSE_MEMCHAN_STUBS $(BASE_CFLAGS) \
+	$(OPTDEFINES) $(INCLUDES) -Fo$(TMP_DIR)\ -c $**
 
 #---------------------------------------------------------------------
 # Implicit rules
@@ -377,6 +409,9 @@ $<
 
 {$(WINDIR)}.rc{$(TMP_DIR)}.res:
 	$(rc32) -fo $@ -r -i "$(GENERICDIR)" -D__WIN32__ \
+		-DCOMMAVERSION=$(DOTVERSION:.=,),0 \
+		-DDOTVERSION=\"$(DOTVERSION)\" \
+		-DVERSION=\"$(VERSION)$(SUFX)\" \
 !if $(DEBUG)
 	-d DEBUG \
 !endif
@@ -388,10 +423,17 @@ $<
 !endif
 	$<
 
-DOC2HTML = $(TCLSH) $(TOOLSDIR)\mpexpand.tcl html
+DOC2HTML = $(TCLSH) "$(TOOLSDIR)\mpexpand.tcl" html
 
 {$(DOCDIR)}.man{$(OUT_DIR)}.html:
 	$(DOC2HTML) $< $@
+        @$(TCLSH) <<
+set name $(@:\=/)
+set f [open $$name r]; set d [read $$f]; close $$f
+set d [regsub {</head>} $$d {<link rel="stylesheet" href="manpage.css" type="text/css"></head>}]
+set f [open $$name w]; puts -nonewline $$f $$d; close $$f
+<<
+
 
 .SUFFIXES:
 .SUFFIXES:.c .rc .man
@@ -406,15 +448,22 @@ DOC2HTML = $(TCLSH) $(TOOLSDIR)\mpexpand.tcl html
 
 install-binaries:
 	@echo Installing binaries to '$(SCRIPT_INSTALL_DIR)'
-	@if not exist $(SCRIPT_INSTALL_DIR)\nul mkdir $(SCRIPT_INSTALL_DIR)
-	@$(CPY) $(PRJLIB)     $(SCRIPT_INSTALL_DIR) >NUL
-	@$(CPY) $(PRJIMPLIB)  $(SCRIPT_INSTALL_DIR) >NUL
-	@$(CPY) $(PRJSTUBLIB) $(SCRIPT_INSTALL_DIR) >NUL
+	@if not exist $(SCRIPT_INSTALL_DIR)\nul mkdir "$(SCRIPT_INSTALL_DIR)"
+	@if not exist $(LIB_INSTALLDIR)\nul mkdir "$(LIB_INSTALL_DIR)"
+	@if not exist $(INCLUDE_INSTALL_DIR)\nul mkdir "$(INCLUDE_INSTALL_DIR)"
+	@$(CPY) $(PRJLIB)     "$(SCRIPT_INSTALL_DIR)" >NUL
+	@$(CPY) $(PRJIMPLIB)  "$(SCRIPT_INSTALL_DIR)" >NUL
+	@echo Installing stubs library to '$(LIB_INSTALL_DIR)'
+	@$(CPY) $(PRJSTUBLIB) "$(LIB_INSTALL_DIR)" >NUL
+	@echo Installing headers to '$(INCLUDE_INSTALL_DIR)'
+	@for %i in ($(PRJHDRS)) do @$(CPY) %i "$(INCLUDE_INSTALL_DIR)" >NUL
+
+# "fix font locking
 
 install-libraries:
 	@echo Installing libraries to '$(SCRIPT_INSTALL_DIR)'
-	@if exist $(LIBDIR)\nul $(CPY) $(LIBDIR)\*.tcl $(SCRIPT_INSTALL_DIR)
-	@type << >$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl
+	@if exist $(LIBDIR)\nul $(CPY) $(LIBDIR)\*.tcl "$(SCRIPT_INSTALL_DIR)" >NUL
+	@type << >"$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl"
 # Handcrafted pkgIndex for memchan.
 if {[info exists ::tcl_platform(debug)]} {
     package ifneeded $(PROJECT) $(DOTVERSION) [list load [file join $$dir $(PROJECT)$(VERSION)g.$(EXT)]]
@@ -426,9 +475,9 @@ if {[info exists ::tcl_platform(debug)]} {
 install-docs: $(PRJDOCS)
 	@echo Installing documentation to '$(DOC_INSTALL_DIR)'
 	@if not exist $(DOC_INSTALL_DIR)\NUL mkdir $(DOC_INSTALL_DIR)
+	@$(CPY) "$(DOCDIR)\manpage.css" "$(DOC_INSTALL_DIR)\" >NUL
 	@for %i in ($(PRJDOCS)) do @$(CPY) %i "$(DOC_INSTALL_DIR)\" > NUL
 
-# "Fix emacs font-locking
 #---------------------------------------------------------------------
 # Clean up
 #---------------------------------------------------------------------

@@ -26,7 +26,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: random.c,v 1.2 2004/05/31 16:01:16 andreas_kupries Exp $
+ * CVS: $Id: random.c,v 1.3 2004/06/04 14:09:11 patthoyts Exp $
  */
 
 
@@ -487,6 +487,54 @@ GetOption (instanceData, interp, optionName, dsPtr)
 }
 
 /*
+ *------------------------------------------------------
+ *
+ * Memchan_CreateRandomChannel -
+ *
+ * 	Mint a new 'random' channel.
+ *
+ * Result:
+ *	Returns the new channel.
+ *
+ *------------------------------------------------------
+ */
+
+Tcl_Channel
+Memchan_CreateRandomChannel(interp)
+     Tcl_Interp *interp;	/* current interpreter */
+{
+    Tcl_Channel      chan;
+    Tcl_Obj         *channelHandle;
+    ChannelInstance *instance;
+    unsigned long seed;
+
+    instance      = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
+    channelHandle = MemchanGenHandle ("random");
+
+    chan = Tcl_CreateChannel (&channelType,
+	Tcl_GetStringFromObj (channelHandle, NULL),
+	(ClientData) instance,
+	TCL_READABLE | TCL_WRITABLE);
+
+    instance->chan      = chan;
+    instance->timer     = (Tcl_TimerToken) NULL;
+    instance->delay     = DELAY;
+
+    /*
+     * Basic initialization of the PRNG state
+     */
+    seed = time(NULL) + ((long)Tcl_GetCurrentThread() << 12);
+    memcpy(&instance->state.randrsl, &seed, sizeof(seed));
+    randinit(&instance->state);
+    
+    Tcl_RegisterChannel  (interp, chan);
+    Tcl_SetChannelOption (interp, chan, "-buffering", "none");
+    Tcl_SetChannelOption (interp, chan, "-blocking",  "0");
+
+    return chan;
+}
+
+/*
  *------------------------------------------------------*
  *
  *	MemchanRandomCmd --
@@ -512,39 +560,15 @@ MemchanRandomCmd (notUsed, interp, objc, objv)
      int           objc;		/* Number of arguments. */
      Tcl_Obj*CONST objv[];		/* Argument objects. */
 {
-    Tcl_Obj*         channelHandle;
-    Tcl_Channel      chan;
-    ChannelInstance* instance;
-    unsigned long seed;
+    Tcl_Channel chan;
     
     if (objc != 1) {
-	Tcl_WrongNumArgs(interp, 0, objv, "");
+	Tcl_AppendResult (interp, "wrong # args: should be \"fifo\"",
+	    (char*) NULL);
 	return TCL_ERROR;
     }
     
-    instance      = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
-    channelHandle = MemchanGenHandle ("random");
-    
-    chan = Tcl_CreateChannel (&channelType,
-	Tcl_GetStringFromObj (channelHandle, NULL),
-	(ClientData) instance,
-	TCL_READABLE | TCL_WRITABLE);
-    
-    instance->chan      = chan;
-    instance->timer     = (Tcl_TimerToken) NULL;
-    instance->delay     = DELAY;
-
-    /*
-     * Basic initialization of the PRNG state
-     */
-    seed = time(NULL) + ((long)Tcl_GetCurrentThread() << 12);
-    memcpy(&instance->state.randrsl, &seed, sizeof(seed));
-    randinit(&instance->state);
-    
-    Tcl_RegisterChannel  (interp, chan);
-    Tcl_SetChannelOption (interp, chan, "-buffering", "none");
-    Tcl_SetChannelOption (interp, chan, "-blocking",  "0");
-    
-    Tcl_SetObjResult     (interp, channelHandle);
+    chan = Memchan_CreateRandomChannel(interp);
+    Tcl_AppendResult(interp, Tcl_GetChannelName(chan), (char *)NULL);
     return TCL_OK;
 }

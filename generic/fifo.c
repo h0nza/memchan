@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo.c,v 1.12 2004/05/20 19:08:30 andreas_kupries Exp $
+ * CVS: $Id: fifo.c,v 1.13 2004/05/21 20:24:43 andreas_kupries Exp $
  */
 
 
@@ -64,7 +64,7 @@ static int	BlockMode _ANSI_ARGS_((ClientData instanceData,
 
 static Tcl_ChannelType channelType = {
   "memory/fifo",	/* Type name.                                    */
-  BlockMode,		/* Set blocking/nonblocking behaviour. */
+  (Tcl_ChannelTypeVersion)BlockMode, /* Set blocking behaviour.          */
   Close,		/* Close channel, clean instance data            */
   Input,		/* Handle read request                           */
   Output,		/* Handle write request                          */
@@ -495,6 +495,52 @@ ClientData* handlePtr;          /* Space to the handle into */
 }
 
 /*
+ * ----------------------------------------------------------------------
+ *
+ * Memchan_CreateFifoChannel -
+ *
+ *	Create a memchan 'fifo' channel.
+ *
+ * Results:
+ *	Returns the newly minted channel
+ *
+ * Side effects:
+ *	A fifo channel is registered in the current interp.
+ *
+ * ----------------------------------------------------------------------
+ */
+
+Tcl_Channel
+Memchan_CreateFifoChannel(interp)
+     Tcl_Interp *interp;	/* the current interp */
+{
+  Tcl_Obj*         channelHandle;
+  Tcl_Channel      chan;
+  ChannelInstance* instance;
+
+  instance = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
+  instance->length = 0;
+  instance->queue  = Buf_NewQueue ();
+
+  channelHandle = MemchanGenHandle ("fifo");
+
+  chan = Tcl_CreateChannel (&channelType,
+			    Tcl_GetStringFromObj (channelHandle, NULL),
+			    (ClientData) instance,
+			    TCL_READABLE | TCL_WRITABLE);
+
+  instance->chan      = chan;
+  instance->timer     = (Tcl_TimerToken) NULL;
+  instance->interest  = 0;
+
+  Tcl_RegisterChannel  (interp, chan);
+  Tcl_SetChannelOption (interp, chan, "-buffering", "none");
+  Tcl_SetChannelOption (interp, chan, "-blocking",  "0");
+
+  return chan;
+}
+
+/*
  *------------------------------------------------------*
  *
  *	MemchanFifoCmd --
@@ -520,37 +566,16 @@ Tcl_Interp*   interp;		/* Current interpreter. */
 int           objc;		/* Number of arguments. */
 Tcl_Obj*CONST objv[];		/* Argument objects. */
 {
-  Tcl_Obj*         channelHandle;
-  Tcl_Channel      chan;
-  ChannelInstance* instance;
-
-  if (objc != 1) {
-    Tcl_AppendResult (interp,
-		      "wrong # args: should be \"fifo\"",
-		      (char*) NULL);
-    return TCL_ERROR;
-  }
-
-  instance = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
-  instance->length = 0;
-  instance->queue  = Buf_NewQueue ();
-
-  channelHandle = MemchanGenHandle ("fifo");
-
-  chan = Tcl_CreateChannel (&channelType,
-			    Tcl_GetStringFromObj (channelHandle, NULL),
-			    (ClientData) instance,
-			    TCL_READABLE | TCL_WRITABLE);
-
-  instance->chan      = chan;
-  instance->timer     = (Tcl_TimerToken) NULL;
-  instance->interest  = 0;
-
-  Tcl_RegisterChannel  (interp, chan);
-  Tcl_SetChannelOption (interp, chan, "-buffering", "none");
-  Tcl_SetChannelOption (interp, chan, "-blocking",  "0");
-
-  Tcl_SetObjResult     (interp, channelHandle);
-  return TCL_OK;
+    Tcl_Channel chan;
+    
+    if (objc != 1) {
+	Tcl_AppendResult (interp, "wrong # args: should be \"fifo\"",
+	    (char*) NULL);
+	return TCL_ERROR;
+    }
+    
+    chan = Memchan_CreateFifoChannel(interp);
+    Tcl_AppendResult(interp, Tcl_GetChannelName(chan), (char *)NULL);
+    return TCL_OK;
 }
 

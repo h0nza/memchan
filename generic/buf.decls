@@ -15,7 +15,7 @@ library buf
 #     bufPlatInt - platform specific private
 
 interface buf
-hooks {bufInt}
+hooks {bufInt memchan}
 
 # Declare each of the functions in the public Buf interface.  Note that
 # every index should never be reused for a different function in order

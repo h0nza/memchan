@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo2.c,v 1.5 2004/05/21 20:24:43 andreas_kupries Exp $
+ * CVS: $Id: fifo2.c,v 1.6 2004/08/04 12:43:14 patthoyts Exp $
  */
 
 
@@ -792,6 +792,90 @@ ClientData* handlePtr;          /* Space to the handle into */
 }
 
 /*
+ * ----------------------------------------------------------------------
+ *
+ * Memchan_CreateFifo2Channel -
+ *
+ *	Create pair of memchan 'fifo2' channels.
+ *
+ * Results:
+ *	Sets pointers to the new channel instances.
+ *
+ * Side effects:
+ *	Two linked channels are registered in the current interp.
+ *
+ * ----------------------------------------------------------------------
+ */
+
+void
+Memchan_CreateFifo2Channel(interp, aPtr, bPtr)
+     Tcl_Interp *interp;	/* the current interp */
+     Tcl_Channel *aPtr;		/* pointer to channel A */
+     Tcl_Channel *bPtr;		/* pointer to channel B */
+{
+    Tcl_Obj*         channel [2];
+    
+    Tcl_Channel      chanA;
+    Tcl_Channel      chanB;
+    
+    ChannelInstance* instanceA;
+    ChannelInstance* instanceB;
+    
+    instanceA = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
+    instanceA->rQueue   = Buf_NewQueue ();
+    instanceA->wQueue   = Buf_NewQueue ();
+    instanceA->timer    = (Tcl_TimerToken) NULL;
+    instanceA->dead     = FIFO_ALIVE;
+    instanceA->eof      = 0;
+    instanceA->interest = 0;
+    instanceA->lock     = (ChannelLock*) Tcl_Alloc (sizeof (ChannelLock));
+    
+    instanceB = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
+    instanceB->rQueue   = instanceA->wQueue;
+    instanceB->wQueue   = instanceA->rQueue;
+    instanceB->timer    = (Tcl_TimerToken) NULL;
+    instanceB->dead     = FIFO_ALIVE;
+    instanceB->eof      = 0;
+    instanceB->interest = 0;
+    instanceB->lock     = instanceA->lock;
+    
+    /* bug #996078 - Tcl_Mutex expects the mutex to be NULL */
+    memset((ChannelLock *)instanceA->lock, 0, sizeof (ChannelLock));
+    
+    instanceA->otherPtr = instanceB;
+    instanceB->otherPtr = instanceA;
+    
+    channel [0]        = MemchanGenHandle ("fifo");
+    channel [1]        = MemchanGenHandle ("fifo");
+    
+    chanA = Tcl_CreateChannel (&channelType,
+			       Tcl_GetStringFromObj (channel [0], NULL),
+			       (ClientData) instanceA,
+			       TCL_READABLE | TCL_WRITABLE);
+    
+    instanceA->chan      = chanA;
+    
+    chanB = Tcl_CreateChannel (&channelType,
+			       Tcl_GetStringFromObj (channel [1], NULL),
+			       (ClientData) instanceB,
+			       TCL_READABLE | TCL_WRITABLE);
+    
+    instanceB->chan      = chanB;
+    
+    
+    Tcl_RegisterChannel  (interp, chanA);
+    Tcl_SetChannelOption (interp, chanA, "-buffering", "none");
+    Tcl_SetChannelOption (interp, chanA, "-blocking",  "0");
+    
+    Tcl_RegisterChannel  (interp, chanB);
+    Tcl_SetChannelOption (interp, chanB, "-buffering", "none");
+    Tcl_SetChannelOption (interp, chanB, "-blocking",  "0");
+
+    *aPtr = chanA;
+    *bPtr = chanB;
+}
+
+/*
  *------------------------------------------------------*
  *
  *	MemchanFifo2Cmd --
@@ -812,81 +896,31 @@ ClientData* handlePtr;          /* Space to the handle into */
 	/* ARGSUSED */
 int
 MemchanFifo2Cmd (notUsed, interp, objc, objv)
-ClientData    notUsed;		/* Not used. */
-Tcl_Interp*   interp;		/* Current interpreter. */
-int           objc;		/* Number of arguments. */
-Tcl_Obj*CONST objv[];		/* Argument objects. */
+     ClientData    notUsed;	/* Not used. */
+     Tcl_Interp*   interp;	/* Current interpreter. */
+     int           objc;	/* Number of arguments. */
+     Tcl_Obj*CONST objv[];	/* Argument objects. */
 {
-  Tcl_Obj*         channel [2];
-
-  Tcl_Channel      chanA;
-  Tcl_Channel      chanB;
-
-  ChannelInstance* instanceA;
-  ChannelInstance* instanceB;
-
-  if (objc != 1) {
-    Tcl_AppendResult (interp,
-		      "wrong # args: should be \"fifo2\"",
-		      (char*) NULL);
-    return TCL_ERROR;
-  }
-
-  /* We create two instances, connect them together and
-   * return a list containing both names.
-   */
-
-  instanceA          = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
-  instanceA->rQueue   = Buf_NewQueue ();
-  instanceA->wQueue   = Buf_NewQueue ();
-  instanceA->timer    = (Tcl_TimerToken) NULL;
-  instanceA->dead     = FIFO_ALIVE;
-  instanceA->eof      = 0;
-  instanceA->interest = 0;
-  instanceA->lock     = (ChannelLock*) Tcl_Alloc (sizeof (ChannelLock));
-
-  instanceB          = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
-  instanceB->rQueue   = instanceA->wQueue;
-  instanceB->wQueue   = instanceA->rQueue;
-  instanceB->timer    = (Tcl_TimerToken) NULL;
-  instanceB->dead     = FIFO_ALIVE;
-  instanceB->eof      = 0;
-  instanceB->interest = 0;
-  instanceB->lock     = instanceA->lock;
-
-  /* bug #996078 - Tcl_Mutex expects the mutex to be NULL */
-  memset((ChannelLock *)instanceA->lock, 0, sizeof (ChannelLock));
-
-  instanceA->otherPtr = instanceB;
-  instanceB->otherPtr = instanceA;
-
-  channel [0]        = MemchanGenHandle ("fifo");
-  channel [1]        = MemchanGenHandle ("fifo");
-
-  chanA = Tcl_CreateChannel (&channelType,
-			    Tcl_GetStringFromObj (channel [0], NULL),
-			    (ClientData) instanceA,
-			    TCL_READABLE | TCL_WRITABLE);
-
-  instanceA->chan      = chanA;
-
-  chanB = Tcl_CreateChannel (&channelType,
-			    Tcl_GetStringFromObj (channel [1], NULL),
-			    (ClientData) instanceB,
-			    TCL_READABLE | TCL_WRITABLE);
-
-  instanceB->chan      = chanB;
-
-
-  Tcl_RegisterChannel  (interp, chanA);
-  Tcl_SetChannelOption (interp, chanA, "-buffering", "none");
-  Tcl_SetChannelOption (interp, chanA, "-blocking",  "0");
-
-  Tcl_RegisterChannel  (interp, chanB);
-  Tcl_SetChannelOption (interp, chanB, "-buffering", "none");
-  Tcl_SetChannelOption (interp, chanB, "-blocking",  "0");
-
-  Tcl_SetObjResult (interp, Tcl_NewListObj (2, channel));
-  return TCL_OK;
+    Tcl_Obj    *channel[2];
+    Tcl_Channel chanA;
+    Tcl_Channel chanB;
+    
+    if (objc != 1) {
+	Tcl_AppendResult (interp,
+			  "wrong # args: should be \"fifo2\"",
+			  (char*) NULL);
+	return TCL_ERROR;
+    }
+    
+    /* 
+     * We create two instances, connect them together and
+     * return a list containing both names.
+     */
+    
+    Memchan_CreateFifo2Channel(interp, &chanA, &chanB);
+    channel[0] = Tcl_NewStringObj(Tcl_GetChannelName(chanA), -1);
+    channel[1] = Tcl_NewStringObj(Tcl_GetChannelName(chanB), -1);
+    Tcl_SetObjResult (interp, Tcl_NewListObj(2, channel));
+    return TCL_OK;
 }
 

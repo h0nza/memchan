@@ -1,3 +1,32 @@
+2004-11-09  Pat Thoyts  <patthoyts@users.sourceforge.net>
+
+	* generic/memchan.h:          Added a stubs library for the Memchan
+	* generic/memchan.decls:      extension. This exposes an API that
+	* generic/memchanDecls.h:     permits C extensions to create Memchan
+	* generic/memchanStubInit.c:  channels directly.
+	* generic/memchanStubLib.c:
+	
+	* generic/chantest.c:     Sample extension for testing the stubs
+	                          linking C API.
+	
+	* doc/manpage.css:        Added the tcllib style-sheet.
+
+	* generic/memchan.c:      Modified in support of the stubs API. 
+	* generic/fifo.c:         Each channel creation command now uses
+	* generic/fifo2.c:        the C API internally. Channel creation code
+	* generic/null.c:         moved to a function exposed on the Memchan
+	* generic/zero.c:         stubs interface.
+	* generic/random.c:
+	* generic/buf.decls:
+	* generic/bufStubInit.c:
+
+	* win/makefile.vc:        Windows build files updated
+	* win/rules.vc:
+	* configure.in:           TEA files updated with new version.
+	* configure:
+
+	==== Incremented version to 2.2.1 ====
+	
 2004-08-04  Pat Thoyts  <pat@zsplat.freeserve.co.uk>
 
 	* generic/fifo2.c: Applied fix for bug #996078 which sets the channel

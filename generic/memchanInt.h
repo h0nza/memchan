@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.16 2004/05/21 23:20:20 patthoyts Exp $
+ * CVS: $Id: memchanInt.h,v 1.17 2004/06/03 23:39:13 patthoyts Exp $
  */
 
 
@@ -171,29 +171,14 @@ MemchanZeroCmd _ANSI_ARGS_ ((ClientData notUsed,
 extern Tcl_Obj*
 MemchanGenHandle _ANSI_ARGS_ ((CONST char* prefix));
 
+#ifdef __cplusplus
+}
+#endif /* C++ */
+
 /*
  * Exported functionality.
  */
 
-/*
- * Windows needs to know which symbols to export.  Unix does not.
- * BUILD_Memchan should be undefined for Unix.
- */
+#include "memchan.h"
 
-#ifdef BUILD_Memchan
-#undef TCL_STORAGE_CLASS
-#define TCL_STORAGE_CLASS DLLEXPORT
-#endif /* BUILD_Memchan */
-
-
-EXTERN int Memchan_Init _ANSI_ARGS_ ((Tcl_Interp* interp));
-EXTERN int Memchan_SafeInit _ANSI_ARGS_ ((Tcl_Interp* interp));
-
-
-#undef TCL_STORAGE_CLASS
-#define TCL_STORAGE_CLASS DLLIMPORT
-
-#ifdef __cplusplus
-}
-#endif /* C++ */
 #endif /* MEMCHAN_H */

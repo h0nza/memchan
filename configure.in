@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.13 2002/10/15 23:49:24 andreas_kupries Exp $)
+AC_REVISION($Id: configure.in,v 1.14 2004/06/03 23:39:13 patthoyts Exp $)
 
 #--------------------------------------------------------------------
 # Configure script for package 'memchan', as distributed at November 20, 2001.
@@ -33,7 +33,7 @@ MAJOR_VERSION=2
 MINOR_VERSION=2
 #MAJOR_VERSION=10
 #MINOR_VERSION=0
-PATCHLEVEL=0
+PATCHLEVEL=1
 
 VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${PATCHLEVEL}
 NODOT_VERSION=${MAJOR_VERSION}${MINOR_VERSION}

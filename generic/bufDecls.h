@@ -8,7 +8,7 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: bufDecls.h,v 1.1 2000/09/26 21:17:49 aku Exp $
+ * RCS: @(#) $Id: bufDecls.h,v 1.2 2002/04/25 06:29:48 andreas_kupries Exp $
  */
 
 #ifndef _BUFDECLS
@@ -142,6 +142,7 @@ EXTERN int		Buf_QueueSize _ANSI_ARGS_((Buf_BufferQueue queue));
 
 typedef struct BufStubHooks {
     struct BufIntStubs *bufIntStubs;
+    struct MemchanStubs *memchanStubs;
 } BufStubHooks;
 
 typedef struct BufStubs {

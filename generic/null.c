@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: null.c,v 1.5 2004/05/21 20:24:45 andreas_kupries Exp $
+ * CVS: $Id: null.c,v 1.6 2004/06/04 14:09:10 patthoyts Exp $
  */
 
 
@@ -463,6 +463,46 @@ GetOption (instanceData, interp, optionName, dsPtr)
 }
 
 /*
+ *------------------------------------------------------
+ *
+ * Memchan_CreateNullChannel -
+ *
+ * 	Mint a new null channel.
+ *
+ * Result:
+ *	Returns the new channel.
+ *
+ *------------------------------------------------------
+ */
+
+Tcl_Channel
+Memchan_CreateNullChannel(interp)
+     Tcl_Interp *interp;	/* current interpreter */
+{
+    Tcl_Channel      chan;
+    Tcl_Obj         *channelHandle;
+    ChannelInstance *instance;
+
+    instance      = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
+    channelHandle = MemchanGenHandle ("null");
+
+    chan = Tcl_CreateChannel (&channelType,
+	Tcl_GetStringFromObj (channelHandle, NULL),
+	(ClientData) instance,
+	TCL_READABLE | TCL_WRITABLE);
+
+    instance->chan      = chan;
+    instance->timer     = (Tcl_TimerToken) NULL;
+    instance->delay     = DELAY;
+
+    Tcl_RegisterChannel  (interp, chan);
+    Tcl_SetChannelOption (interp, chan, "-buffering", "none");
+    Tcl_SetChannelOption (interp, chan, "-blocking",  "0");
+
+    return chan;
+}
+
+/*
  *------------------------------------------------------*
  *
  *	MemchanNullCmd --
@@ -488,33 +528,15 @@ MemchanNullCmd (notUsed, interp, objc, objv)
      int           objc;		/* Number of arguments. */
      Tcl_Obj*CONST objv[];		/* Argument objects. */
 {
-    Tcl_Obj*         channelHandle;
-    Tcl_Channel      chan;
-    ChannelInstance* instance;
+    Tcl_Channel chan;
     
     if (objc != 1) {
-	Tcl_AppendResult (interp,
-	    "wrong # args: should be \"null\"",
+	Tcl_AppendResult (interp, "wrong # args: should be \"null\"",
 	    (char*) NULL);
 	return TCL_ERROR;
     }
     
-    instance      = (ChannelInstance*) Tcl_Alloc (sizeof (ChannelInstance));
-    channelHandle = MemchanGenHandle ("null");
-    
-    chan = Tcl_CreateChannel (&channelType,
-	Tcl_GetStringFromObj (channelHandle, NULL),
-	(ClientData) instance,
-	TCL_READABLE | TCL_WRITABLE);
-    
-    instance->chan      = chan;
-    instance->timer     = (Tcl_TimerToken) NULL;
-    instance->delay     = DELAY;
-    
-    Tcl_RegisterChannel  (interp, chan);
-    Tcl_SetChannelOption (interp, chan, "-buffering", "none");
-    Tcl_SetChannelOption (interp, chan, "-blocking",  "0");
-    
-    Tcl_SetObjResult     (interp, channelHandle);
+    chan = Memchan_CreateNullChannel(interp);
+    Tcl_AppendResult(interp, Tcl_GetChannelName(chan), (char *)NULL);
     return TCL_OK;
 }
