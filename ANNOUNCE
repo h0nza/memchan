@@ -2,6 +2,11 @@ Hello world,
 
 This is release @VERSION@ of the simple extension providing "Memory channels".
 
+Changes from 1.1:
+
+*	Added support for windows.
+*	Source distribution as .zip-file now too.
+
 Changes from 1.0:
 
 *	cleaned up configuration and removed misleading info (7.5)
@@ -12,6 +17,7 @@ Changes from 1.0:
 
 The package can be found at
         <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.tar.gz>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@NODOT_VERSION@.zip>
         <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.readme>
 
 Enjoy,

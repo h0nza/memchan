@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.2 1996/12/05 18:07:51 aku Exp $
+# CVS:	$Id: PREPARE,v 1.3 1997/02/15 19:30:12 aku Exp $
 #
 
 # O. insert various information into some files
@@ -9,6 +9,9 @@
 set date       [date now]
 set long_date  [clock format [clock scan $date] -format {%B %d, %Y}]
 set short_date [string toupper [clock format [clock scan $date] -format {%d-%b-%Y}]]
+
+# generate version number without dots.
+regsub -all {\.} ${the-version} {} nodot_version
 
 replace_in_file LSM                  @DATE@ $short_date
 replace_in_file DESCRIPTION          @DATE@ $long_date
@@ -22,21 +25,21 @@ replace_in_file ANNOUNCE             @VERSION@ ${the-patchlevel}
 replace_in_file LSM                  @VERSION@ ${the-patchlevel}
 replace_in_file DESCRIPTION          @VERSION@ ${the-patchlevel}
 
+replace_in_file README               @NODOT_VERSION@ ${nodot_version}
+replace_in_file ANNOUNCE             @NODOT_VERSION@ ${nodot_version}
+
 replace_in_file configure.in    @VERSION@       ${the-version}
 replace_in_file configure.in    @MAJOR_VERSION@ $major
 replace_in_file configure.in    @MINOR_VERSION@ $minor
 
 
-# generate version number without dots.
-regsub -all {\.} ${the-version} {} _
-
 file copy pkgIndex.tcl.in pkgIndex.win
 replace_in_file pkgIndex.win @configure_input@ "Distributed at $long_date"
 replace_in_file pkgIndex.win @MEMCHAN_VERSION@  ${the-version}
-replace_in_file pkgIndex.win @MEMCHAN_LIB_FILE@ "mchan${_}.dll"
+replace_in_file pkgIndex.win @MEMCHAN_LIB_FILE@ "mchan${nodot_version}.dll"
 
 replace_in_file makefile.vc @MC_VERSION@       ${the-version}
-replace_in_file makefile.vc @MC_nodotVERSION@  $_
+replace_in_file makefile.vc @MC_nodotVERSION@  $nodot_version
 replace_in_file makefile.vc @DATE@             $long_date
 
 

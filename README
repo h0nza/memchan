@@ -26,6 +26,7 @@ the /tcl/extension directory (at least after their reorganization).
 
 Primary ftp-site will be
 		<ftp://ftp.kisters.de/pub/lang/tcl/memchan@VERSION@.tar.gz>
+		<ftp://ftp.kisters.de/pub/lang/tcl/memchan@NODOT_VERSION@.zip>
 		<ftp://ftp.kisters.de/pub/lang/tcl/memchan@VERSION@.readme>
 
 
