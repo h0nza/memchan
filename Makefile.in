@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.8 2002/08/21 05:59:14 andreas_kupries Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.9 2002/08/21 06:35:18 andreas_kupries Exp $
 
 #========================================================================
 # Additional variables defined here for convenient access to some
@@ -259,8 +259,8 @@ binaries: $(BINARIES)
 libraries:
 
 doc:
-	if [ $(srcdir) != "." ] ; then		\
-		rm -rf tools htdocs;		; \
+	if [ "$(srcdir)" != "." ] ; then	\
+		rm -rf tools htdocs		; \
 		cp -rf $(srcdir)/tools .	; \
 		cp -rf $(srcdir)/htdocs .	; \
 		rm -rf doc ; mkdir doc		; \
