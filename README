@@ -2,7 +2,7 @@
 		Memory Channels in Tcl
 		(Version @mFullVersion@ / @mDate@)
 
-		Andreas Kupries	(a.kupries@westend.com)
+	Andreas Kupries	(andreas_kupries@users.sourceforge.net)
 
 This directory contains a freely distributable extension to Tcl
 implementing memory channels, i.e. channels storing the data
@@ -31,7 +31,7 @@ To compile Memchan follow the instructions in the HTML documentation.
 To report bugs, bug fixes, descriptions of interesting Memchan
 applications, and suggested improvements:
 
-+) Send email to a.kupries@westend.com
++) Send email to andreas_kupries@users.sourceforge.net
 
 or
 
