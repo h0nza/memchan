@@ -26,7 +26,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id$
+ * CVS: $Id: random.c,v 1.1 2004/05/21 23:20:20 patthoyts Exp $
  */
 
 
@@ -52,6 +52,9 @@ static int      GetFile      _ANSI_ARGS_((ClientData instanceData,
 					  int direction,
 					  ClientData* handlePtr));
 
+static int	BlockMode _ANSI_ARGS_((ClientData instanceData,
+				       int mode));
+
 /*
  * This structure describes the channel type structure for random channels:
  * random channels are not seekable. They have no options.
@@ -59,7 +62,7 @@ static int      GetFile      _ANSI_ARGS_((ClientData instanceData,
 
 static Tcl_ChannelType channelType = {
     "random",			/* Type name.                                */
-    NULL,			/* Set blocking/nonblocking.       NULL'able */
+    BlockMode,			/* Set blocking/nonblocking behaviour.       */
     Close,			/* Close channel, clean instance data        */
     Input,			/* Handle read request                       */
     Output,			/* Handle write request                      */
@@ -78,7 +81,7 @@ static Tcl_ChannelType channelType = {
 
 
 /*
- * This structure describes the per-instance state of a in-memory null channel.
+ * This structure describes the per-instance state of a in-memory random channel.
  */
 
 typedef struct ChannelInstance {
@@ -89,6 +92,31 @@ typedef struct ChannelInstance {
 } ChannelInstance;
 
 /*
+ *----------------------------------------------------------------------
+ *
+ * BlockMode --
+ *
+ *	Helper procedure to set blocking and nonblocking modes on a
+ *	memory channel. Invoked by generic IO level code.
+ *
+ * Results:
+ *	0 if successful, errno when failed.
+ *
+ * Side effects:
+ *	Sets the device into blocking or non-blocking mode.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+BlockMode (instanceData, mode)
+     ClientData instanceData;
+     int mode;
+{
+    return 0;
+}
+
+/*
  *------------------------------------------------------*
  *
  *	Close --
@@ -96,7 +124,7 @@ typedef struct ChannelInstance {
  *	------------------------------------------------*
  *	This procedure is called from the generic IO
  *	level to perform channel-type-specific cleanup
- *	when an in-memory null channel is closed.
+ *	when an in-memory random channel is closed.
  *	------------------------------------------------*
  *
  *	Sideeffects:
@@ -134,7 +162,7 @@ Close (instanceData, interp)
  *
  *	------------------------------------------------*
  *	This procedure is invoked from the generic IO
- *	level to read input from an in-memory null channel.
+ *	level to read input from an in-memory random channel.
  *	------------------------------------------------*
  *
  *	Sideeffects:
@@ -248,7 +276,7 @@ WatchChannel (instanceData, mask)
      int        mask;		/* Events of interest */
 {
     /*
-     * null channels are not based on files.
+     * random channels are not based on files.
      * They are always writable, and always readable.
      * We could call Tcl_NotifyChannel immediately, but this
      * would starve other sources, so a timer is set up instead.
@@ -289,8 +317,8 @@ ChannelReady (instanceData)
      ClientData instanceData;	/* Channel to query */
 {
     /*
-     * In-memory null channels are always writable (fileevent
-     * writable) and they are readable if they are not empty.
+     * In-memory random channels are always writable (fileevent
+     * writable) and they are also always readable.
      */
     
     ChannelInstance* chan = (ChannelInstance*) instanceData;
@@ -316,7 +344,7 @@ ChannelReady (instanceData)
  *
  *	------------------------------------------------*
  *	Called from Tcl_GetChannelHandle to retrieve
- *	OS handles from inside a in-memory null channel.
+ *	OS handles from inside a in-memory random channel.
  *	------------------------------------------------*
  *
  *	Sideeffects:
@@ -335,7 +363,7 @@ GetFile (instanceData, direction, handlePtr)
      ClientData* handlePtr;	/* Space to the handle into */
 {
     /*
-     * In-memory null channels are not based on files.
+     * In-memory random channels are not based on files.
      */
     
     /* *handlePtr = (ClientData) NULL; */
