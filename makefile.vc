@@ -3,7 +3,7 @@
 # See the file "doc/license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# CVS:	$Id: makefile.vc,v 1.4 1997/05/29 09:29:23 aku Exp $
+# CVS:	$Id: makefile.vc,v 1.5 1997/05/29 09:53:28 aku Exp $
 # 
 
 # Does not depend on the presence of any environment variables in
@@ -27,6 +27,7 @@
 # PKZIP	  =	name and path to pkzip archiver application
 #		(required for generation of binary distribution only)
 #
+# TCLSH / TCLLIB	Choose the set appropriate for your system.
 
 ROOT		= .
 TMPDIR		= .
@@ -41,12 +42,16 @@ MACHINE	= IX86
 NODEBUG=1
 
 
+TCLSH		=	$(TCL)\bin\tclsh80.exe
+TCLLIB		=	$(TCL)\bin\tcl80.lib
+
+#TCLSH		=	$(TCL)\bin\tclsh81.exe
+#TCLLIB		=	$(TCL)\bin\tcl81.lib
+
+
 ######################################################################
 # Do not modify below this line
 ######################################################################
-
-TCLSH		=	$(TCL)\bin\tclsh80.exe
-TCLLIB		=	$(TCL)\bin\tcl80.lib
 
 MC		=	mchan@mShortDosVersion@
 MCLIB		=	$(MC).lib

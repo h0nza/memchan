@@ -12,11 +12,7 @@ Primary-URL:	ftp://ftp.westend.com/pub/aku/memchan@mFullVersion@.tar.gz
 	        ftp://ftp.westend.com/pub/aku/memchan@mDosVersion@.zip
         	ftp://ftp.westend.com/pub/aku/memchan@mFullVersion@.README
 	        ftp://ftp.westend.com/pub/aku/mchan@mDosVersion@b.zip
-Secondary-URL:	ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mFullVersion@.tar.gz
-		ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mDosVersion@.zip
-		ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mFullVersion@.readme
-	        ftp://ftp.kisters.de/pub/lang/tcl/ext/mchan@mDosVersion@b.zip
 Copying-policy: BSDStyle (-> tcl)
-Dependencies:   tcl (7.6 or 8.0b2)
+Dependencies:   tcl (7.6, 8.0 or 8.1a2)
 Comments:
 End
