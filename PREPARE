@@ -1,30 +1,39 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.7 1997/05/29 09:53:28 aku Exp $
+# CVS:	$Id: PREPARE,v 1.8 1997/05/29 12:02:08 aku Exp $
 
 
 # O. insert various information into some files
 #    (version, patchlevel, current date)
 
-mInsertInfo \
-	LSM DESCRIPTION README ANNOUNCE manual \
-	configure.in Makefile.in makefile.vc
+mExclude LSM ANNOUNCE
 
-file copy pkgIndex.tcl.in pkgIndex.win
+mInsertInfo \
+	DESCRIPTION doc/manual \
+	README win/README win/README.VC mac/README \
+	unix/configure.in unix/Makefile.in \
+	win/makefile.vc
+
+mGetDescription
+mExpandUrls
+mGenerateLSM
+mGenerateANNOUNCE
+
+
+file copy generic/pkgIndex.tcl.in win/pkgIndex.win
 
 set mInfo(@configure_input@)  "Distributed at $mDate"
 set mInfo(@MEMCHAN_VERSION@)  $mVersion
 set mInfo(@MEMCHAN_LIB_FILE@) mchan${mShortDosVersion}.dll
-#                             ~~~~~ coordinate with makefile.vc
-mInsertInfo pkgIndex.win
+#                             ~~~~~ coordinate with win/makefile.vc
+mInsertInfo win/pkgIndex.win
 
 # remove internal directories
 
 mExclude patches mails
-#file delete -force patches mails
 
 # generate configure script to be used
+cd unix
 mConfigure .
 
-#exec autoconf
-
+cd ..

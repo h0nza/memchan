@@ -3,7 +3,7 @@ extension memchan {
     author       {Andreas Kupries (a.kupries@westend.com)}
     maintenance  {Andreas Kupries (a.kupries@westend.com)}
 
-    version	   1.6
+    version	   1.7
     copying-policy {BSD-Style, see 'tcl'-license}
     date           {@mDate@}
 
@@ -21,7 +21,7 @@ extension memchan {
 
     dependencies {
 	tcl 7.6 or 8.0. Does not work with 8.0(ab)*
-	Works with tcl 8.1a2 and 8.1b1, but don't leave channels open
-	before exit.
+	Works with tcl 8.1a2 and 8.1b1/2, but don't leave channels open
+	before 'exit'ing.
     }
 }

@@ -1,3 +1,11 @@
+Mon Mar 22 09:57:05 1999  Andreas Kupries  <a.kupries@westend.com>
+
+	* memchan.c: Started to work on the changes required by 8.1 and
+	  the stubs. 
+
+	* configure.in (TCL_LIB/INCLUDE_DIR): Added 8.0.4 and 8.0.5 to the
+	  list of paths to search.
+
 Sun Dec 20 19:54:08 1998  Andreas Kupries  <a.kupries@westend.com>
 
 	* memchan.c: Changed definition of panic to allow co-existence
