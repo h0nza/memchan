@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.4 1999/05/25 22:35:21 aku Exp $
+ * CVS: $Id: memchanInt.h,v 1.5 1999/06/12 21:54:49 aku Exp $
  */
 
 
@@ -99,8 +99,8 @@ extern "C" {
  */
 
 #define GT81 ((TCL_MAJOR_VERSION > 8) || \
-	      ((TCL_MAJOR_VERSION == 8) && \
-	       (TCL_MINOR_VERSION >= 1)))
+((TCL_MAJOR_VERSION == 8) && \
+ (TCL_MINOR_VERSION >= 1)))
 
 #if ! (GT81)
 /* Enable use of procedure internal to tcl. Necessary only
@@ -118,18 +118,6 @@ panic _ANSI_ARGS_ ((char* format, ...));
 /* Internal command visible to other parts of the package.
  */
 
-#if TCL_MAJOR_VERSION < 8
-extern int
-MemchanCmd _ANSI_ARGS_ ((ClientData notUsed,
-			 Tcl_Interp* interp,
-			 int argc, char** argv));
-
-extern int
-MemchanFifoCmd _ANSI_ARGS_ ((ClientData notUsed,
-			     Tcl_Interp* interp,
-			     int argc, char** argv));
-#define ARGC argc
-#else
 extern int
 MemchanCmd _ANSI_ARGS_ ((ClientData notUsed,
 			 Tcl_Interp* interp,
@@ -139,19 +127,14 @@ extern int
 MemchanFifoCmd _ANSI_ARGS_ ((ClientData notUsed,
 			     Tcl_Interp* interp,
 			     int objc, Tcl_Obj*CONST objv[]));
-#define ARGC objc
-#endif
 
 
 /* Generator procedure for handles. Handles mutex issues for a thread
  * enabled version of tcl.
  */
 
-#if TCL_MAJOR_VERSION < 8
-CONST char* MemchanGenHandle _ANSI_ARGS_ ((CONST char* prefix));
-#else
-Tcl_Obj*    MemchanGenHandle _ANSI_ARGS_ ((CONST char* prefix));
-#endif
+Tcl_Obj*
+MemchanGenHandle _ANSI_ARGS_ ((CONST char* prefix));
 
 #ifdef __cplusplus
 }

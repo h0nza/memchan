@@ -10,8 +10,8 @@ MEMCHAN_MAJOR_VERSION=@mMajor@
 MEMCHAN_MINOR_VERSION=@mMinor@
 VERSION=${MEMCHAN_VERSION}
 
-TCL_REQ_MAJOR_VERSION=7
-TCL_REQ_MINOR_VERSION=6
+TCL_REQ_MAJOR_VERSION=8
+TCL_REQ_MINOR_VERSION=0
 
 
 dnl
@@ -108,7 +108,6 @@ dnl	TCL_INCLUDE_DIR		(--with-tcl, --with-tcl-include-dir)
 dnl	../../tcl8.2*/generic	(assume tcl source in sibling directory)
 dnl	../../tcl8.1*/generic	(assume tcl source in sibling directory)
 dnl	../../tcl8.0/generic	(assume tcl source in sibling directory)
-dnl	../../tcl7.6/generic	(assume tcl source in sibling directory)
 dnl	../../tcl/generic	(see above)
 dnl	../../tcl		(should be old version)
 dnl	$prefix/include		(--prefix)
@@ -130,7 +129,6 @@ AC_CACHE_CHECK(for directory with tcl.h,
 		../../tcl8.1a*/generic \
 		../../tcl8.0.*/generic \
 		../../tcl8.0/generic \
-		../../tcl7.6/generic \
 		../../tcl/generic \
 		../../tcl \
 		$prefix/include \
@@ -159,16 +157,16 @@ AC_CACHE_CHECK(for up-to-date version of Tcl,
     CPPFLAGS="-I$TCL_INCLUDE_DIR $CPPFLAGS"
     AC_EGREP_CPP(good_tcl_version,
 [#include <tcl.h>
-#if ((TCL_MAJOR_VERSION == 7) && (TCL_MINOR_VERSION >= 6))
+#if ((TCL_MAJOR_VERSION == 8) && (TCL_MINOR_VERSION >= 0))
     good_tcl_version
 #endif
-#if (TCL_MAJOR_VERSION > 7)
+#if (TCL_MAJOR_VERSION > 8)
     good_tcl_version
 #endif],memchan_cv_vers_good_tcl_version=yes,memchan_cv_vers_good_tcl_version=no)
     CPPFLAGS=$ac_save_cppflags])
 
 if test "$memchan_cv_vers_good_tcl_version" = "no"; then
-    AC_MSG_ERROR(Your Tcl must be at least version 7.6)
+    AC_MSG_ERROR(Your Tcl must be at least version 8.0)
 fi
 
 AC_SUBST(TCL_INCLUDE_DIR)
@@ -181,7 +179,6 @@ dnl	TCL_LIB_DIR		(--with-tcl, --with-tcl-lib-dir)
 dnl	../../tcl8.2*/unix	(assume tcl source in sibling directory)
 dnl	../../tcl8.1*/unix	(assume tcl source in sibling directory)
 dnl	../../tcl8.0/unix	(assume tcl source in sibling directory)
-dnl	../../tcl7.6/unix	(assume tcl source in sibling directory)
 dnl	../../tcl/unix		(see above)
 dnl	../../tcl			(should be old version)
 dnl	$exec_prefix/lib	(--exec-prefix)
@@ -203,7 +200,6 @@ AC_CACHE_CHECK(for tcl library,
 	../../tcl8.1a*/unix \
 	../../tcl8.0.*/unix \
 	../../tcl8.0/unix \
-	../../tcl7.6/unix \
 	../../tcl/unix \
 	../../tcl \
 	 $exec_prefix/lib \
@@ -214,7 +210,7 @@ AC_CACHE_CHECK(for tcl library,
         if test -n "$memchan_cv_lib_TCL_LIB"; then
             break
         fi
-        for version in 8.2 8.1.1 8.1 8.0.5 8.0.4 8.0.3 8.0 7.6 82 811 81 805 804 803 80 76 ""; do
+        for version in 8.2 8.1.1 8.1 8.0.5 8.0.4 8.0.3 8.0 82 811 81 805 804 803 80 ""; do
             if test -n "$memchan_cv_lib_TCL_LIB"; then
                 break
             fi
@@ -262,7 +258,18 @@ SHLIB_SUFFIX=$TCL_SHLIB_SUFFIX
 SHLIB_VERSION=$TCL_SHLIB_VERSION
 DL_LIBS=$TCL_DL_LIBS
 LD_FLAGS=$TCL_LD_FLAGS
-MEMCHAN_LD_SEARCH_FLAGS=$TCL_LD_SEARCH_FLAGS
+
+eval "MEMCHAN_CC_SEARCH_FLAGS=\"$TCL_LD_SEARCH_FLAGS\""
+
+case $SHLIB_LD in
+*ld*)
+      MEMCHAN_LD_SEARCH_FLAGS=`echo ${MEMCHAN_CC_SEARCH_FLAGS} |sed -e "s|-Wl,||g" -e "s|,| |g"`
+      ;;
+*)
+      MEMCHAN_LD_SEARCH_FLAGS="${MEMCHAN_CC_SEARCH_FLAGS}"
+      ;;
+esac
+
 
 TCL_BASE=`echo ${TCL_LIB_SPEC} |sed -e "s|^.*-l||"`
 TCL_STUB_BASE=`echo ${TCL_STUB_LIB_SPEC} |sed -e "s|^.*-l||"`

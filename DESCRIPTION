@@ -3,12 +3,12 @@ extension memchan {
     author       {Andreas Kupries (a.kupries@westend.com)}
     maintenance  {Andreas Kupries (a.kupries@westend.com)}
 
-    version	   1.9
+    version	   2.0
     copying-policy {BSD-Style, see 'tcl'-license}
     date           {@mDate@}
 
     description {
-	an extension implementing a new channel-type. Instances
+	an extension implementing two new channel-types. Instances
 	store their contents in memory, not on disk.
     }
 
@@ -16,12 +16,11 @@ extension memchan {
 	http://www.oche.de/%7Eakupries/tcltk.html
 	http://www.oche.de/%7Eakupries/soft/memchan/
 	http://www.oche.de/%7Eakupries/soft/memchan/download/<ARCH>
-	http://www.oche.de/%7Eakupries/soft/memchan/download/mchan@mDosVersion@b.zip
     }
 
     dependencies {
-	Tcl 7.6, 8.0 or 8.1. Does not work with 8.0(ab)*
+	Tcl 8.0 or 8.1. Does not work with 8.0(ab)*
 	Works with tcl 8.1a2 and 8.1b1/2/3, but don't leave channels open
-	before 'exit'ing. This is solved since 8.1.0
+	before 'exit'ing. This is solved since 8.1.0.
     }
 }

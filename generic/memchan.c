@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.7 1999/05/25 22:26:47 aku Exp $
+ * CVS: $Id: memchan.c,v 1.8 1999/05/25 22:35:21 aku Exp $
  */
 
 
@@ -51,17 +51,6 @@ static int	Seek _ANSI_ARGS_((ClientData instanceData,
 
 static void	WatchChannel _ANSI_ARGS_((ClientData instanceData, int mask));
 
-
-#if (TCL_MAJOR_VERSION < 8)
-static int	GetOption _ANSI_ARGS_((ClientData instanceData,
-				       char *optionName,
-				       Tcl_DString *dsPtr));
-
-static int	ChannelReady _ANSI_ARGS_((ClientData instanceData, int mask));
-static Tcl_File GetFile      _ANSI_ARGS_((ClientData instanceData, int mask));
-
-#else
-
 static int	GetOption _ANSI_ARGS_((ClientData instanceData,
 				       Tcl_Interp* interp, char *optionName,
 				       Tcl_DString *dsPtr));
@@ -70,7 +59,6 @@ static void	ChannelReady _ANSI_ARGS_((ClientData instanceData));
 static int      GetFile      _ANSI_ARGS_((ClientData instanceData,
 					  int direction,
 					  ClientData* handlePtr));
-#endif
 
 /*
  * This structure describes the channel type structure for in-memory channels:
@@ -86,9 +74,6 @@ static Tcl_ChannelType channelType = {
   NULL,			/* Set options.                        NULL'able */
   GetOption,		/* Get options.                        NULL'able */
   WatchChannel,		/* Initialize notifier                           */
-#if (TCL_MAJOR_VERSION < 8)
-  ChannelReady,		/* Are there events?                             */
-#endif
 #if GT81
   GetFile,              /* Get OS handle from the channel.               */
   NULL                  /* Close2Proc, not available, no partial close
@@ -107,12 +92,11 @@ typedef struct ChannelInstance {
   unsigned long  rwLoc;	    /* current location to read from (or write to). */
   unsigned long  allocated; /* number of allocated bytes */
   unsigned long  used;	    /* number of bytes stored in the channel. */
-  VOID*          data;	    /* memory plane used to store the channel contents */
+  VOID*          data;	    /* memory plane used to store the channel
+			     * contents */
   Tcl_Channel    chan;      /* Backreference to generic channel information */
-
-#if (TCL_MAJOR_VERSION >= 8)
-  Tcl_TimerToken timer;     /* Timer used to link the channel into the notifier */
-#endif
+  Tcl_TimerToken timer;     /* Timer used to link the channel into the
+			     * notifier */
 } ChannelInstance;
 
 /*
@@ -356,20 +340,12 @@ int*       errorCodePtr;	/* Location of error flag. */
  *------------------------------------------------------*
  */
 
-#if (TCL_MAJOR_VERSION < 8)
-static int
-GetOption (instanceData, optionName, dsPtr)
-ClientData   instanceData;	/* Channel to query */
-char*        optionName;	/* Name of reuqested option */
-Tcl_DString* dsPtr;		/* String to place the result into */
-#else
 static int
 GetOption (instanceData, interp, optionName, dsPtr)
 ClientData   instanceData;	/* Channel to query */
 Tcl_Interp*  interp;		/* Interpreter to leave error messages in */
 char*        optionName;	/* Name of reuqested option */
 Tcl_DString* dsPtr;		/* String to place the result into */
-#endif
 {
   /*
    * In-memory channels provide a channel type specific,
@@ -385,11 +361,7 @@ Tcl_DString* dsPtr;		/* String to place the result into */
 
   if ((optionName != (char*) NULL) && (0 != strcmp (optionName, "-length"))) {
     Tcl_SetErrno (EINVAL);
-#if (TCL_MAJOR_VERSION < 8)
-    return TCL_ERROR;
-#else
     return Tcl_BadChannelOption (interp, optionName, "length");
-#endif
   }
 
 
@@ -433,7 +405,6 @@ WatchChannel (instanceData, mask)
 ClientData instanceData;	/* Channel to watch */
 int        mask;		/* Events of interest */
 {
-#if (TCL_MAJOR_VERSION >= 8)
   /*
    * In-memory channels are not based on files.
    * They are always writable, and almost always readable.
@@ -449,65 +420,8 @@ int        mask;		/* Events of interest */
     Tcl_DeleteTimerHandler (chan->timer);
     chan->timer = (Tcl_TimerToken) NULL;
   }
-#else
-  /*
-   * In-memory channels are not based on files. Readiness
-   * for events is defined explicitly, see "ChannelReady".
-   * Nothing has to be done here.
-   */
-#endif
 }
 
-#if (TCL_MAJOR_VERSION < 8)
-/*
- *------------------------------------------------------*
- *
- *	ChannelReady --
- *
- *	------------------------------------------------*
- *	Called by the notifier to check whether events
- *	of interest are present on the channel.
- *	------------------------------------------------*
- *
- *	Sideeffects:
- *		None.
- *
- *	Result:
- *		Returns OR-ed combination of TCL_READABLE,
- *		TCL_WRITABLE and TCL_EXCEPTION to indicate
- *		which events of interest are present.
- *
- *------------------------------------------------------*
- */
-
-static int
-ChannelReady (instanceData, mask)
-ClientData instanceData;	/* Channel to query */
-int        mask;		/* Mask of queried events */
-{
-  /*
-   * In-memory channels are always writable (fileevent
-   * writable will fire continuously) and they are readable
-   * when the current access point is before the last byte
-   * contained in the channel.
-   */
-
-  ChannelInstance* chan;
-  int              resultMask;
-
-  chan       = (ChannelInstance*) instanceData;
-  resultMask = mask;
-
-  if ((resultMask & TCL_READABLE) &&
-      (chan->rwLoc >= chan->used)) {
-      resultMask &= ~TCL_READABLE;
-  }
-
-  resultMask &= ~TCL_EXCEPTION;
-
-  return resultMask;
-}
-#else
 /*
  *------------------------------------------------------*
  *
@@ -555,41 +469,7 @@ ClientData instanceData; /* Channel to query */
 
   Tcl_NotifyChannel (chan->chan, mask);
 }
-#endif
 
-#if (TCL_MAJOR_VERSION < 8)
-/*
- *------------------------------------------------------*
- *
- *	GetFile --
- *
- *	------------------------------------------------*
- *	Called from Tcl_GetChannelFile to retrieve
- *	Tcl_Files from inside a in-memory channel.
- *	------------------------------------------------*
- *
- *	Sideeffects:
- *		None.
- *
- *	Result:
- *		The appropriate Tcl_File or NULL if not
- *		present. 
- *
- *------------------------------------------------------*
- */
-	/* ARGSUSED */
-static Tcl_File
-GetFile (instanceData, mask)
-ClientData instanceData;	/* Channel to query */
-int        mask;		/* Direction of interest */
-{
-  /*
-   * In-memory channels are not based on files.
-   */
-
-  return (Tcl_File) NULL;
-}
-#else
 /*
  *------------------------------------------------------*
  *
@@ -622,7 +502,6 @@ ClientData* handlePtr;          /* Space to the handle into */
   /* *handlePtr = (ClientData) NULL; */
   return TCL_ERROR;
 }
-#endif /* (TCL_MAJOR_VERSION < 8) */
 
 /*
  *------------------------------------------------------*
@@ -644,30 +523,17 @@ ClientData* handlePtr;          /* Space to the handle into */
  */
 	/* ARGSUSED */
 int
-#if TCL_MAJOR_VERSION < 8
-MemchanCmd (notUsed, interp, argc, argv)
-ClientData  notUsed;		/* Not used. */
-Tcl_Interp* interp;		/* Current interpreter. */
-int         argc;		/* Number of arguments. */
-char**      argv;		/* Argument strings. */
-#else
 MemchanCmd (notUsed, interp, objc, objv)
 ClientData    notUsed;		/* Not used. */
 Tcl_Interp*   interp;		/* Current interpreter. */
 int           objc;		/* Number of arguments. */
 Tcl_Obj*CONST objv[];		/* Argument objects. */
-#endif
 {
+  Tcl_Obj*         channelHandle;
   Tcl_Channel      chan;
   ChannelInstance* instance;
 
-#if TCL_MAJOR_VERSION < 8
-  char* channelHandle;
-#else
-  Tcl_Obj* channelHandle;
-#endif
-
-  if (ARGC != 1) {
+  if (objc != 1) {
     Tcl_AppendResult (interp,
 		      "wrong # args: should be \"memchan\"",
 		      (char*) NULL);
@@ -682,33 +548,19 @@ Tcl_Obj*CONST objv[];		/* Argument objects. */
 
   channelHandle = MemchanGenHandle ("mem");
 
-#if TCL_MAJOR_VERSION < 8
-  chan = Tcl_CreateChannel (&channelType,
-			    channelHandle,
-			    (ClientData) instance,
-			    TCL_READABLE | TCL_WRITABLE);
-#else
   chan = Tcl_CreateChannel (&channelType,
 			    Tcl_GetStringFromObj (channelHandle, NULL),
 			    (ClientData) instance,
 			    TCL_READABLE | TCL_WRITABLE);
-#endif
 
   instance->chan      = chan;
-
-#if (TCL_MAJOR_VERSION >= 8)
   instance->timer     = (Tcl_TimerToken) NULL;
-#endif
 
   Tcl_RegisterChannel  (interp, chan);
   Tcl_SetChannelOption (interp, chan, "-buffering", "none");
   Tcl_SetChannelOption (interp, chan, "-blocking",  "0");
 
-#if TCL_MAJOR_VERSION < 8
-  Tcl_AppendResult     (interp, channelHandle, (char*) NULL);
-#else
   Tcl_SetObjResult     (interp, channelHandle);
-#endif
   return TCL_OK;
 }
 

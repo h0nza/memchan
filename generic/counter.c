@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: counter.c,v 1.2 1999/05/25 18:29:39 aku Exp $
+ * CVS: $Id: counter.c,v 1.3 1999/05/25 19:10:40 aku Exp $
  */
 
 
@@ -33,11 +33,7 @@
 
 #include "memchanInt.h"
 
-#if TCL_MAJOR_VERSION < 8
-CONST char*
-#else
 Tcl_Obj*
-#endif
 MemchanGenHandle (prefix)
 CONST char* prefix;
 {
@@ -74,7 +70,7 @@ CONST char* prefix;
 
   return res;
 
-#elif  TCL_MAJOR_VERSION == 8
+#else /* TCL_MAJOR_VERSION == 8 */
   static unsigned long memCounter = 0;
 
   char     channelName [50];
@@ -86,13 +82,5 @@ CONST char* prefix;
   Tcl_AppendStringsToObj (res, channelName, (char*) NULL);
 
   return res;
-#else
-  static unsigned long memCounter = 0;
-  static char          channelName [200];
-
-  sprintf (channelName, "%s%lu", prefix, memCounter);
-  memCounter ++;
-
-  return channelName;
 #endif
 }

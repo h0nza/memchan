@@ -16,8 +16,8 @@ embeddable scripting language package.  Tk is an freely distributable X
 windows interface toolkit and widget library implemented as a collection of
 new commands added to Tcl.
 
-Memchan is developed for Tcl 7.6 or higher.  It is a Tcl extension,
-Tk is not required.
+Memchan @mFullVersion@ is developed for Tcl 8.0 or higher.  It is a Tcl
+extension, Tk is not required.
 
 This distribution contains the source code for Memchan + (very simple)
 documentation describing the new command.
@@ -26,7 +26,7 @@ Memchan should be available by anonymous ftp from ftp.neosoft.com soon.
 
 COMPILING/USING Memchan
 
-To compile Memchan follow the instructions of the INSTALL file.
+To compile Memchan follow the instructions in the HTML documentation.
 
 To report bugs, bug fixes, descriptions of interesting Memchan
 applications, and suggested improvements:

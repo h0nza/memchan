@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.17 1999/06/11 23:44:55 aku Exp $
+# CVS:	$Id: PREPARE,v 1.18 1999/06/14 19:23:55 aku Exp $
 
 
 # O. insert various information into some files
@@ -81,7 +81,7 @@ file delete -force nodes/a_up.def
 exec nodeCompile     plain html              nodes
 exec nodeMakeSitemap plain html memchan_home nodes
 
-mExclude nodes
+mExclude nodes manual INSTALL
 cd ..
 
 

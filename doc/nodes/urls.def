@@ -16,6 +16,8 @@ url consortium "Tcl/Tk Consortium"     http://www.tclconsortium.org/
 
 url tclwiki	"Tcl'ers Wiki"	"http://purl.org/thecliff/tcl/wiki/"
 
+url Trf      "Trf"      http://www.oche.de/~akupries/soft/trf/
+url Trfcrypt "Trfcrypt" http://www.oche.de/~akupries/soft/trfcrypt/
 
 # -------------------------------------------------
 
@@ -24,7 +26,8 @@ set base http://www.oche.de/~akupries/soft/memchan/download
 link memchan_src_tgz  {Sources, Unix}                  ${base}/memchan@mFullVersion@.tar.gz
 link memchan_src_zip  {Sources, Win*}                  ${base}/memchan@mFullVersion@.zip
 link memchan_readme   README                           ${base}/memchan@mFullVersion@.README
-link memchan_win32    {Binary distribution, WinNT, Tcl 8.0} ${base}/mchan@mDosVersion@b.zip
+
+#link memchan_win32    {Binary distribution, WinNT, Tcl 8.0} ${base}/mchan@mDosVersion@b.zip
 
 unset base
 

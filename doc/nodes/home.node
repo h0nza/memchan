@@ -18,6 +18,7 @@ node memchan_home {
 	memchan_cmds
 	memchan_where
 	memchan_ack
+	memchan_compile
     }
 
     contents {
@@ -39,5 +40,14 @@ node memchan_home {
 	on-the-fly generation of code too. No need to [strong set] or
 	[strong append] to a string, just do a simple [strong puts].
 	"
+
+	hr
+
+	p "Users of this extension:"
+
+	bullet_list {
+	    li "[Trf], in its testsuite"
+	    li "[Trfcrypt], in its testsuite"
+	}
     }
 }

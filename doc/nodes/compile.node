@@ -1,0 +1,19 @@
+# -*- tcl -*-
+# compile base
+
+node memchan_compile {
+    title       "Memchan: Compilation"
+    shortTitle  "Compilation"
+    description "Compilation of memchan"
+    parent      memchan_install
+
+    menu {
+	memchan_cmac memchan_cunix memchan_cwin
+    }
+
+    contents {
+	p "
+	The following subsections describe the process of compiling and
+	installing [memchan] for the 3 major platforms."
+    }
+}

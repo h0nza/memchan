@@ -45,21 +45,14 @@ node memchan_where {
 	    }
 	}
 
-	hr
-	p "[strong [cem Upcoming:]] Version [strong 2.0]."
-	p "Changes to expect:"
-	bullet_list {
-	    li "Support for Tcl 7.x. / Tk 4.x. will be dropped."
-	    li "Will allow compilation with its own stub table."
-	}
-    }
-}
-
-
-if {0} {
-    table_row bgcolor=#ffffcc {
-	table_data {
-	    cgi_puts [link memchan_win32]
+	if {0} {
+	    hr
+	    p "[strong [cem Upcoming:]] Version [strong 2.0]."
+	    p "Changes to expect:"
+	    bullet_list {
+		li "Support for Tcl 7.x. / Tk 4.x. will be dropped."
+		li "Will allow compilation with its own stub table."
+	    }
 	}
     }
 }
