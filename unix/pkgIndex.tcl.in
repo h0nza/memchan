@@ -10,25 +10,25 @@
 # @configure_input@
 #
 
-
-
 foreach {__maj__ __min__} [string trimright [split [info tclversion] .] +] {break}
+
+set __memchan_version__ @MEMCHAN_MAJOR_VERSION@.@MEMCHAN_MINOR_VERSION@
 
 if {@MC_USING_STUBS@} {
     # Compiled with stubs, allow 8.1 and beyond.
     if {$__maj__ > 8 || ($__maj__ == 8 && $__min__ > 0)} {
-	package ifneeded Memchan @MEMCHAN_MAJOR_VERSION@.@MEMCHAN_MINOR_VERSION@ \
-		[list tclPkgSetup $dir Memchan @MEMCHAN_MAJOR_VERSION@.@MEMCHAN_MINOR_VERSION@ \
+	package ifneeded Memchan $__memchan_version__ \
+		[list tclPkgSetup $dir Memchan $__memchan_version__ \
 		{{@MEMCHAN_LIB_FILE@ load {fifo memchan null fifo2}}}]
     }
 } else {
     # Compiled without stubs, allow 8.0.x and below.
 
     if {$__maj__ < 8 || ($__maj__ == 8 && $__min__ == 0)} {
-	package ifneeded Memchan @MEMCHAN_MAJOR_VERSION@.@MEMCHAN_MINOR_VERSION@ \
-		[list tclPkgSetup $dir Memchan @MEMCHAN_MAJOR_VERSION@.@MEMCHAN_MINOR_VERSION@ \
+	package ifneeded Memchan $__memchan_version__ \
+		[list tclPkgSetup $dir Memchan $__memchan_version__ \
 		{{@MEMCHAN_LIB_FILE@ load {fifo memchan null fifo2}}}]
     }
 }
 
-unset __maj__ __min__
+unset __maj__ __min__ __memchan_version__
