@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.25 2001/09/19 08:15:51 andreas_kupries Exp $
+# CVS:	$Id: PREPARE,v 1.26 2001/09/19 08:17:30 andreas_kupries Exp $
 
 # Exclude older binary distributions, they are made available through the 1.9 site.
 
@@ -73,6 +73,15 @@ if {0} {
 cd doc
 exec ../tools/manpage_regen > /dev/null 2>/dev/null
 cd ..
+
+file mkdir doc/art
+
+file rename htdocs/art/memchan2.2a1/htdocs/art/logo100.gif doc/art/
+file rename htdocs/art/memchan2.2a1/htdocs/art/logo520.jpg doc/art/
+file rename htdocs/art/memchan2.2a1/htdocs/art/logo64.gif  doc/art/
+
+mExclude htdocs
+
 
 #mHandleBinaryDistributions
 #mHandleBinaryDistributions doc/license.terms README
