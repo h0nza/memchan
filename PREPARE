@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.14 1999/05/11 21:18:09 aku Exp $
+# CVS:	$Id: PREPARE,v 1.15 1999/05/30 11:48:22 aku Exp $
 
 
 # O. insert various information into some files
@@ -22,8 +22,8 @@ mGenerateANNOUNCE
 
 package require MSA
 mGenerateAnnounceMail tcl-announce@mitchell.org lvirden@cas.org
-mSupport AMAIL
-
+mSupport    AMAIL
+file delete AMAIL
 
 #file copy unix/pkgIndex.tcl.in win/pkgIndex.tcl
 
