@@ -1,4 +1,9 @@
-2002-10-15  Andreas Kupries  <andreask@pliers.activestate.com>
+2002-11-06  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* win/makefile.vc (MCOBJS): Updated to list all relevant object
+	  files.
+
+2002-10-15  Andreas Kupries  <andreask@activestate.com>
 
 	* configure.in: Changed to propagate an initial CFLAGS value to
 	  the final definition. A TEA condition (SHARED_BUILD == 1)
