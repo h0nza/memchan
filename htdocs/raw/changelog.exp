@@ -1,0 +1,16 @@
+[header "ChangeLog"][memchan_open]
+
+[nav_begin]
+	[nav_link [mem/sf/txt]]
+	<br>
+	[nav_link [mem/home]]
+	[nav_link [mem/releases]]
+	[nav_link [mem/images]]
+	[nav_link [mem/anim]]
+	[nav_link [mem/doc]]
+[nav_end]
+
+[changelog]
+
+[memchan_close][trailer]
+

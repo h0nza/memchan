@@ -38,7 +38,7 @@ url mem/anim     "Animations"    animations.html
 url mem/releases "Releases"      [releases/url]
 url copyright    "&#169;"        disclaimer.html
 url mem/doc      "Documentation" documentation.html
-
+url mem/clog     "ChangeLog"     changelog.html
 
 url tcl/foundry  "Tcl Foundry" http://sourceforge.net/foundry/tcl-foundry/
 

@@ -7,6 +7,7 @@
 	[nav_link [mem/releases]]
 	[nav_link [mem/images]]
 	[nav_link [mem/anim]]
+	[nav_link [mem/clog]]
 [nav_end]
 
 [p] Currently only the [mem/txt/old/2] carries documentation.
@@ -14,5 +15,7 @@
 [p] When the manpages and/or TMML documentation are written they will
 be integrated into this site using some automated conversion to keep
 the raw documentation and the web in sync.
+
+[p] For the people interested in internal details, here is the [mem/clog].
 
 [memchan_close][trailer]

@@ -32,3 +32,123 @@ proc tcl.cmd {cmd} {return "<b>\[$cmd]</b>"}
 proc wget {url} {
     exec /usr/bin/wget -q -O - $url 2>/dev/null
 }
+
+proc protect {text} {
+    regsub -all {&} $text {\&amp;} text
+    regsub -all {<} $text {\&lt;} text
+    regsub -all {>} $text {\&gt;} text
+    return $text
+}
+
+proc get_changelog {} {
+    set cl [exec [file join [here] .. changelog_to_list] [file join [here] .. .. ChangeLog]]
+    proc get_changelog {} [list return $cl]
+    return $cl
+}
+
+proc changelog {} {
+    set cl   [get_changelog]
+    set html "<ul>"
+
+    foreach chunk $cl {
+	foreach {date person items} $chunk break ; # lassign
+	append html "<li><hr><b>[protect $date]</b><p align=right>[protect $person] ...<hr>[p][changelog_items $items][p]\n"
+    }
+
+    return $html</ul>
+} 
+
+proc changelog_items {items} {
+    set dlopen  0
+    set onlykey 0
+
+    foreach item $items {
+	foreach {key com} $item break
+
+	if {$key != {}} {
+	    if {!$dlopen} {
+		if {$onlykey} {
+		    append html [p]
+		    set onlykey 0
+		}
+		append html <dl>\n
+	    }
+	    set dlopen 1
+
+	    append html <dt><i>[protect $key]</i></dt>
+	    if {$com != {}} {
+		append html <dd>[protect $com]</dd>\n
+	    }
+	} else {
+	    if {$com != {}} {
+		if {$dlopen} {append html </dl>[p]\n}
+		set dlopen 0
+		append html [protect $com]
+		set onlykey 1
+	    }
+	}
+
+    }
+    if {$dlopen} {append html </dl>\n}
+    return $html
+}
+
+
+######################################################################
+#
+# scratch area
+#
+
+######################################################################
+#
+# scratch area -- changelog using tables ...
+#
+
+if {0} {
+    set lastcom ""
+    set rows 0
+    foreach item $items {
+	foreach {key com} $item break
+	if {$com != {}} {
+	    if {$lastcom != {}} {
+		# Close last row(s)
+		if {$rows > 1} {
+		    append html "<td bgcolor=[bgcolor] rowspan=$rows>[protect $lastcom]</td></tr>"
+		} else {
+		    append html "[td][protect $lastcom]</td></tr>"
+		}
+		set lastcom ""
+		set rows    0
+		append html [trtop][td][protect $key]</td>\n
+		set lastcom $com
+		incr rows
+	    } else {
+		# Non empty row and no preceding comments
+		# Remember comment, print key.
+		append html [trtop][td][protect $key]</td>\n
+		set lastcom $com
+		set rows 1
+	    }
+	} else {
+	    # No comment right now
+	    if {$lastcom != {}} {
+		# But an open key
+		incr rows
+	    } else {
+		# And no preceding comments -> print empty row.
+		append html "[trtop][td][protect $key]</td>[td]&nbsp;</td></tr>\n"
+		set lastcom ""
+		set rows 0
+	    }
+	}
+    }
+    if {$lastcom != {}} {
+	if {$rows > 1} {
+	    append html "<td bgcolor=[bgcolor] rowspan=$rows>[protect $lastcom]</td></tr>"
+	} else {
+	    append html "[td][protect $lastcom]</td></tr>"
+	}
+    }
+    append html </tr></table>
+    return $html
+}

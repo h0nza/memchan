@@ -1,4 +1,26 @@
-2001-08-30 Andreas Kupries  <akupries@home.com>
+2001-08-31 Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* htdocs/raw/animation.exp:
+	* htdocs/raw/changelog.exp:
+	* htdocs/raw/disclaimer.exp:
+	* htdocs/raw/documentation.exp:
+	* htdocs/raw/image.exp:
+	* htdocs/raw/index.exp: Consistent crossreferences to all memchan
+	  pages.
+
+	* tools/rules/references: Added reference to changelog page.
+
+	* tools/changelog_to_list: Application converting a ChangeLog into
+	  a tcl list. Used by the formatting cvode below to get a tcl
+	  friendly format of the changelog.
+
+	* tools/rules/formatting: Added code to generate the formatted
+	  changelog. Used in the page below.
+
+	* htdocs/raw/changelog.exp: New page for the website. Generated
+	  from the ChangeLog.
+
+2001-08-30 Andreas Kupries <andreas_kupries@users.sourceforge.net>
 
 	* htdocs: Sources of the new website.
 	* tools/htdocs/*:

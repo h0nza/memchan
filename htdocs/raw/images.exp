@@ -1,8 +1,14 @@
 [header "Images"][memchan_open]
 
 [nav_begin]
+	[nav_link [mem/sf/txt]]
+	<br>
 	[nav_link [mem/home]]
+	[nav_link [mem/releases]]
+	[nav_link [mem/images]]
 	[nav_link [mem/anim]]
+	[nav_link [mem/doc]]
+	[nav_link [mem/clog]]
 [nav_end]
 
 [p] This page displays a series of images all containing the [mem/txt]
