@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.16 1999/05/31 15:41:04 aku Exp $
+# CVS:	$Id: PREPARE,v 1.17 1999/06/11 23:44:55 aku Exp $
 
 
 # O. insert various information into some files
@@ -55,7 +55,8 @@ eval file rename [glob tg*] testlib
 # Now generate documentation for linkage into my
 # site and standalone distribution
 
-mHandleBinaryDistributions
+#mHandleBinaryDistributions
+mHandleBinaryDistributions doc/license.terms README
 
 # -up-man assumes that the document is part of the
 # hierarchy at http://www.oche.de/~akupries
