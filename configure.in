@@ -1,17 +1,17 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.1.1.1 1996/11/15 21:37:43 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.2 1996/12/05 18:07:51 aku Exp $)
 dnl
 AC_INIT(memchan.c)
 
-MEMCHAN_VERSION=1.0
+MEMCHAN_VERSION=1.1
 MEMCHAN_MAJOR_VERSION=1
-MEMCHAN_MINOR_VERSION=0
+MEMCHAN_MINOR_VERSION=1
 VERSION=${MEMCHAN_VERSION}
 
 TCL_REQ_MAJOR_VERSION=7
-TCL_REQ_MINOR_VERSION=5
+TCL_REQ_MINOR_VERSION=6
 
 
 dnl
@@ -67,25 +67,27 @@ dnl
 dnl Locate tcl.h
 dnl Searches:
 dnl	TCL_INCLUDE_DIR		(--with-tcl, --with-tcl-include-dir)
+dnl	../tcl8.0*/generic	(assume tcl source in sibling directory)
+dnl	../tcl7.6/generic	(assume tcl source in sibling directory)
+dnl	../tcl/generic		(see above)
+dnl	../tcl			(should be old version)
 dnl	$prefix/include		(--prefix)
 dnl	/usr/local/include
 dnl	/usr/include
-dnl	../tcl7.6/generic	(assume tcl source in sibling directory)
-dnl	../tcl7.5/generic	(assume tcl source in sibling directory)
-dnl	../tcl/generic		(see above)
-dnl	../tcl			(should be old version)
 dnl
 AC_CACHE_CHECK(for directory with tcl.h,
 	memchan_cv_path_TCL_INCLUDE_DIR,
 	[memchan_cv_path_TCL_INCLUDE_DIR=""
 	 places="$TCL_INCLUDE_DIR \
+		../tcl8.0/generic \
+		../tcl8.0b*/generic \
+		../tcl8.0a*/generic \
+		../tcl7.6/generic \
+		../tcl/generic \
+		../tcl \
 		$prefix/include \
 		/usr/local/include \
-		/usr/include \
-		../tcl7.6/generic \
-		../tcl7.5/generic \
-		../tcl/generic \
-		../tcl"
+		/usr/include"
      for dir in $places; do
          if test -r $dir/tcl.h ; then
             memchan_cv_path_TCL_INCLUDE_DIR=$dir
@@ -109,7 +111,7 @@ AC_CACHE_CHECK(for up-to-date version of Tcl,
     CPPFLAGS="-I$TCL_INCLUDE_DIR $CPPFLAGS"
     AC_EGREP_CPP(good_tcl_version,
 [#include <tcl.h>
-#if ((TCL_MAJOR_VERSION == 7) && (TCL_MINOR_VERSION >= 5))
+#if ((TCL_MAJOR_VERSION == 7) && (TCL_MINOR_VERSION >= 6))
     good_tcl_version
 #endif
 #if (TCL_MAJOR_VERSION > 7)
@@ -118,7 +120,7 @@ AC_CACHE_CHECK(for up-to-date version of Tcl,
     CPPFLAGS=$ac_save_cppflags])
 
 if test "$memchan_cv_vers_good_tcl_version" = "no"; then
-    AC_MSG_ERROR(Your Tcl must be at least version 7.5)
+    AC_MSG_ERROR(Your Tcl must be at least version 7.6)
 fi
 
 AC_SUBST(TCL_INCLUDE_DIR)
@@ -128,30 +130,32 @@ dnl
 dnl Locate tcl library
 dnl Searches:
 dnl	TCL_LIB_DIR		(--with-tcl, --with-tcl-lib-dir)
+dnl	../tcl6.0*/unix		(assume tcl source in sibling directory)
+dnl	../tcl7.6/unix		(assume tcl source in sibling directory)
+dnl	../tcl/unix		(see above)
+dnl	../tcl			(should be old version)
 dnl	$exec_prefix/include		(--exec-prefix)
 dnl	/usr/local/lib
 dnl	/usr/lib
-dnl	../tcl7.6/unix		(assume tcl source in sibling directory)
-dnl	../tcl7.5/unix		(assume tcl source in sibling directory)
-dnl	../tcl/unix		(see above)
-dnl	../tcl			(should be old version)
 dnl
 AC_CACHE_CHECK(for tcl library,
 	memchan_cv_lib_TCL_LIB,
 	[memchan_cv_lib_TCL_LIB=""
 	 places="$TCL_LIB_DIR \
+	../tcl8.0/unix \
+	../tcl8.0b*/unix \
+	../tcl8.0a*/unix \
+	../tcl7.6/unix \
+	../tcl/unix \
+	../tcl \
 	 $prefix/lib \
 	 /usr/local/lib \
-	 /usr/lib \
-	../tcl7.6/unix \
-	../tcl7.5/unix \
-	../tcl/unix \
-	../tcl"
+	 /usr/lib"
     for dir in $places; do
         if test -n "$memchan_cv_lib_TCL_LIB"; then
             break
         fi
-        for version in 7.6 7.5 ""; do
+        for version in 8.0 8.0a1 7.6 ""; do
             if test -n "$memchan_cv_lib_TCL_LIB"; then
                 break
             fi
@@ -251,6 +255,12 @@ dnl AC_SUBST(LIBS)
 dnl ----------------------------------------------------------------
 dnl non-standard substitutions
 dnl
+
+dnl don't bother with -ltclX.Y if not running under AIX
+if test "x${TCL_SHARED_LIB_SUFFIX}" != 'x${VERSION}.a' -o "x${SHLIB_SUFFIX}" != "x.so"; then
+	TCL_LIB_SPEC=""
+fi
+
 
 AC_SUBST(CC)
 AC_SUBST(DL_LIBS)

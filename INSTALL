@@ -1,4 +1,4 @@
-# -- CVS $Id: INSTALL,v 1.2 1996/10/07 20:20:24 aku Exp $
+# -- CVS $Id: INSTALL,v 1.1.1.1 1996/11/15 21:37:43 aku Exp $
 #
 
 Installation and compilation instructions
@@ -28,12 +28,13 @@ o	The configure script searches for tcl.h in the following
 	places:
 
 	-1	$(TCL_INCLUDE_DIR)
-	-2	$(prefix)
-	-3	/usr/local/include
-	-4	/usr/include
-	-5	../tcl7.5/generic
-	-6	../tcl/generic
-	-7	../tcl
+	-2	../tcl8.0*/generic
+	-3	../tcl7.6/generic
+	-4	../tcl/generic
+	-5	../tcl
+	-6	$(prefix)
+	-7	/usr/local/include
+	-8	/usr/include
 
 	By default $(TCL_INCLUDE_DIR) is empty and $(prefix) points
 	to the location of an installed 'tclsh' or is /usr/local if
@@ -49,12 +50,13 @@ o	The configure script searches for tcl.h in the following
 o	To find libtcl.a (libtcl.so.??) the paths
 
 	-1	$(TCL_LIB_DIR)
-	-2	$(exec_prefix)
-	-3	/usr/local/include
-	-4	/usr/include
-	-5	../tcl7.5/unix
-	-6	../tcl/unix
-	-7	../tcl
+	-2	../tcl8.0*/unix
+	-3	../tcl7.6/unix
+	-4	../tcl/unix
+	-5	../tcl
+	-6	$(exec_prefix)
+	-7	/usr/local/include
+	-8	/usr/include
 
 	are searched. $(TCL_LIB_DIR) is empty by default, but
 	can be set via --with-tcl or --with-tcl-lib-dir.

@@ -519,13 +519,13 @@ fi
 
 
 
-MEMCHAN_VERSION=1.0
+MEMCHAN_VERSION=1.1
 MEMCHAN_MAJOR_VERSION=1
-MEMCHAN_MINOR_VERSION=0
+MEMCHAN_MINOR_VERSION=1
 VERSION=${MEMCHAN_VERSION}
 
 TCL_REQ_MAJOR_VERSION=7
-TCL_REQ_MINOR_VERSION=5
+TCL_REQ_MINOR_VERSION=6
 
 
 if test "x$prefix" = xNONE; then
@@ -756,13 +756,15 @@ if eval "test \"`echo '$''{'memchan_cv_path_TCL_INCLUDE_DIR'+set}'`\" = set"; th
 else
   memchan_cv_path_TCL_INCLUDE_DIR=""
 	 places="$TCL_INCLUDE_DIR \
+		../tcl8.0/generic \
+		../tcl8.0b*/generic \
+		../tcl8.0a*/generic \
+		../tcl7.6/generic \
+		../tcl/generic \
+		../tcl \
 		$prefix/include \
 		/usr/local/include \
-		/usr/include \
-		../tcl7.6/generic \
-		../tcl7.5/generic \
-		../tcl/generic \
-		../tcl"
+		/usr/include"
      for dir in $places; do
          if test -r $dir/tcl.h ; then
             memchan_cv_path_TCL_INCLUDE_DIR=$dir
@@ -784,10 +786,10 @@ else
     ac_save_cppflags="$CPPFLAGS"
     CPPFLAGS="-I$TCL_INCLUDE_DIR $CPPFLAGS"
     cat > conftest.$ac_ext <<EOF
-#line 788 "configure"
+#line 790 "configure"
 #include "confdefs.h"
 #include <tcl.h>
-#if ((TCL_MAJOR_VERSION == 7) && (TCL_MINOR_VERSION >= 5))
+#if ((TCL_MAJOR_VERSION == 7) && (TCL_MINOR_VERSION >= 6))
     good_tcl_version
 #endif
 #if (TCL_MAJOR_VERSION > 7)
@@ -810,7 +812,7 @@ fi
 echo "$ac_t""$memchan_cv_vers_good_tcl_version" 1>&6
 
 if test "$memchan_cv_vers_good_tcl_version" = "no"; then
-    { echo "configure: error: Your Tcl must be at least version 7.5" 1>&2; exit 1; }
+    { echo "configure: error: Your Tcl must be at least version 7.6" 1>&2; exit 1; }
 fi
 
 
@@ -820,18 +822,20 @@ if eval "test \"`echo '$''{'memchan_cv_lib_TCL_LIB'+set}'`\" = set"; then
 else
   memchan_cv_lib_TCL_LIB=""
 	 places="$TCL_LIB_DIR \
+	../tcl8.0/unix \
+	../tcl8.0b*/unix \
+	../tcl8.0a*/unix \
+	../tcl7.6/unix \
+	../tcl/unix \
+	../tcl \
 	 $prefix/lib \
 	 /usr/local/lib \
-	 /usr/lib \
-	../tcl7.6/unix \
-	../tcl7.5/unix \
-	../tcl/unix \
-	../tcl"
+	 /usr/lib"
     for dir in $places; do
         if test -n "$memchan_cv_lib_TCL_LIB"; then
             break
         fi
-        for version in 7.6 7.5 ""; do
+        for version in 8.0 8.0a1 7.6 ""; do
             if test -n "$memchan_cv_lib_TCL_LIB"; then
                 break
             fi
@@ -923,6 +927,11 @@ else
 	MEMCHAN_LIB_DIR=${exec_prefix}/lib
 fi
 
+
+
+if test "x${TCL_SHARED_LIB_SUFFIX}" != 'x${VERSION}.a' -o "x${SHLIB_SUFFIX}" != "x.so"; then
+	TCL_LIB_SPEC=""
+fi
 
 
 

@@ -1,6 +1,6 @@
 
 		Memory Channels in Tcl
-		(Version 1.0 / NoRemember 15, 1996)
+		(Version 1.1 / January 13, 1997)
 
 		Andreas Kupries	(a.kupries@westend.com)
 
@@ -16,7 +16,7 @@ embeddable scripting language package.  Tk is an freely distributable X
 windows interface toolkit and widget library implemented as a collection of
 new commands added to Tcl.
 
-Memchan is developed for Tcl 7.5 or higher.  It is a pure Tcl extension,
+Memchan is developed for Tcl 7.6 or higher.  It is a pure Tcl extension,
 Tk is not required.
 
 This distribution contains the source code for Memchan + (very simple)
@@ -24,10 +24,11 @@ documentation describing the new command.
 Memchan should be available by anonymous ftp from ftp.neosoft.com in
 the /tcl/extension directory (at least after their reorganization).
 
-Primary ftp-site will be <ftp://ftp.kisters.de/pub/lang/tcl/memchan1.0.tar.gz>
+Primary ftp-site will be
+		<ftp://ftp.kisters.de/pub/lang/tcl/memchan1.1.tar.gz>
 
 
-COMPILING/USING Tcl-Trf
+COMPILING/USING Memchan
 
 To compile Memchan follow the instructions of the INSTALL file.
 
@@ -44,4 +45,6 @@ or
 REMARKS
 
 This extension was developed on my private computer, a PC running
-Linux 1.2.13. It is not tested anywhere else. Feedback is appreciated.
+Linux 1.2.13 (gcc 2.7.2). If you have problems compiling on a
+particular architecture please mail me your solutions so that I am
+able to integrate them into the base.

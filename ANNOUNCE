@@ -1,0 +1,25 @@
+Hello world,
+
+This is release 1.1 of the simple extension providing "Memory channels".
+
+Changes from 1.0:
+
+*	cleaned up configuration and removed misleading info (7.5)
+*	configure is now aware of tcl 8.0*
+*	changed search order used by configure.
+
+*	No, no changes in functionality :-)
+
+The package can be found at
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan1.1.tar.gz>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan1.1.readme>
+
+Enjoy,
+	Andreas Kupries <a.kupries@westend.com>	(private)
+                        <aku@kisters.de>	(at work)
+-------------------------------------------------------------------------------
+	Kongress-Strasse 23/15, 52070 Aachen, Germany
+
+ pgp-key:	via keyserver
+ finger print:	3E C8 C9 6B 2A EC 05 B1 EE 49 15 0B 62 DC 23 06
+-------------------------------------------------------------------------------
