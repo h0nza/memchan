@@ -19,7 +19,7 @@ if {@MC_USING_STUBS@} {
     if {$__maj__ > 8 || ($__maj__ == 8 && $__min__ > 0)} {
 	package ifneeded Memchan @MEMCHAN_MAJOR_VERSION@.@MEMCHAN_MINOR_VERSION@ \
 		[list tclPkgSetup $dir Memchan @MEMCHAN_MAJOR_VERSION@.@MEMCHAN_MINOR_VERSION@ \
-		{{@MEMCHAN_LIB_FILE@ load {fifo memchan}}}]
+		{{@MEMCHAN_LIB_FILE@ load {fifo memchan null fifo2}}}]
     }
 } else {
     # Compiled without stubs, allow 8.0.x and below.
@@ -27,7 +27,7 @@ if {@MC_USING_STUBS@} {
     if {$__maj__ < 8 || ($__maj__ == 8 && $__min__ == 0)} {
 	package ifneeded Memchan @MEMCHAN_MAJOR_VERSION@.@MEMCHAN_MINOR_VERSION@ \
 		[list tclPkgSetup $dir Memchan @MEMCHAN_MAJOR_VERSION@.@MEMCHAN_MINOR_VERSION@ \
-		{{@MEMCHAN_LIB_FILE@ load {fifo memchan}}}]
+		{{@MEMCHAN_LIB_FILE@ load {fifo memchan null fifo2}}}]
     }
 }
 
