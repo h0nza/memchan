@@ -23,10 +23,10 @@ the raw documentation and the web in sync.
 [trtop][td]
 
 [table]
-[trtop][td][nbsp]</td>[td]HTML             </td>[td]nroff             </td></tr>
-[trtop][td]gzip  </td>[td][mc/doc/html/gz] </td>[td][mc/doc/nroff/gz] </td></tr>
-[trtop][td]bzip2 </td>[td][mc/doc/html/bz] </td>[td][mc/doc/nroff/bz] </td></tr>
-[trtop][td]zip   </td>[td][mc/doc/html/zip]</td>[td][mc/doc/nroff/zip]</td></tr>
+[trtop][td][nbsp]</td>[td]HTML             </td>[td]nroff             </td>[td]TMML             </td></tr>
+[trtop][td]gzip  </td>[td][mc/doc/html/gz] </td>[td][mc/doc/nroff/gz] </td>[td][mc/doc/tmml/gz] </td></tr>
+[trtop][td]bzip2 </td>[td][mc/doc/html/bz] </td>[td][mc/doc/nroff/bz] </td>[td][mc/doc/tmml/bz] </td></tr>
+[trtop][td]zip   </td>[td][mc/doc/html/zip]</td>[td][mc/doc/nroff/zip]</td>[td][mc/doc/tmml/zip]</td></tr>
 </table>
 
 </td></tr></table></td></tr></table></td></tr></table>

@@ -10,6 +10,9 @@ proc main {} {
     global argv
     set in [lindex $argv 0]
     set out [cl:parse [read [set fh [open $in r]]][close $fh]]
+
+    puts [join $out \n]
+    exit
     puts $out
 }
 
@@ -124,7 +127,7 @@ proc cl:parse:close_last_item {} {
 	set co [string trim [string range $i [incr ke 2] end]]
 
 	lappend c(items) [list $k $co]
-	set idata {}
+	set i {}
 
     }
     return

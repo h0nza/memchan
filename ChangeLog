@@ -1,4 +1,31 @@
+2001-09-10  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* htdocs/raw/documentation.exp: Added TMML bundles to table.
+
+	* tools/rules/memchan: Added TMML references.
+
+	* tools/htdocs_setup: Added generation of TMML bundles.
+
+	* tools/manpage_regen: Added generation of TMML pages.
+
+2001-09-09  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* tools/rules/xmlrules.tcl: New. Helper file to manpage.tmml (see
+	  below) containing XML utility procedures.
+
+	* tools/rules/manpage.tmml: New file to convert my manpage/tcl
+	  format into TMML, created for me by Joe English
+	  <jenglish@flightlab.com>, current maintainer of TMML.
+
+	* tools/htdocs_setup: Redirect output of zip commands into nothing.
+
 2001-09-08 Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* tools/changelog_to_list: Fixed error in parser which duplicated
+	  the last item of a chunk as a bogus first item in the next chunk.
+
+	* tools/watch_cvs: Removed a delay in usage when it comes to
+	  changes in "htdocs_setup".
 
 	* PREPARE: Removed the generation of the 'webTemplate' based
 	  documentation.

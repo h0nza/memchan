@@ -49,3 +49,6 @@ url mc/doc/nroff/zip "Archive"  doc/memchan.nroff.tar.zip
 url mc/doc/html/gz   "Archive"  doc/memchan.html.tar.gz
 url mc/doc/html/bz   "Archive"  doc/memchan.html.tar.bz2
 url mc/doc/html/zip  "Archive"  doc/memchan.html.tar.zip
+url mc/doc/tmml/gz   "Archive"  doc/memchan.tmml.tar.gz
+url mc/doc/tmml/bz   "Archive"  doc/memchan.tmml.tar.bz2
+url mc/doc/tmml/zip  "Archive"  doc/memchan.tmml.tar.zip

@@ -26,10 +26,13 @@ cd htdocs ; ../tools/htdocs_refresh        ; cd ..
 
 tar cfz memchan.nroff.tar.gz   doc/*.n
 tar cfI memchan.nroff.tar.bz2  doc/*.n
-zip     memchan.nroff.tar.zip  doc/*.n
+zip     memchan.nroff.tar.zip  doc/*.n		> /dev/null
 tar cfz memchan.html.tar.gz    doc/*.html
 tar cfI memchan.html.tar.bz2   doc/*.html
-zip     memchan.html.tar.zip   doc/*.html
+zip     memchan.html.tar.zip   doc/*.html	> /dev/null
+tar cfz memchan.tmml.tar.gz    doc/*.tmml
+tar cfI memchan.tmml.tar.bz2   doc/*.tmml
+zip     memchan.tmml.tar.zip   doc/*.tmml	> /dev/null
 
 mkdir -p     htdocs/doc
 mv memchan.* htdocs/doc/
