@@ -1,0 +1,47 @@
+
+		Memory Channels in Tcl
+		(Version 1.0 / NoRemember 15, 1996)
+
+		Andreas Kupries	(a.kupries@westend.com)
+
+This directory contains a freely distributable extension to Tcl
+implementing memory channels, i.e. channels storing the data
+placed into them in memory, not on disk.
+
+
+BACKGROUND
+
+Tcl stands for the Tool Command Language, a freely distributable,
+embeddable scripting language package.  Tk is an freely distributable X
+windows interface toolkit and widget library implemented as a collection of
+new commands added to Tcl.
+
+Memchan is developed for Tcl 7.5 or higher.  It is a pure Tcl extension,
+Tk is not required.
+
+This distribution contains the source code for Memchan + (very simple)
+documentation describing the new command.
+Memchan should be available by anonymous ftp from ftp.neosoft.com in
+the /tcl/extension directory (at least after their reorganization).
+
+Primary ftp-site will be <ftp://ftp.kisters.de/pub/lang/tcl/memchan1.0.tar.gz>
+
+
+COMPILING/USING Tcl-Trf
+
+To compile Memchan follow the instructions of the INSTALL file.
+
+To report bugs, bug fixes, descriptions of interesting Memchan
+applications, and suggested improvements:
+
++) Send email to a.kupries@westend.com
+
+or
+
++) Post an article to the newsgroup	comp.lang.tcl
+
+
+REMARKS
+
+This extension was developed on my private computer, a PC running
+Linux 1.2.13. It is not tested anywhere else. Feedback is appreciated.

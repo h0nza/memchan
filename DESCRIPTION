@@ -1,0 +1,12 @@
+# -*- tcl -*-
+extension memchan {
+    comment {
+	Implements memory channels, i.e. channels
+	storing their contents in memory, not on disk.
+    }
+
+    author {Andreas Kupries (a.kupries@westend.com)}
+
+    version	1.0
+    requires	tcl7.5
+}

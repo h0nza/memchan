@@ -1,0 +1,9 @@
+# -*- tcl -*-
+# CVS:	$Id$
+# dependency information of Memchan
+
+# required tools
+tool install-sh
+tool mkinstalldirs
+
+# other required modules
