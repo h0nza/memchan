@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.8 1999/05/30 11:48:32 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.9 1999/06/28 21:24:03 aku Exp $)
 dnl
 AC_INIT(Makefile.in)
 
@@ -105,6 +105,7 @@ dnl
 dnl Locate tcl.h
 dnl Searches:
 dnl	TCL_INCLUDE_DIR		(--with-tcl, --with-tcl-include-dir)
+dnl	../../tcl8.2*/generic	(assume tcl source in sibling directory)
 dnl	../../tcl8.1*/generic	(assume tcl source in sibling directory)
 dnl	../../tcl8.0/generic	(assume tcl source in sibling directory)
 dnl	../../tcl7.6/generic	(assume tcl source in sibling directory)
@@ -119,7 +120,11 @@ AC_CACHE_CHECK(for directory with tcl.h,
 	memchan_cv_path_TCL_INCLUDE_DIR,
 	[memchan_cv_path_TCL_INCLUDE_DIR=""
 	 places="$TCL_INCLUDE_DIR \
-		../../tcl8.1.*/generic \
+		../../tcl8.2.*/generic \
+		../../tcl8.2/generic \
+		../../tcl8.2b*/generic \
+		../../tcl8.2a*/generic \
+		../../tcl8.2.*/generic \
 		../../tcl8.1/generic \
 		../../tcl8.1b*/generic \
 		../../tcl8.1a*/generic \
@@ -173,6 +178,7 @@ dnl
 dnl Locate tcl library
 dnl Searches:
 dnl	TCL_LIB_DIR		(--with-tcl, --with-tcl-lib-dir)
+dnl	../../tcl8.2*/unix	(assume tcl source in sibling directory)
 dnl	../../tcl8.1*/unix	(assume tcl source in sibling directory)
 dnl	../../tcl8.0/unix	(assume tcl source in sibling directory)
 dnl	../../tcl7.6/unix	(assume tcl source in sibling directory)
@@ -187,6 +193,10 @@ AC_CACHE_CHECK(for tcl library,
 	memchan_cv_lib_TCL_LIB,
 	[memchan_cv_lib_TCL_LIB=""
 	 places="$TCL_LIB_DIR \
+	../../tcl8.2.*/unix \
+	../../tcl8.2/unix \
+	../../tcl8.2b*/unix \
+	../../tcl8.2a*/unix \
 	../../tcl8.1.*/unix \
 	../../tcl8.1/unix \
 	../../tcl8.1b*/unix \
@@ -204,7 +214,7 @@ AC_CACHE_CHECK(for tcl library,
         if test -n "$memchan_cv_lib_TCL_LIB"; then
             break
         fi
-        for version in 8.1.1 8.1 8.0.5 8.0.4 8.0.3 8.0 7.6 811 81 805 804 803 80 76 ""; do
+        for version in 8.2 8.1.1 8.1 8.0.5 8.0.4 8.0.3 8.0 7.6 82 811 81 805 804 803 80 76 ""; do
             if test -n "$memchan_cv_lib_TCL_LIB"; then
                 break
             fi
