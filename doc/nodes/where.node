@@ -7,9 +7,14 @@ node memchan_where {
     description "Where to get the Memchan distribution"
     parent      memchan_home
 
+    menu {
+	memchan_bdist
+    }
+
     contents {
 	p "The extension is distributed in several variants, as listed
-	below. The given links allow an immediate download.
+	below. The given links allow an immediate download. The binary
+	distributions are on a separate page.
 	"
 
 	table border=1 cellspacing=0 cellpadding=2 bgcolor=black width=100% {
@@ -33,11 +38,6 @@ node memchan_where {
 		    cgi_puts [link memchan_src_zip]
 		}
 	    }
-	    table_row bgcolor=#ffffcc {
-		table_data {
-		    cgi_puts [link memchan_win32]
-		}
-	    }
 	}
 
 	hr
@@ -45,6 +45,15 @@ node memchan_where {
 	bullet_list {
 	    li "Drops support for Tcl 7.x. / Tk 4.x."
 	    li "Allows compilation with its own stub table."
+	}
+    }
+}
+
+
+if {0} {
+    table_row bgcolor=#ffffcc {
+	table_data {
+	    cgi_puts [link memchan_win32]
 	}
     }
 }
