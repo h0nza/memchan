@@ -1,10 +1,10 @@
 
-		Tcl Data transformations (Tcl-Trf)
+		Memory Channels in Tcl
 		(Version @mFullVersion@ / @mDate@)
 
 		Andreas Kupries	(a.kupries@westend.com)
 
-This is the README file for the Macintosh version of the Tcl-Trf package.
+This is the README file for the Macintosh version of the Memchan extension
 
 
 	I don't have a Mac, nor do I have access one. Because
