@@ -8,15 +8,16 @@ extension memchan {
     date           {@mDate@}
 
     description {
-	Implements memory channels, i.e. channels
-	storing their contents in memory, not on disk.
+	an extension implementing a new channel-type. Instances
+	store their contents in memory, not on disk.
     }
 
     primary-urls {
-	http://www.oche.de/~akupries/soft/memchan/memchan@mFullVersion@.tar.gz
-	http://www.oche.de/~akupries/soft/memchan/memchan@mDosVersion@.zip
-	http://www.oche.de/~akupries/soft/memchan/memchan@mFullVersion@.README
-	http://www.oche.de/~akupries/soft/memchan/mchan@mDosVersion@b.zip
+	http://www.oche.de/%7Eakupries/soft/memchan/<ARCH>
+	http://www.oche.de/%7Eakupries/soft/memchan/memchan@mFullVersion@.tar.gz
+	http://www.oche.de/%7Eakupries/soft/memchan/memchan@mDosVersion@.zip
+	http://www.oche.de/%7Eakupries/soft/memchan/memchan@mFullVersion@.README
+	http://www.oche.de/%7Eakupries/soft/memchan/mchan@mDosVersion@b.zip
     }
 
     dependencies {
