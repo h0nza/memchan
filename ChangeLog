@@ -1,3 +1,9 @@
+Sun Aug  1 16:15:23 1999  Andreas Kupries  <a.kupries@westend.com>
+
+	* Added binary distribution for Windows, from Jan, excluded old
+ 	  binary distributions (for 1.9) and added a reference to the old
+ 	  site for this version instead.
+
 Tue Jul 27 22:57:56 1999  Andreas Kupries  <a.kupries@westend.com>
 
 	* doc/nodes/home.node, compile.node, win.node, mac.node,

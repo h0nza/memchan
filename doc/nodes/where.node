@@ -46,6 +46,10 @@ node memchan_where {
 		table_data {
 		    p "The binary distributions are on a separate page."
 		    p [link memchan_bdist]
+
+		    p "The binary distributions for version 1.9 are
+		    available on its site."
+		    p [link memchan_bdist19]
 		}
 	    }
 	}

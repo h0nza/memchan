@@ -18,7 +18,8 @@ url tclwiki	"Tcl'ers Wiki"	"http://purl.org/thecliff/tcl/wiki/"
 
 url Trf       "Trf"         http://www.oche.de/~akupries/soft/trf/
 url Trfcrypt  "Trfcrypt"    http://www.oche.de/~akupries/soft/trfcrypt/
-url memchan19 "version 1.9" http://www.oche.de/~akupries/soft/memchan1.9/
+url memchan19       "version 1.9" http://www.oche.de/~akupries/soft/memchan1.9/
+url memchan_bdist19 "Memchan 1.9 binary distributions" http://www.oche.de/~akupries/soft/memchan1.9/memchan_bdist.html
 
 # -------------------------------------------------
 

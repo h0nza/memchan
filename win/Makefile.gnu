@@ -25,7 +25,8 @@ TMPDIR		=	.
 # Directories in which the Tcl core can be found
 TCL_INC_DIR	= /progra~1/tcl/include
 TCL_LIB_DIR	= /progra~1/tcl/lib
-TCL_LIB_SPEC	= /progra~1/tcl/lib/libtclstub81.a
+#TCL_LIB_SPEC	= /progra~1/tcl/lib/libtclstub81.a
+TCL_LIB_SPEC	= /progra~1/tcl/lib/libtclstub82.a
 
 # Libraries to be included with memchan.dll
 TCL_SHARED_LIBS		=
@@ -72,7 +73,8 @@ MAN_INSTALL_DIR =	$(INSTALL_ROOT)$(prefix)/man
 
 # To change the compiler switches, for example to change from -O
 # to -g, change the following line:
-CFLAGS		=	-O2 -mno-cygwin -DNDEBUG -D__WIN32__
+#CFLAGS		=	-O2 -mno-cygwin -DNDEBUG -D__WIN32__
+CFLAGS		=	-O2 -mno-cygwin -DNDEBUG -D__WIN32__ -DTCL_THREADS
 
 # To disable ANSI-C procedure prototypes reverse the comment characters
 # on the following lines:
@@ -149,7 +151,8 @@ DLLWRAP = dllwrap
 WINDRES = windres
 
 DLL_LDFLAGS = -mwindows -Wl,-e,_DllMain@12
-DLL_LDLIBS = -L/progra~1/tcl/lib -ltclstub81
+#DLL_LDLIBS = -L/progra~1/tcl/lib -ltclstub81
+DLL_LDLIBS = -L/progra~1/tcl/lib -ltclstub82
 
 baselibs   = -lkernel32 $(optlibs) -ladvapi32
 winlibs    = $(baselibs) -luser32 -lgdi32 -lcomdlg32 -lwinspool

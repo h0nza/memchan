@@ -1,6 +1,17 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.18 1999/06/14 19:23:55 aku Exp $
+# CVS:	$Id: PREPARE,v 1.19 1999/07/27 21:25:11 aku Exp $
+
+# Exclude older binary distributions, they are made available through the 1.9 site.
+
+mExclude \
+	win/bdist/cygwin.jan.19.1 \
+	win/bdist/cygwin.jan.19.2 \
+	win/bdist/vc6.ak.19.1     \
+	unix/bdist/ak.1           \
+	unix/bdist/ak.2           \
+	unix/bdist/ak.3
+
 
 
 # O. insert various information into some files
