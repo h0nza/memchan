@@ -4,8 +4,10 @@ This is release @VERSION@ of the simple extension providing "Memory channels".
 
 Changes from 1.1:
 
-*	Added support for windows.
-*	Source distribution as .zip-file now too.
+*	Added support for Windows.
+*	Source distribution now available as zip-file too.
+*	Binary distribution available for Windows (used MSVC++ 4.2)
+
 
 Changes from 1.0:
 
@@ -16,9 +18,18 @@ Changes from 1.0:
 *	No, no changes in functionality :-)
 
 The package can be found at
+
+primary:
+        <ftp://ftp.westend.com/pub/aku/memchan@VERSION@.tar.gz>
+        <ftp://ftp.westend.com/pub/aku/memchan@NODOT_VERSION@.zip>
+        <ftp://ftp.westend.com/pub/aku/memchan@VERSION@.readme>
+        <ftp://ftp.westend.com/pub/aku/mchan@NODOT_VERSION@b.zip>
+
+secondary:
         <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.tar.gz>
         <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@NODOT_VERSION@.zip>
         <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.readme>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/mchan@NODOT_VERSION@b.zip>
 
 Enjoy,
 	Andreas Kupries <a.kupries@westend.com>	(private)

@@ -8,9 +8,14 @@ Description:    loadable extension, provides commands to create
 Keywords:       tcl, channeltypes, memory channel
 Author:         a.kupries@westend.com  (Andreas Kupries)
 Maintained-by:  a.kupries@westend.com  (Andreas Kupries)
-Primary-URL:	ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.tar.gz
-		ftp.kisters.de/pub/lang/tcl/ext/memchan@NODOT_VERSION@.zip
-		ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.readme
+Primary-URL:	ftp://ftp.westend.com/pub/aku/memchan@VERSION@.tar.gz
+	        ftp://ftp.westend.com/pub/aku/memchan@NODOT_VERSION@.zip
+        	ftp://ftp.westend.com/pub/aku/memchan@VERSION@.readme
+	        ftp://ftp.westend.com/pub/aku/mchan@NODOT_VERSION@b.zip
+Secondary-URL:	ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.tar.gz
+		ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@NODOT_VERSION@.zip
+		ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.readme
+	        ftp://ftp.kisters.de/pub/lang/tcl/ext/mchan@NODOT_VERSION@b.zip
 Copying-policy: BSDStyle (-> tcl)
 Dependencies:   tcl (7.6 or higher)
 Comments:

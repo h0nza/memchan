@@ -13,9 +13,17 @@ extension memchan {
     }
 
     primary-urls {
-	ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.tar.gz
-	ftp.kisters.de/pub/lang/tcl/ext/memchan@NODOT_VERSION@.zip
-	ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.readme
+        ftp://ftp.westend.com/pub/aku/memchan@VERSION@.tar.gz
+        ftp://ftp.westend.com/pub/aku/memchan@NODOT_VERSION@.zip
+        ftp://ftp.westend.com/pub/aku/memchan@VERSION@.readme
+        ftp://ftp.westend.com/pub/aku/mchan@NODOT_VERSION@b.zip
+    }
+
+    secondary-urls {
+	ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.tar.gz
+	ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@NODOT_VERSION@.zip
+	ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.readme
+        ftp://ftp.kisters.de/pub/lang/tcl/ext/mchan@NODOT_VERSION@b.zip
     }
 
     dependencies {tcl7.6 or higher}

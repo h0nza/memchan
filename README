@@ -21,13 +21,19 @@ Tk is not required.
 
 This distribution contains the source code for Memchan + (very simple)
 documentation describing the new command.
-Memchan should be available by anonymous ftp from ftp.neosoft.com in
-the /tcl/extension directory (at least after their reorganization).
+Memchan should be available by anonymous ftp from ftp.neosoft.com soon.
 
-Primary ftp-site will be
-		<ftp://ftp.kisters.de/pub/lang/tcl/memchan@VERSION@.tar.gz>
-		<ftp://ftp.kisters.de/pub/lang/tcl/memchan@NODOT_VERSION@.zip>
-		<ftp://ftp.kisters.de/pub/lang/tcl/memchan@VERSION@.readme>
+Primary Urls are:
+        <ftp://ftp.westend.com/pub/aku/memchan@VERSION@.tar.gz>
+        <ftp://ftp.westend.com/pub/aku/memchan@NODOT_VERSION@.zip>
+        <ftp://ftp.westend.com/pub/aku/memchan@VERSION@.readme>
+        <ftp://ftp.westend.com/pub/aku/mchan@NODOT_VERSION@b.zip>
+
+Secondary Urls:
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.tar.gz>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@NODOT_VERSION@.zip>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.readme>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/mchan@NODOT_VERSION@b.zip>
 
 
 COMPILING/USING Memchan
