@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.5 1999/03/23 23:04:43 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.6 1999/03/23 23:21:31 aku Exp $)
 dnl
 AC_INIT(Makefile.in)
 
@@ -120,13 +120,9 @@ AC_CACHE_CHECK(for directory with tcl.h,
 	[memchan_cv_path_TCL_INCLUDE_DIR=""
 	 places="$TCL_INCLUDE_DIR \
 		../../tcl8.1/generic \
-		../../tcl8.1b2/generic \
-		../../tcl8.1b1/generic \
-		../../tcl8.1a2/generic \
-		../../tcl8.1a1/generic \
-		../../tcl8.0.5/generic \
-		../../tcl8.0.4/generic \
-		../../tcl8.0.3/generic \
+		../../tcl8.1b*/generic \
+		../../tcl8.1a*/generic \
+		../../tcl8.0.*/generic \
 		../../tcl8.0/generic \
 		../../tcl7.6/generic \
 		../../tcl/generic \
@@ -193,9 +189,7 @@ AC_CACHE_CHECK(for tcl library,
 	../../tcl8.1/unix \
 	../../tcl8.1b*/unix \
 	../../tcl8.1a*/unix \
-	../../tcl8.0.5/unix \
-	../../tcl8.0.4/unix \
-	../../tcl8.0.3/unix \
+	../../tcl8.0.*/unix \
 	../../tcl8.0/unix \
 	../../tcl7.6/unix \
 	../../tcl/unix \
