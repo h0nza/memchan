@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.4 1999/09/18 13:35:59 aku Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.5 2000/01/14 23:52:21 aku Exp $
 
 #========================================================================
 # Additional variables defined here for convenient access to some
@@ -405,7 +405,9 @@ install-lib-binaries: installdirs
 	    $(RANLIB) $(DESTDIR)$(libdir)/$$p; \
 	  else :; fi; \
 	done
-	$(TCLSH_PROG) mkIndex.tcl
+	if test "x$(MAKE_LIB)" = "x$(MAKE_SHARED_LIB)"; then \
+	  $(TCLSH_PROG) mkIndex.tcl; \
+	fi
 
 #========================================================================
 # Install binary executables (e.g. .exe files)
