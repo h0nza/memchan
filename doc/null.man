@@ -34,6 +34,6 @@ writable [cmd fileevent]-handler will fire continuously and a readable
 only the destruction of the channel which will cause the delivery of
 an eof event to a readable handler.
 
-[see_also memchan fifo fifo2]
+[see_also memchan fifo fifo2 random zero]
 [keywords null {in-memory channel} channel i/o]
 [manpage_end]

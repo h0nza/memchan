@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.15 2003/05/15 23:25:25 andreas_kupries Exp $
+ * CVS: $Id: memchanInt.h,v 1.16 2004/05/21 23:20:20 patthoyts Exp $
  */
 
 
@@ -156,6 +156,11 @@ MemchanNullCmd _ANSI_ARGS_ ((ClientData notUsed,
 
 extern int
 MemchanRandomCmd _ANSI_ARGS_ ((ClientData notUsed,
+                  Tcl_Interp* interp,
+			      int objc, Tcl_Obj*CONST objv[]));
+
+extern int
+MemchanZeroCmd _ANSI_ARGS_ ((ClientData notUsed,
                   Tcl_Interp* interp,
 			      int objc, Tcl_Obj*CONST objv[]));
 

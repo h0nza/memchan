@@ -3,9 +3,9 @@ extension memchan {
     author       {Andreas Kupries (andreas_kupries@users.sourceforge.net)}
     maintenance  {Andreas Kupries (andreas_kupries@users.sourceforge.net)}
 
-    version	   2.2a5
+    version	   2.2.0
     copying-policy {BSD-Style, see 'tcl'-license}
-    date           {FEB-18-2004}
+    date           {JUN-03-2004}
 
     description {
 	an extension implementing several new channel-types. Instances
@@ -24,6 +24,6 @@ extension memchan {
 
     comments {
 	TEA compliant version (As far as TEA currently goes).
-	Additional channel types: null, fifo2.
+	Additional channel types: null, fifo2, zero, random.
     }
 }

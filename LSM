@@ -1,7 +1,7 @@
 Begin3
 Title:          memchan
-Version:        2.2a4
-Entered-date:   AUG-20-2002
+Version:        2.2.0
+Entered-date:   JUN-03-2002
 Description:    An extension implementing several new channel-types.
 	Instances store their contents in memory, not on disk.
 Author:         Andreas Kupries (andreas_kupries@users.sourceforge.net)

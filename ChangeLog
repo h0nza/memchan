@@ -1,3 +1,22 @@
+2004-06-03  Pat Thoyts  <patthoyts@users.sourceforge.net>
+
+	* configure.in:         Changed version to 2.2.0
+	* configure:
+	* DESCRIPTION:
+	* win/makefile.vc:
+	* win/mc.rc:
+	* unix/Makefile.in:     Updated unix/* build files for the new
+	* unix/configure.in:    random and zero channels.
+	* unix/configure:
+
+	* generic/zero.c:       Added a 'zero' channel (FR #470414)
+	* tests/zero.test:
+	* doc/zero.man:
+	* generic/init.c:
+	* generic/memchanInt.h:
+	* Makefile.in:
+	* win/makefile.vc
+	
 2004-06-03  Andreas Kupries  <andreask@activestate.com>
 
 	* generic/memchan.c: Added include of <stdio.h>. This does not

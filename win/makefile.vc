@@ -18,10 +18,10 @@
 # Copyright (c) 2003 Pat Thoyts
 #
 #-------------------------------------------------------------------------
-# RCS: @(#)$Id: makefile.vc,v 1.11 2004/05/21 23:05:20 patthoyts Exp $
+# RCS: @(#)$Id: makefile.vc,v 1.12 2004/05/22 00:30:40 patthoyts Exp $
 #-------------------------------------------------------------------------
 
-!if "$(MSVCDIR)" == ""
+!if  !defined(MSDEVDIR) && !defined(MSVCDIR) && !defined(VCToolkitInstallDir)
 MSG = ^
 You will need to run vcvars32.bat from Developer Studio, first, to setup^
 the environment.  Jump to this line to read the new instructions.
@@ -156,8 +156,8 @@ Please `cd` to its location first.
 PROJECT = Memchan
 !include "rules.vc"
 
-DOTVERSION      = 2.2
-MEMCHAN_VERSION = 2.2a5
+DOTVERSION      = 2.2.0
+MEMCHAN_VERSION = 2.2.0
 VERSION         = $(DOTVERSION:.=)
 STUBPREFIX      = $(PROJECT)stub
 
@@ -169,6 +169,7 @@ DLLOBJS	= \
 	$(TMP_DIR)\fifo2.obj	\
 	$(TMP_DIR)\null.obj	\
 	$(TMP_DIR)\random.obj	\
+	$(TMP_DIR)\zero.obj	\
 	$(TMP_DIR)\buf.obj	\
 	$(TMP_DIR)\bufFix.obj	\
 	$(TMP_DIR)\bufExt.obj	\
@@ -187,6 +188,7 @@ PRJDOCS = \
 	$(OUT_DIR)\fifo2.html \
 	$(OUT_DIR)\memchan.html \
 	$(OUT_DIR)\null.html \
+	$(OUT_DIR)\zero.html \
 	$(OUT_DIR)\random.html
 
 DLLRES = $(TMP_DIR)\mc.res
@@ -403,12 +405,14 @@ DOC2HTML = $(TCLSH) $(TOOLSDIR)\mpexpand.tcl html
 #---------------------------------------------------------------------
 
 install-binaries:
-	@echo Installing to '$(SCRIPT_INSTALL_DIR)'
+	@echo Installing binaries to '$(SCRIPT_INSTALL_DIR)'
 	@if not exist $(SCRIPT_INSTALL_DIR)\nul mkdir $(SCRIPT_INSTALL_DIR)
-	@$(CPY) $(PRJLIB) $(SCRIPT_INSTALL_DIR)
+	@$(CPY) $(PRJLIB)     $(SCRIPT_INSTALL_DIR) >NUL
+	@$(CPY) $(PRJIMPLIB)  $(SCRIPT_INSTALL_DIR) >NUL
+	@$(CPY) $(PRJSTUBLIB) $(SCRIPT_INSTALL_DIR) >NUL
 
 install-libraries:
-	@echo Installing to '$(SCRIPT_INSTALL_DIR)'
+	@echo Installing libraries to '$(SCRIPT_INSTALL_DIR)'
 	@if exist $(LIBDIR)\nul $(CPY) $(LIBDIR)\*.tcl $(SCRIPT_INSTALL_DIR)
 	@type << >$(SCRIPT_INSTALL_DIR)\pkgIndex.tcl
 # Handcrafted pkgIndex for memchan.
@@ -421,15 +425,17 @@ if {[info exists ::tcl_platform(debug)]} {
 
 install-docs: $(PRJDOCS)
 	@echo Installing documentation to '$(DOC_INSTALL_DIR)'
-	@if not exist $(DOC_INSTALL_DIR)\NUL $(MKDIR) $(DOC_INSTALL_DIR)
+	@if not exist $(DOC_INSTALL_DIR)\NUL mkdir $(DOC_INSTALL_DIR)
 	@for %i in ($(PRJDOCS)) do @$(CPY) %i "$(DOC_INSTALL_DIR)\" > NUL
 
+# "Fix emacs font-locking
 #---------------------------------------------------------------------
 # Clean up
 #---------------------------------------------------------------------
 
 clean:
 	@if exist $(TMP_DIR)\nul $(RMDIR) $(TMP_DIR)
+	@if exist $(WINDIR)\version.vc del $(WINDIR)\version.vc
 
 realclean: clean
 	@if exist $(OUT_DIR)\nul $(RMDIR) $(OUT_DIR)

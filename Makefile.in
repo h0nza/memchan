@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.17 2004/05/31 16:01:16 andreas_kupries Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.18 2004/06/01 16:19:16 andreas_kupries Exp $
 
 #========================================================================
 # Edit the following few lines when writing a new extension
@@ -35,7 +35,8 @@ Memchan_SOURCES	=		\
 		fifo.c		\
 		fifo2.c		\
 		null.c		\
-		random.c		\
+		zero.c		\
+		random.c	\
 		buf.c		\
 		bufFix.c	\
 		bufExt.c	\
@@ -54,6 +55,7 @@ DOC_SOURCES = \
 	fifo.man \
 	fifo2.man \
 	null.man \
+	zero.man \
 	random.man
 
 #========================================================================
