@@ -1,9 +1,24 @@
+Sat Jun 12 23:12:26 1999  Andreas Kupries  <a.kupries@westend.com>
+
+	* win/makefile.vc5 (MCOBJS): See below.
+
+	* win/makefile.vc (MCOBJS): Added 'dllEntry.obj' to the
+	  definition. 
+
+	* generic/memchanInt.h: 'DllEntryPoint' removed. See below.
+
+	* generic/init.c: 'DllEntryPoint' removed. See below.
+
+	* win/dllEntry.c: New file, again from Jan, to simplify DLL
+	  generation for Windows. The information in it can be removed
+	  from the generic parts.
+
 Fri Jun 11 22:40:02 1999  Andreas Kupries  <a.kupries@westend.com>
 
 	* win/Makefile.gnu: Got from Jan <nijtmans@wxs.nl> a binary
- 	  distribution for memchan, compiled with Cygwin B20.1, and the
- 	  Makefile used to do that. Assorted little changes to 'mc.rc'
-	  too.
+ 	  distribution for memchan, compiled with Cygwin B20.1
+ 	  (-mno-cygwin), and the Makefile used to do that. Assorted
+	  little changes to 'mc.rc' too.
 
 Wed May 26 00:17:18 1999  Andreas Kupries  <a.kupries@westend.com>
 
