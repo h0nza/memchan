@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.31 2002/08/21 03:30:19 andreas_kupries Exp $
+# CVS:	$Id: PREPARE,v 1.32 2002/08/21 05:59:14 andreas_kupries Exp $
 
 ## Make this script completely independent of external packages.
 ## Assume [pwd] == Toplevel directory of memchan distribution in
@@ -67,7 +67,7 @@ proc UpdateAnnounceMail {} {
     close         $fh
 
     set    fh [open ANNOUNCE.MAIL w]
-    puts  $fh [string map [list @ANO@ $ano @SIG@ $sig] $mail]
+    puts  $fh [string map [list @ANO@ [LastChanges] @SIG@ $sig] $mail]
     close $fh
     return
 }
