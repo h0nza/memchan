@@ -1,5 +1,40 @@
+Fri Jun 19 22:59:18 1998  Andreas Kupries  <a.kupries@westend.com>
+
+	* configure.in: Fixed a bug noted by David Herron
+	  <davidh@crl.com>. From its mail:
+
+	> In the section that checks for the TCL library there
+	> is a loop looking for different library extensions.
+	> In my case it needs to match the ".so.*" case of
+	> the loop, but it doesn't.
+	> 
+	> Changing the test to read as follows fixes the problem.
+	> 
+	>    if test -f $dir/libtcl$version$libsuff; then
+	>        memchan_cv_lib_TCL_LIB="-L$dir -ltcl$version"
+	>        TCL_LIB_DIR="$dir"
+	>    fi
+	> 
+	> The difference is removal of the quote marks around
+	> the file name.  This allows the "*" to be evaluated
+	> by the shell & find the file name.
+	> 
+	> Another change that would be convenient is, in
+	> the 'for version in ...' part, to add "80" to
+	> the list of choices.  With (at least) tcl8.0pl2
+	> on FreeBSD the library is "libtcl80.so.1.0" and 
+	> since the configure script only looks for "libtcl8.0"
+	> it is not found again because of that.
+
+Sat Jun 13 14:27:10 1998  Andreas Kupries  <a.kupries@westend.com>
+
+	* memchan.c (channelType): Updated to reflect structure change
+	  from Tcl 8.0 to Tcl 8.1.
+
 Sun Jul  6 14:29:51 1997  Andreas Kupries  <a.kupries@westend.com>
 
+	* -------------------- 1.4 released --------
+	
 	* memchan.c: Updated code to reflect changes in Set/GetOption API
 	  of channel drivers made by 8.0b2.
 
