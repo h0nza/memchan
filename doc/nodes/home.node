@@ -1,0 +1,42 @@
+# -*- tcl -*-
+# entry into the memchan documentation
+
+node memchan_home {
+    title       "Memchan: Main documentation"
+    shortTitle  "Home"
+    description "The Memchan documentation"
+    setFile     index.html
+
+    # environment dependent action:
+    # link to my site, or produce stand alone docs
+
+    if {[info exists ::westend]} {
+	parent tcltk
+    }
+
+    menu {
+	memchan_where
+	memchan_ack
+    }
+
+    contents {
+	p align=center \
+		[font size=6 "
+	This document accompanies [memchan] @mFullVersion@, as
+	distributed at @mDate@"]
+
+	#  indexing is required
+
+	p "
+	[memchan] is an extension library to the script language [tcl], as
+	created by [jo]. It provides a new channel type for in-memory
+	channels and a single command, 'memchan' for their creation.
+	"
+
+	p "They are useful to transfer large amounts of data between procedures
+	or interpreters, and additionally provide an easy interface to on-the-fly
+	generation of code too. No need to [bold set] or [bold append] to a
+	string, just do a simple [bold puts].
+	"
+    }
+}

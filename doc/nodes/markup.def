@@ -1,0 +1,40 @@
+# -*- tcl -*-
+# commands for logical markup
+
+proc strong {text} {return [cgi_bold $text]}
+proc cem    {text} {return [font color=red $text]}
+
+proc lang   {text} {return [cgi_typewriter $text]}
+proc afile  {text} {return [cgi_typewriter $text]}
+proc arg    {text} {return [cgi_typewriter "[cgi_lt]$text[cgi_gt]"]}
+proc cmd    {text} {return [cgi_typewriter $text]}
+proc lib    {text} {return [cgi_typewriter $text]}
+proc opt    {text} {return [cgi_typewriter $text]}
+proc var    {text} {return [cgi_typewriter $text]}
+proc man    {text} {return [cgi_typewriter $text]}
+proc os     {text} {return [cgi_typewriter $text]}
+
+
+# special commands to make the definition of links to people easier
+# 3 types:
+# * A person with an email address
+# * A person with a home page
+# * A person having both an email address and a home page
+
+proc personH {code name home} {
+    link $code $name $home
+    proc $code {} "return \[link $code\]"
+    return
+}
+
+proc personM {code name email} {
+    link $code $name "mailto:$email"
+    proc $code {} "return \[link $code\]"
+    return
+}
+
+proc personMH {code name email home} {
+    # ignore the email address for now, assume that
+    # it is placed on the homepage somewhere
+    personH $code $name $home
+}

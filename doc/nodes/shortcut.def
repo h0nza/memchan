@@ -1,0 +1,38 @@
+# -*- tcl -*-
+# shortcuts
+
+proc memchan {} {return [strong memchan]}
+proc trf   {} {return [strong trf]}
+proc blob  {} {return [strong blob]}
+proc blobx {} {return [strong blobX]}
+proc tclsh {} {return [cmd    tclsh]}
+proc wish  {} {return [cmd    wish]}
+proc dos   {} {return [os     DOS]}
+proc win   {} {return [os     Windows[tm]]}
+proc winnt {} {return [os    "Windows NT[tm]"]}
+
+proc tm    {} {return [cgi_tm]}
+proc ra    {} {return "-[cgi_gt]"} ; # -W- use a picture instead
+proc eq    {} {return =}
+
+proc strterm {} {return "\\0"}
+proc smiley {} {return [imglink smiley]} ; # -W- use a picture
+
+
+proc defrow {string desc} {
+    table_row valign=top {
+	td [strong $string]
+	table_data {
+	    uplevel $desc
+	}
+    }
+}
+
+
+proc thline {n} {
+    table_row {
+	table_data colspan=$n {
+	    hr
+	}
+    }
+}

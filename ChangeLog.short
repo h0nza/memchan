@@ -2,6 +2,8 @@ Changes from 1.7
 
 *	Bugfixes for windows.
 
+*	Added (minimal) test suite.
+
 Changes from 1.6
 
 *	Added 8.0.4 and 8.0.5 to the paths to search.

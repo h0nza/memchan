@@ -1,0 +1,24 @@
+# -*- tcl -*-
+# references to the persons named in the document
+
+#personM bast      {Bastiaan Harmsen}   {BastiaanHarmsen@t-online.de}
+
+personMH jcw \
+	{Jean-Claude Wippler} \
+	{jcw@equi4.com} \
+	{http://www.equi4.com/jcw/}
+
+personMH jan \
+	{Jan Nijtmans} \
+	{nijtmans@wxs.nl} \
+	{http://home.wxs.nl/%7Enijtmans/}
+
+personMH jo \
+	{John Ousterhout} \
+	{JohnOusterhout@sun.eng.com} \
+	{http://www.scriptics.com/people/john.ousterhout}
+
+personMH lvirden \
+	{Larry Virden} \
+	{lvirden@cas.org} \
+	{http://www.purl.org/NET/lvirden/}

@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.12 1999/03/24 12:27:26 aku Exp $
+# CVS:	$Id: PREPARE,v 1.13 1999/05/11 18:07:57 aku Exp $
 
 
 # O. insert various information into some files
@@ -8,11 +8,12 @@
 
 mExclude LSM ANNOUNCE
 
-mInsertInfo \
+eval mInsertInfo \
 	DESCRIPTION doc/manual \
 	README win/README win/README.VC mac/README \
 	unix/configure.in unix/Makefile.in \
-	win/makefile.vc win/mc.rc
+	win/makefile.vc win/mc.rc \
+	[glob doc/nodes/*.node] [glob doc/nodes/*.def]
 
 mGetDescription
 mExpandUrls
@@ -47,3 +48,35 @@ eval file delete \
 
 eval file rename [glob tg*] testlib
 
+# Now generate documentation for linkage into my
+# site and standalone distribution
+
+# -up-man assumes that the document is part of the
+# hierarchy at http://www.oche.de/~akupries
+# It resides at '~akupries/soft/setops/index.html'
+# The tcltk page is '~akupries/tcltk.html'
+
+cd doc
+file mkdir html html/img
+
+mLog info generating documentation tree
+
+exec nodeCompile westend html nodes 
+
+cd ..
+mDocTGZArchive doc/html
+mDocZIPArchive doc/html
+cd doc
+
+eval file delete -force [glob html/*.html]
+
+file delete -force nodes/a_up.def
+exec nodeCompile     plain html              nodes
+exec nodeMakeSitemap plain html memchan_home nodes
+
+mExclude nodes
+cd ..
+
+
+# create the file required by the NeoSoft CSA
+file copy ChangeLog.short CHANGES
