@@ -7,7 +7,7 @@
 #
 # Distribution as of @mDate@
 #
-# $Id: Makefile.in,v 1.1 1999/03/23 10:15:17 aku Exp $
+# $Id: Makefile.in,v 1.2 1999/03/23 11:24:11 aku Exp $
 
 EXTENSION	=	Memchan
 VERSION		=	@mFullVersion@
@@ -154,7 +154,7 @@ CPPFLAGS	=	$(DEFINES) $(INCLUDES)
 INCLUDES	=	-I. -I$(srcdir) -I$(GENERIC_DIR) -I$(TOP_DIR)	\
 			-I$(TCL_INCLUDE_DIR)
 
-DEFINES		=	$(PROTO_FLAGS) $(MEM_DEBUG_FLAGS) @DEFS@
+DEFINES		=	$(PROTO_FLAGS) $(MEM_DEBUG_FLAGS) @DEFS@ @TCL_DEFS@
 
 HEADER		=	
 
