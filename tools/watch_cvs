@@ -5,15 +5,15 @@
 
 cd `dirname $0`/..
 
-export CVSROOT
-CVSROOT=:pserver:anonymous@cvs.memchan.sourceforge.net:/cvsroot/memchan
+CVSROOT
+CVSROOT=:pserver:anonymous@cvs1:/cvsroot/memchan
 
-if [ 0 -lt `cvs diff memchan 2>/dev/null | wc -l` ]
+if [ 0 -lt `cvs -d $CVSROOT diff memchan 2>/dev/null | wc -l` ]
 then
 	out=$HOME/logs/memchan
 	mkdir -p `dirname $out`
 
-	cvs co memchan >$out 2>&1
+	cvs -d $CVSROOT co memchan >$out 2>&1
 	mkdir -p memchan/htdocs/state
 
         # Use a new htdocs_setup script immediately.
@@ -21,7 +21,7 @@ then
         # only after with the change after the current
         # one.
 
-        cp ./memchan/tools/htdocs_setup ./tools_setup
+        cp ./memchan/tools/htdocs_setup ./tools/htdocs_setup
 
 	(sleep 60 ; ./tools/htdocs_setup ) &
 fi

@@ -21,13 +21,13 @@ done
 for i in `ls *.man`
 do
 	echo $i '-->' `basename $i .man`.n
-	../tools/mpexpand nroff $i > `basename $i .man`.n
+	../tools/mpexpand nroff $i `basename $i .man`.n
 
 	echo $i '-->' `basename $i .man`.html
-	../tools/mpexpand html $i  > `basename $i .man`.html
+	../tools/mpexpand html $i  `basename $i .man`.html
 
 	echo $i '-->' `basename $i .man`.tmml
-	../tools/mpexpand tmml $i  > `basename $i .man`.tmml
+	../tools/mpexpand tmml $i  `basename $i .man`.tmml
 
 	## We need a true formatting engine for this one.
 
