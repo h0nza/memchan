@@ -13,7 +13,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.18 2004/06/01 16:19:16 andreas_kupries Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.19 2004/06/03 23:39:13 patthoyts Exp $
 
 #========================================================================
 # Edit the following few lines when writing a new extension
@@ -44,6 +44,8 @@ Memchan_SOURCES	=		\
 		bufQueue.c	\
 		bufStubInit.c	\
 		bufStubLib.c	\
+		memchanStubInit.c	\
+		memchanStubLib.c	\
 		randport.c      \
 		@EXTRA_SOURCES@
 
@@ -52,6 +54,7 @@ UNIX_SOURCES	=
 
 DOC_SOURCES = \
 	memchan.man \
+	memchanapi.man \
 	fifo.man \
 	fifo2.man \
 	null.man \
@@ -73,8 +76,11 @@ DOC_SOURCES = \
 Memchan_OBJECTS	= $(Memchan_SOURCES:.c=.@OBJEXT@)
 Memchan_LIB_FILE= @Memchan_LIB_FILE@
 
-Memchanstub_OBJECTS=	bufStubLib.$(OBJEXT)
+Memchanstub_OBJECTS=	bufStubLib.$(OBJEXT) memchanStubLib.$(OBJEXT)
 Memchanstub_LIB_FILE= @Memchanstub_LIB_FILE@
+
+CHANTEST_OBJECTS=chantest.$(OBJEXT)
+CHANTEST_LIB_FILE=libChantest0.1.so
 
 DOC_NROFF = $(DOC_SOURCES:.man=.n)
 DOC_HTML  = $(DOC_SOURCES:.man=.html)
@@ -90,7 +96,8 @@ DOC_HTML  = $(DOC_SOURCES:.man=.html)
 # This is a list of header files to be installed
 #========================================================================
 
-GENERIC_HDRS	= 
+GENERIC_HDRS	= $(srcdir)/generic/memchan.h \
+		  $(srcdir)/generic/memchanDecls.h
 
 #========================================================================
 # Add additional lines to handle any additional AC_SUBST cases that
@@ -255,10 +262,10 @@ install-binaries: binaries install-lib-binaries install-bin-binaries
 install-libraries: libraries
 	@mkdir -p $(DESTDIR)$(includedir)
 	@echo "Installing header files in $(DESTDIR)$(includedir)"
-#	@for i in $(GENERIC_HDRS) ; do \
-#	    echo "Installing $$i" ; \
-#	    $(INSTALL_DATA) $$i $(DESTDIR)$(includedir) ; \
-#	done;
+	@for i in $(GENERIC_HDRS) ; do \
+	    echo "Installing $$i" ; \
+	    $(INSTALL_DATA) $$i $(DESTDIR)$(includedir) ; \
+	done;
 
 #========================================================================
 # Install documentation.  Unix manpages should go in the $(mandir)
@@ -286,6 +293,8 @@ testshell	=	$(TCLSH_PROG) $(srcdir)/testshell
 test: binaries libraries
 	echo load ./$(Memchan_LIB_FILE) \; cd $(srcdir)/tests \; source all | $(TCLSH) $(TESTFLAGS)
 
+
+chantest: binaries $(CHANTEST_LIB_FILE)
 
 shell: binaries libraries
 	@$(TCLSH) $(SCRIPT)
@@ -315,6 +324,12 @@ $($(PACKAGE)stub_LIB_FILE): $($(PACKAGE)stub_OBJECTS)
 	${MAKE_STUB_LIB}
 	$(RANLIB) $($(PACKAGE)stub_LIB_FILE)
 
+$(CHANTEST_LIB_FILE): $(CHANTEST_OBJECTS)
+	-rm -f $@
+	${SHLIB_LD} -o $@ $(CHANTEST_OBJECTS) ${SHLIB_LDFLAGS} \
+		${SHLIB_LD_LIBS} $($(PACKAGE)stub_LIB_FILE)
+	$(RANLIB) $@
+
 #========================================================================
 # We need to enumerate the list of .c to .o lines here.
 #
@@ -335,6 +350,10 @@ VPATH = $(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win:$(srcdir)/isaac:$(srcdir)
 
 .c.$(OBJEXT):
 	$(COMPILE) -c `@CYGPATH@ $<` -o $@
+
+chantest.$(OBJEXT): chantest.c
+	$(COMPILE) -I$(srcdir)/generic -DUSE_MEMCHAN_STUBS=1 \
+		-c `@CYGPATH@ $<` -o $@
 
 .man.n:
 	$(MPEXPAND) nroff `@CYGPATH@ $<` $@
@@ -517,6 +536,9 @@ genstubs:
 		$(srcdir)/tools/genStubs.tcl $(srcdir)/generic	\
 		$(srcdir)/generic/buf.decls			\
 		$(srcdir)/generic/bufInt.decls
+	$(TCLSH_PROG) \
+		$(srcdir)/tools/genStubs.tcl $(srcdir)/generic \
+		$(srcdir)/generic/memchan.decls
 
 #========================================================================
 #
@@ -542,7 +564,7 @@ checkstubs:
 	done
 
 
-.PHONY: all binaries clean depend distclean doc install libraries test
+.PHONY: all binaries clean depend distclean doc install libraries test chantest
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
