@@ -1,3 +1,9 @@
+Wed Oct  4 20:00:25 2000  Andreas Kupries  <a.kupries@westend.com>
+
+	* Fixed problem with use of version information in
+ 	  unix/pkgIndex.tcl.in. Can't use the patchlevel here, would choke
+ 	  the package ifneeded/require commands.
+
 Sat Jan 15 00:28:52 2000  Andreas Kupries  <a.kupries@westend.com>
 
 	* tea/Makefile.in (install-lib-binaries): Fixed error in this
