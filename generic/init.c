@@ -25,40 +25,10 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: init.c,v 1.2 1999/05/25 22:26:47 aku Exp $
+ * CVS: $Id: init.c,v 1.3 1999/05/25 22:35:21 aku Exp $
  */
 
 #include "memchanInt.h"
-
-/*
- *----------------------------------------------------------------------
- *
- * DllEntryPoint --
- *
- *	This wrapper function is used by Windows to invoke the
- *	initialization code for the DLL.  If we are compiling
- *	with Visual C++, this routine will be renamed to DllMain.
- *	routine.
- *
- * Results:
- *	Returns TRUE;
- *
- * Side effects:
- *	None.
- *
- *----------------------------------------------------------------------
- */
-
-#ifdef __WIN32__
-BOOL APIENTRY
-DllEntryPoint(hInst, reason, reserved)
-    HINSTANCE hInst;		/* Library instance handle. */
-    DWORD reason;		/* Reason this function is being called. */
-    LPVOID reserved;		/* Not used. */
-{
-    return TRUE;
-}
-#endif
 
 /*
  *------------------------------------------------------*

@@ -3,7 +3,7 @@
 # See the file "doc/license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# CVS:	$Id: makefile.vc,v 1.5 1999/05/25 22:26:48 aku Exp $
+# CVS:	$Id: makefile.vc,v 1.6 1999/06/11 23:45:04 aku Exp $
 # 
 
 # Does not depend on the presence of any environment variables in
@@ -63,7 +63,8 @@ INSTALLDIR	=	$(TCL)\lib\$(MC)
 MCOBJS		=	$(TMPDIR)\memchan.obj	\
 			$(TMPDIR)\fifo.obj	\
 			$(TMPDIR)\init.obj	\
-			$(TMPDIR)\counter.obj
+			$(TMPDIR)\counter.obj	\
+			$(TMPDIR)\dllEntry.obj
 
 
 PATH=$(TOOLS32)\bin;$(PATH)

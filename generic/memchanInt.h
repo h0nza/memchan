@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.3 1999/05/25 22:27:58 aku Exp $
+ * CVS: $Id: memchanInt.h,v 1.4 1999/05/25 22:35:21 aku Exp $
  */
 
 
@@ -65,7 +65,6 @@ extern "C" {
 #   if defined(_MSC_VER)
 #       undef EXPORT
 #	define EXPORT(a,b) TCL_STORAGE_CLASS a b
-#	define DllEntryPoint DllMain
 #   else
 #	if defined(__BORLANDC__)
 #	    define EXPORT(a,b) a _export b
