@@ -5,7 +5,7 @@ node memchan_compile {
     title       "Memchan: Compilation"
     shortTitle  "Compilation"
     description "Compilation of memchan"
-    parent      memchan_install
+    parent      memchan_home
 
     menu {
 	memchan_cmac memchan_cunix memchan_cwin
