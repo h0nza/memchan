@@ -1,3 +1,32 @@
+2001-09-06 Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* tools/htdocs_setup: Added generation of manpages and
+	  documentation bundles for the website.
+
+	* tools/manpage_clean: Cleanup of generated manpage files.
+	* tools/manpage_regen: Generation of manpages from base files.
+
+	* tools/rules/manpage.api.spec:  Specification of manpage policy
+	* tools/rules/manpage.api:       Error catching definitions
+	* tools/rules/manpage.html:      Rules to generate HTML
+	* tools/rules/manpage.html.site: S.a., but for integration into the website.
+	* tools/rules/manpage.list:      Rules to generate list of defined manpages
+	* tools/rules/manpage.nroff:     Rules to generate nroff, true manpages
+	
+	* tools/rules/configuration: Removed obsolete file
+	* tools/rules/site:          Added new site policy file.
+	* tools/rules/memchan:       Changed to contain configuration.
+	* tools/rules/formatting:    More basic formatting commands
+	* tools/rules/references:    Some more references.
+
+	* htdocs/raw/animation.exp:
+	* htdocs/raw/changelog.exp:
+	* htdocs/raw/disclaimer.exp:
+	* htdocs/raw/documentation.exp:
+	* htdocs/raw/image.exp:
+	* htdocs/raw/index.exp: Rewritten according to the new code for
+	  the website.
+
 2001-08-31 Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* htdocs/raw/animation.exp:

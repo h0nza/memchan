@@ -1,44 +1,58 @@
 # -*- tcl -*-
 # Helper rules for the creation of the memchan website from the .exp files.
+# General formatting instructions ...
 
-proc p     {} {return <p>}
-proc ptop  {} {return "<p valign=top>"}
-proc td    {} {return "<td bgvolor=[bgcolor]>"}
-proc trtop {} {return "<tr valign=top bgcolor=[bgcolor]>"}
-proc tr    {} {return "<tr            bgcolor=[bgcolor]>"}
-proc sect {s} {return "<b>$s</b><br><hr>"}
+proc state {} [list return [file join [pwd] state]]
 
-proc link {text url} {
-    return "<a href=\"$url\">$text</a>"
+proc use_bg {} {
+    set c [bgcolor]
+    #puts stderr "using $c"
+    if {$c == {}} {return ""}
+    return bgcolor=$c
 }
 
 
+proc nbsp  {} {return "&nbsp;"}
+proc p     {} {return <p>}
+proc ptop  {} {return "<p valign=top>"}
+proc td    {} {return "<td [use_bg]>"}
+proc trtop {} {return "<tr valign=top [use_bg]>"}
+proc tr    {} {return "<tr            [use_bg]>"}
+proc sect {s} {return "<b>$s</b><br><hr>"}
+proc link {text url} {return "<a href=\"$url\">$text</a>"}
 proc table  {} {return "<table [border] width=100% cellspacing=0 cellpadding=0>"}
 proc btable {} {return "<table border=1 width=100% cellspacing=0 cellpadding=0>"}
+proc stable {} {return "<table [border] cellspacing=0 cellpadding=0>"}
 
+
+proc tcl_cmd {cmd} {return "<b>\[$cmd]</b>"}
+proc wget    {url} {exec /usr/bin/wget -q -O - $url 2>/dev/null}
+
+proc url {tag text url} {
+    set body {
+	switch -exact -- $what {
+	    link {return {<a href="%url%">%text%</a>}}
+	    text {return {%text%}}
+	    url  {return {%url%}}
+	}
+    }
+    proc $tag {{what link}} [string map [list %text% $text %url% $url] $body]
+}
+
+proc img {tag alt img} {
+    proc $tag {} [list return "<img alt=\"$alt\" src=\"$img\">"]
+}
 
 proc header {title} {
     proc pagetitle {} [list return $title]
-    return "<html><head><title>[project] @ SourceForge : $title</title><meta name=\"Author\" content=[author]></head><body bgcolor=[bgcolor]>"
+    return "<html><head><title>[sfproject] @ SourceForge : $title</title><meta name=\"Author\" content=[author]></head><body [use_bg]>"
 }
 
 proc trailer {} {
     return "<hr>[table][tr]<td align=left><address>[copyright][me]</address></td><td align=right>Last update at [clock format [clock seconds]]</td></tr></table></body></html>"
 }
 
-proc tcl.cmd {cmd} {return "<b>\[$cmd]</b>"}
-
-
-proc wget {url} {
-    exec /usr/bin/wget -q -O - $url 2>/dev/null
-}
-
-proc protect {text} {
-    regsub -all {&} $text {\&amp;} text
-    regsub -all {<} $text {\&lt;} text
-    regsub -all {>} $text {\&gt;} text
-    return $text
-}
+proc protect {text} {return [string map [list & "&amp;" < "&lt;" > "&gt;"] $text]}
 
 proc get_changelog {} {
     set cl [exec [file join [here] .. changelog_to_list] [file join [pwd] .. memchan ChangeLog]]
@@ -56,7 +70,7 @@ proc changelog {} {
     }
 
     return $html</ul>
-} 
+}
 
 proc changelog_items {items} {
     set dlopen  0
@@ -93,62 +107,20 @@ proc changelog_items {items} {
     return $html
 }
 
+proc news {} {
+    set nfile [file join [state] news]
+    set data [read [set fh [open $nfile r]]][close $fh]
+    return [string trim $data]\n
+}
 
-######################################################################
-#
-# scratch area
-#
+proc stats {} {
+    set nfile [file join [state] statistics]
+    set data [read [set fh [open $nfile r]]][close $fh]
 
-######################################################################
-#
-# scratch area -- changelog using tables ...
-#
+    set data [string trim $data]
 
-if {0} {
-    set lastcom ""
-    set rows 0
-    foreach item $items {
-	foreach {key com} $item break
-	if {$com != {}} {
-	    if {$lastcom != {}} {
-		# Close last row(s)
-		if {$rows > 1} {
-		    append html "<td bgcolor=[bgcolor] rowspan=$rows>[protect $lastcom]</td></tr>"
-		} else {
-		    append html "[td][protect $lastcom]</td></tr>"
-		}
-		set lastcom ""
-		set rows    0
-		append html [trtop][td][protect $key]</td>\n
-		set lastcom $com
-		incr rows
-	    } else {
-		# Non empty row and no preceding comments
-		# Remember comment, print key.
-		append html [trtop][td][protect $key]</td>\n
-		set lastcom $com
-		set rows 1
-	    }
-	} else {
-	    # No comment right now
-	    if {$lastcom != {}} {
-		# But an open key
-		incr rows
-	    } else {
-		# And no preceding comments -> print empty row.
-		append html "[trtop][td][protect $key]</td>[td]&nbsp;</td></tr>\n"
-		set lastcom ""
-		set rows 0
-	    }
-	}
-    }
-    if {$lastcom != {}} {
-	if {$rows > 1} {
-	    append html "<td bgcolor=[bgcolor] rowspan=$rows>[protect $lastcom]</td></tr>"
-	} else {
-	    append html "[td][protect $lastcom]</td></tr>"
-	}
-    }
-    append html </tr></table>
-    return $html
+    regsub -all {BGCOLOR="[^"]*"} $data "[use_bg]" data
+    regsub -all {bgcolor="[^"]*"} $data "[use_bg]" data
+
+    return [string trim $data]\n
 }

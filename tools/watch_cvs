@@ -16,6 +16,6 @@ then
 	cvs co memchan >$out 2>&1
 	mkdir -p memchan/htdocs/state
 
-	./tools/htdocs_setup
+	(sleep 60 ; ./tools/htdocs_setup ) &
 fi
 exit

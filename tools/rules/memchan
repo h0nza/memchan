@@ -1,61 +1,36 @@
 # -*- tcl -*-
+# configures the site policy with some variant information, like colors.
+
 # Rules for the creation of the memchan website from the .exp files.
 
 proc here {} [list return [file dirname [info script]]]
-proc state {} [list return [file join [pwd] state]]
 
-source [file join [here] configuration]
-source [file join [here] formatting]
-source [file join [here] references]
-
+source [file join [here] site]       ; # load policy, defines template interface too.
+source [file join [here] references] ; # load references used by the site.
+source [file join [here] manpages]   ; # load list of known manpages.
 
 
-proc memchan_open {} {
-#    append data "[table][trtop]"
-#    append data "[td]<b>[project] @</b>[sf/img]<br><hr></td>[td]<h1>[pagetitle]</h1></td></tr>"
+proc sfproject {} {return Memchan}
+proc sfgroup   {} {return 34191}
 
-    append data "[table][trtop]"
-    append data "[td]<h1>[project]</h1><hr></td>[td]&nbsp;</td>[td]<h1>[pagetitle]</h1></td></tr>"
-    
-    return $data
-}
+proc bgcolor {} {return lightsteelblue}
+proc hlcolor {} {return lightyellow}
 
-proc nav_begin {} {
-    return "[trtop][td][table][trtop]<td>[table][trtop][td]<p align=center>[sf/img]<br><br>[mem/logo/100]<br><br>[tcl/sf/img]</td>[td]&nbsp;</td>[td][sect Crossreferences]"
-}
-proc nav_end {} {
-    return "</td></tr></table></td></tr></table></td>[td]&nbsp;</td>[td]"
-}
+proc author  {} {return "\"Andreas Kupries,,,\""}
+proc border  {} {return border=0}
 
-proc nav_link {link} {
-    return $link<br>
-}
+# Declare the pages of this site upfront ...
 
-proc news {} {
-    set nfile [file join [state] news]
-    set data [read [set fh [open $nfile r]]][close $fh]
-    return [string trim $data]\n
-}
+sitepage mem/home      "Homepage"          index.html
+sitepage mem/releases  "Releases"          [releases/url]
+sitepage mem/images    "Logos"             images.html
+sitepage mem/anim      "Animations"        animations.html
+sitepage mem/doc       "Documentation"     documentation.html
+sitepage mem/clog      "ChangeLog"         changelog.html
+sitepage mem/copyright "&#169; Disclaimer" disclaimer.html
 
-proc stats {} {
-    set nfile [file join [state] statistics]
-    set data [read [set fh [open $nfile r]]][close $fh]
 
-    set data [string trim $data]
-
-    regsub -all {BGCOLOR="[^"]*"} $data "bgcolor=[bgcolor]" data
-    regsub -all {bgcolor="[^"]*"} $data "bgcolor=[bgcolor]" data
-
-    return [string trim $data]\n
-}
-
-proc memchan_close {} {
-    set nfile [file join [state] sn.time]
-    set data [read [set fh [open $nfile r]]][close $fh]
-
-    return "<tr><td colspan=3 bgcolor=[bgcolor]><hr></td></tr><tr><td bgcolor=[bgcolor] colspan=3><b>Last updated @ $data</b></td></tr><tr><td bgcolor=[bgcolor] colspan=3>[table][trtop][td][news]</td>[td][stats]</td></tr></table></td></tr></table></td></tr></table>"
-}
-
+# memchan specific commands
 
 proc mem/latest-release {} {
     set nfile [file join [state] latest.release]
@@ -67,3 +42,8 @@ proc mem/latest-release {} {
 
     return "[link "version $version" [releases/url]&release_id=$release_id] as of $date"
 }
+
+url mc/doc/nroff/gz  "Archive"  doc/memchan.nroff.tar.gz
+url mc/doc/nroff/bz  "Archive"  doc/memchan.nroff.tar.bz2
+url mc/doc/html/gz   "Archive"  doc/memchan.html.tar.gz
+url mc/doc/html/bz   "Archive"  doc/memchan.html.tar.bz2

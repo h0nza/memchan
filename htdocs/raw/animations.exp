@@ -1,14 +1,8 @@
-[header "Animations"][memchan_open]
-
-[nav_begin]
+[page_begin mem/anim]
 	[nav_link [mem/sf/txt]]
-	<br>
-	[nav_link [mem/home]]
-	[nav_link [mem/releases]]
-	[nav_link [mem/images]]
-	[nav_link [mem/doc]]
-	[nav_link [mem/clog]]
-[nav_end]
+<br>
+	[site_xref]
+[page_content]
 
 [p] This page shows animations of the [mem/txt] logo in two sizes.
 
@@ -18,4 +12,4 @@
 </td></tr>[trtop][td][mem/logo/64a]</td>[td]
 [mem/logo/100a]</td></tr></table>
 
-[memchan_close][trailer]
+[page_end]

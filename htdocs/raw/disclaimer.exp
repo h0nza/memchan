@@ -1,15 +1,8 @@
-[header "Acknowledgements, Disclaimer"][memchan_open]
-
-[nav_begin]
+[page_begin mem/copyright]
 	[nav_link [mem/sf/txt]]
-	<br>
-	[nav_link [mem/home]]
-	[nav_link [mem/releases]]
-	[nav_link [mem/images]]
-	[nav_link [mem/anim]]
-	[nav_link [mem/doc]]
-	[nav_link [mem/clog]]
-[nav_end]
+<br>
+	[site_xref]
+[page_content]
 
 <h2>Acknowledgements</h2>
 <ul>
@@ -51,4 +44,4 @@
 	AND THE AUTHOR AND DISTRIBUTORS HAVE NO OBLIGATION TO PROVIDE
 	MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
-[memchan_close][trailer]
+[page_end]

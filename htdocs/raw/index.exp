@@ -1,16 +1,8 @@
-[header "Homepage"][memchan_open]
-
-[nav_begin]
+[page_begin mem/home]
 	[nav_link [mem/sf/txt]]
-	<br>
-	[nav_link [mem/releases]]
-	[nav_link [mem/images]]
-	[nav_link [mem/anim]]
-	[nav_link [mem/doc]]
-	[nav_link [mem/clog]]
-	<br>
-	[nav_link "[copyright] Disclaimer"]
-	<br>
+<br>
+	[site_xref]
+<br>
 	[nav_link [tcl/foundry]]
 	[nav_link [tcl/sf/txt/home]]
 	[nav_link [trf/txt/home]]
@@ -20,7 +12,7 @@
 
 	[nav_link [andreas_kupries/home]]
 	[nav_link [stevel/home]]
-[nav_end]
+[page_content]
 
 <b>Note</b>: The [mem/txt/old/2] is still available.
 <hr>
@@ -32,10 +24,10 @@ their creation.
 
 [p] They are useful to transfer large amounts of data between
 procedures or interpreters, and additionally provide an easy interface
-to on-the-fly generation of code or data too. No need to [tcl.cmd set]
-or [tcl.cmd append] to a string, just do a simple [tcl.cmd puts].
+to on-the-fly generation of code or data too. No need to [tcl_cmd set]
+or [tcl_cmd append] to a string, just do a simple [tcl_cmd puts].
 
 [p] The latest release of the extension is [mem/latest-release].
 
-[memchan_close][trailer]
+[page_end]
 

@@ -6,11 +6,30 @@
 
 # pwd = /home/groups/m/me/memchan/
 
+mkdir doc
+
 cp -r memchan/tools/*  tools/
+cp -r memchan/doc/*    doc/
 cp -r memchan/htdocs/* htdocs/
 
-cd htdocs
+# Regenerate the external representatons of all manpages, and the site
+# itself. At last generate bundles of the documentation for download.
 
-../tools/htdocs_refresh
+cd doc    ; ../tools/manpage_refresh ; cd ..
+cd htdocs ; ../tools/htdocs_refresh  ; cd ..
+
+
+tar cfz memchan.nroff.tar.gz  doc/*.n
+tar cfI memchan.nroff.tar.bz2 doc/*.n
+
+tar cfz memchan.html.tar.gz   doc/*.html
+tar cfI memchan.html.tar.bz2  doc/*.html
+
+mkdir -p     htdocs/doc
+mv memchan.* htdocs/doc/
+
+# Remove temporary information.
+
+rm -rf doc 
 
 exit
