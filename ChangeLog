@@ -1,6 +1,13 @@
+2004-05-21  Andreas Kupries  <andreask@activestate.com>
+
+	* generic/fifo2.c:   Failure in BMP is not allowed.
+	* generic/fifo.c:    Seek sets the channel temp. to
+	* generic/memchan.c: blocking 1.
+	* generic/null.c:
+
 2004-05-20  Andreas Kupries  <andreask@activestate.com>
 
-	* generic/fifo2.c:   Gave all drivers a BlockMode proc.
+	* generic/fifo2.c:   Gave all drivers a BlockMode proc (BMP).
 	* generic/fifo.c:    This proc will reject all attempts
 	* generic/memchan.c: to set -blocking 1. But the main
 	* generic/null.c:    purpose is to ensure that the

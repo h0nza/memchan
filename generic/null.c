@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: null.c,v 1.3 2002/04/25 06:29:48 andreas_kupries Exp $
+ * CVS: $Id: null.c,v 1.4 2004/05/20 19:08:30 andreas_kupries Exp $
  */
 
 
@@ -108,10 +108,6 @@ BlockMode (instanceData, mode)
      ClientData instanceData;
      int mode;
 {
-    /* Fail if blocking is tried */
-    if (mode == TCL_MODE_BLOCKING) {
-        return EINVAL;
-    }
     return 0;
 }
 
