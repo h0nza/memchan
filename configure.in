@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.6 1997/05/29 09:53:28 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.7 1998/06/19 22:12:21 aku Exp $)
 dnl
 AC_INIT(memchan.c)
 
@@ -47,6 +47,22 @@ AC_ARG_ENABLE(shared,
 
 dnl ----------------------------------------------------------------
 dnl
+dnl Crossover between --with-tcl-include-dir and --with-tcl-lib-dir
+dnl Setting one, but not the other will cause automatic definition
+dnl of the missing part.
+
+if test "X" = "X$TCL_LIB_DIR" -a "X" != "X$TCL_INCLUDE_DIR"
+then
+    TCL_LIB_DIR="$TCL_INCLUDE_DIR/../lib"
+fi
+
+if test "X" = "X$TCL_INCLUDE_DIR" -a "X" != "X$TCL_LIB_DIR"
+then
+    TCL_INCLUDE_DIR="$TCL_LIB_DIR/../include"
+fi
+
+dnl ----------------------------------------------------------------
+dnl
 dnl	checks for alternative programs:
 dnl		GNU cc, cpp, install, ranlib, makeinfo
 dnl
@@ -76,6 +92,7 @@ dnl	$prefix/include		(--prefix)
 dnl	/usr/local/include
 dnl	/usr/include
 dnl
+
 AC_CACHE_CHECK(for directory with tcl.h,
 	memchan_cv_path_TCL_INCLUDE_DIR,
 	[memchan_cv_path_TCL_INCLUDE_DIR=""
@@ -83,6 +100,7 @@ AC_CACHE_CHECK(for directory with tcl.h,
 		../tcl8.1/generic \
 		../tcl8.1b*/generic \
 		../tcl8.1a*/generic \
+		../tcl8.0.3/generic \
 		../tcl8.0/generic \
 		../tcl7.6/generic \
 		../tcl/generic \
@@ -137,7 +155,8 @@ dnl	../tcl8.0/unix		(assume tcl source in sibling directory)
 dnl	../tcl7.6/unix		(assume tcl source in sibling directory)
 dnl	../tcl/unix		(see above)
 dnl	../tcl			(should be old version)
-dnl	$exec_prefix/include		(--exec-prefix)
+dnl	$exec_prefix/lib	(--exec-prefix)
+dnl	$prefix/lib		(--prefix)
 dnl	/usr/local/lib
 dnl	/usr/lib
 dnl
@@ -148,10 +167,12 @@ AC_CACHE_CHECK(for tcl library,
 	../tcl8.1/unix \
 	../tcl8.1b*/unix \
 	../tcl8.1a*/unix \
+	../tcl8.0.3/unix \
 	../tcl8.0/unix \
 	../tcl7.6/unix \
 	../tcl/unix \
 	../tcl \
+	 $exec_prefix/lib \
 	 $prefix/lib \
 	 /usr/local/lib \
 	 /usr/lib"
@@ -159,7 +180,7 @@ AC_CACHE_CHECK(for tcl library,
         if test -n "$memchan_cv_lib_TCL_LIB"; then
             break
         fi
-        for version in 8.1 8.0 7.6 81 80 76 ""; do
+        for version in 8.1 8.0.3 8.0 7.6 81 803 80 76 ""; do
             if test -n "$memchan_cv_lib_TCL_LIB"; then
                 break
             fi

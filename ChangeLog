@@ -1,3 +1,12 @@
+Wed Sep 30 15:43:42 1998  Andreas Kupries  <a.kupries@westend.com>
+
+	* configure.in (TCL_LIB/INCLUDE_DIR): Added some additional
+	  intelligence: Setting one of the variables, but not the other
+	  causes automatic definition of the missing part with a value
+	  derived from the defined directory. Suggested by Larry Virden.
+	  Added 8.0.3 to the paths to search. Added $exec_prefix/lib to
+	  the paths to search for the tcl-library.
+
 Fri Jun 19 22:59:18 1998  Andreas Kupries  <a.kupries@westend.com>
 
 	* configure.in: Fixed a bug noted by David Herron
