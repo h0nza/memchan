@@ -1,9 +1,12 @@
 Tue Jul 27 22:57:56 1999  Andreas Kupries  <a.kupries@westend.com>
 
-	* generic/memchan.c, counter.c, init.c, fifo.c, memchanInt.h:
-	  Removed all #ifdefs relating to Tcl 7.6.
+	* doc/nodes/home.node, compile.node, win.node, mac.node,
+	  unix.node: Moved doc/INSTALL to HTML. Added reference to version
+	  1.9 site for people interested in usability with Tcl 7.6.
 
-	* Started to drop support for 7.6.
+	* generic/memchan.c, counter.c, init.c, fifo.c, memchanInt.h:
+	  Removed all #ifdefs relating to Tcl 7.6, support for that
+	  version is no dropped.
 
 Mon Jun 28 23:17:35 1999  Andreas Kupries  <a.kupries@westend.com>
 

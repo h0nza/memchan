@@ -28,8 +28,8 @@ node memchan_home {
 	distributed at @mDate@"]
 
 	hr
-	p "[strong [cem "If you are interested in a version of memchan usable
-	with Tcl 7.6, please go and have a look at [memchan19]"]]."
+	p "If you are interested in a version of [strong {memchan usable
+	with Tcl 7.6}, please go and have a look at [memchan19]."
 	hr
 
 	#  indexing is required
