@@ -1,0 +1,57 @@
+# -*- tcl -*-
+# Commands covered:	null
+#
+# This file contains a collection of tests for one or more of the commands
+# the Memchan extension. Sourcing this file into Tcl runs the tests and
+# generates output for errors.  No output means no errors were found.
+#
+# Copyright (c) 1999 Andreas Kupries (a.kupries@westend.com)
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# $Id: memchan_bb.test,v 1.1 1999/09/18 13:36:03 aku Exp $
+
+
+test null-basic-1.0 {Create null devices} {
+    set chan [null]
+    close $chan
+    regsub -all {[0-9]} $chan {} chan
+    set chan
+} {null}
+
+
+test null-basic-1.1 {Check tell on null devices} {
+    set chan [null]
+    set res [tell $chan]
+    close $chan
+    set res
+} {-1}
+
+
+test null-basic-1.2 {Check seek on null devices} {
+    set chan [null]
+    catch {seek $chan 0} res
+    close $chan
+    regsub -all $chan $res XXX res
+    set res
+} {error during seek on "XXX": invalid argument}
+
+
+test null-rw-1.0 {Write, length and tell} {
+    set chan [null]
+    puts -nonewline $chan {hello world}
+    set res [tell $chan]
+    close $chan
+    set res
+} {-1}
+
+test null-rw-1.1 {Write and read} {
+    set chan [null]
+    puts -nonewline $chan {hello world!}
+    set res [tell $chan]
+    lappend res [read $chan]
+    close $chan
+    set res
+} {-1 {}}
+

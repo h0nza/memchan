@@ -1,0 +1,143 @@
+#ifndef BUF_H
+/*
+ * buf.h --
+ *
+ *	Definitions for buffer objects.
+ *
+ * Copyright (C) 2000 Andreas Kupries (a.kupries@westend.com)
+ * All rights reserved.
+ *
+ * Permission is hereby granted, without written agreement and without
+ * license or royalty fees, to use, copy, modify, and distribute this
+ * software and its documentation for any purpose, provided that the
+ * above copyright notice and the following two paragraphs appear in
+ * all copies of this software.
+ *
+ * IN NO EVENT SHALL I BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT, SPECIAL,
+ * INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OF THIS
+ * SOFTWARE AND ITS DOCUMENTATION, EVEN IF I HAVE BEEN ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * I SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND
+ * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
+ * ENHANCEMENTS, OR MODIFICATIONS.
+ *
+ * CVS: $Id: memchanInt.h,v 1.8 2000/01/14 23:52:21 aku Exp $
+ */
+
+
+#include <tcl.h>
+#include <errno.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*
+ * The definitions in this header and the accompanying code define a
+ * generic buffer object.
+
+ * The code here is partially based upon the buffer structures used by
+ * the tcl core and uponconcepts laid out in the STREAMS paper at
+ * http://cm.bell-labs.com/cm/cs/who/dmr/st.html
+ *
+ * I hope that it can and will be used in a future reorganization of
+ * the core I/O system.
+ */
+
+/*
+ * Definition of a macro to ease the platform independent definition
+ * of vector procedures.
+ */
+
+#ifdef MAC_TCL
+#define VECTOR(returns,name) typedef pascal returns *(name)
+#elif defined __WIN32__
+#define VECTOR(returns,name) typedef returns (__stdcall name)
+#else
+#define VECTOR(returns,name) typedef returns (name)
+#endif
+
+/* Basis:
+ *	Refcounted buffers. The structures actually holding
+ *	information. Buffers are typed to allow differentation
+ *	between simple data and special control blocks.
+ *
+ *	To the outside they are opaque tokens.
+ *	All access to them have to go through the public API.
+ */
+
+typedef struct Buf_Buffer_* Buf_Buffer;
+
+/*
+ * Definition of the type for variables referencing a position
+ * in a buffer. Opaque token.
+ */
+
+typedef struct Buf_BufferPosition_* Buf_BufferPosition;
+
+/*
+ * Another opaque structure: Queues of buffers.
+ * The queues defined here are thread-safe !
+ */
+
+typedef struct Buf_BufferQueue_* Buf_BufferQueue;
+
+
+
+/* The structure for a buffer type.
+ * Before that the interfaces of the procedures used by buffer types.
+ */
+
+VECTOR (int,Buf_ReadProc) _ANSI_ARGS_ ((Buf_Buffer buf, ClientData clientData,
+					VOID* outbuf, int size));
+
+VECTOR (int,Buf_WriteProc) _ANSI_ARGS_ ((Buf_Buffer buf, ClientData clientData,
+					 CONST VOID* inbuf, int size));
+
+VECTOR (Buf_Buffer,Buf_DuplicateProc) _ANSI_ARGS_ ((Buf_Buffer buf,
+						    ClientData clientData));
+
+VECTOR (void,Buf_FreeProc) _ANSI_ARGS_ ((Buf_Buffer buf,
+					 ClientData clientData));
+
+VECTOR (int,Buf_SizeProc) _ANSI_ARGS_ ((Buf_Buffer buf,
+					ClientData clientData));
+
+VECTOR (int,Buf_TellProc) _ANSI_ARGS_ ((Buf_Buffer buf,
+					ClientData clientData));
+
+VECTOR (char*,Buf_DataProc) _ANSI_ARGS_ ((Buf_Buffer buf,
+					  ClientData clientData));
+
+typedef struct Buf_BufferType_ {
+  char* typeName;               /* The name of the buffer type.
+				 * Statically allocated.
+				 * Not touched by the system */
+  Buf_ReadProc*      readProc;  /* Procedure called to read data
+				 * from a buffer of this type. */
+  Buf_WriteProc*     writeProc; /* Procedure called to write data
+				 * into a buffer of this type. */
+  Buf_DuplicateProc* dupProc;   /* Procedure called to duplicate
+				 * a buffer of this type. */
+  Buf_FreeProc*      freeProc;  /* Procedure called to free
+				 * a buffer of this type. */
+  Buf_SizeProc*      sizeProc;  /* Procedure called to ask for the
+				 * size of a buffer of this type. */
+  Buf_TellProc*      tellProc;  /* Procedure called to ask for the
+				 * offset of the read location. */
+  Buf_DataProc*      dataProc;  /* Procedure called to ask for a
+				 * pointer to the data area of a
+				 * buffer. */
+} Buf_BufferType;
+
+
+#include "bufDecls.h"
+
+
+#ifdef __cplusplus
+}
+#endif /* C++ */
+#endif /* BUF_H */
