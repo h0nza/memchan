@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: null.c,v 1.2 2002/04/24 05:42:14 andreas_kupries Exp $
+ * CVS: $Id: null.c,v 1.3 2002/04/25 06:29:48 andreas_kupries Exp $
  */
 
 
@@ -48,6 +48,9 @@ static int      GetFile      _ANSI_ARGS_((ClientData instanceData,
 					  int direction,
 					  ClientData* handlePtr));
 
+static int	BlockMode _ANSI_ARGS_((ClientData instanceData,
+				       int mode));
+
 /*
  * This structure describes the channel type structure for null channels:
  * Null channels are not seekable. They have no options.
@@ -55,7 +58,7 @@ static int      GetFile      _ANSI_ARGS_((ClientData instanceData,
 
 static Tcl_ChannelType channelType = {
   "null",		/* Type name.                                    */
-  NULL,			/* Set blocking/nonblocking behaviour. NULL'able */
+  BlockMode,		/* Set blocking/nonblocking behaviour. */
   Close,		/* Close channel, clean instance data            */
   Input,		/* Handle read request                           */
   Output,		/* Handle write request                          */
@@ -82,6 +85,35 @@ typedef struct ChannelInstance {
   Tcl_TimerToken timer;  /* Timer used to link the channel into the
 			  * notifier. */
 } ChannelInstance;
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * BlockMode --
+ *
+ *	Helper procedure to set blocking and nonblocking modes on a
+ *	memory channel. Invoked by generic IO level code.
+ *
+ * Results:
+ *	0 if successful, errno when failed.
+ *
+ * Side effects:
+ *	Sets the device into blocking or non-blocking mode.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+BlockMode (instanceData, mode)
+     ClientData instanceData;
+     int mode;
+{
+    /* Fail if blocking is tried */
+    if (mode == TCL_MODE_BLOCKING) {
+        return EINVAL;
+    }
+    return 0;
+}
 
 /*
  *------------------------------------------------------*

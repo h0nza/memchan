@@ -1,3 +1,12 @@
+2004-05-20  Andreas Kupries  <andreask@activestate.com>
+
+	* generic/fifo2.c:   Gave all drivers a BlockMode proc.
+	* generic/fifo.c:    This proc will reject all attempts
+	* generic/memchan.c: to set -blocking 1. But the main
+	* generic/null.c:    purpose is to ensure that the
+	                     Tcl IO core does not believe that is
+			     has to do non-blocking on its own.
+
 2004-02-18  Andreas Kupries  <andreask@activestate.com>
 
 	* DESCRIPTION.txt: Updated to dinstinguish CVS from release.

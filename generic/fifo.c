@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo.c,v 1.10 2002/04/25 06:29:48 andreas_kupries Exp $
+ * CVS: $Id: fifo.c,v 1.11 2004/02/18 19:05:01 andreas_kupries Exp $
  */
 
 
@@ -55,6 +55,8 @@ static int      GetFile      _ANSI_ARGS_((ClientData instanceData,
 					  int direction,
 					  ClientData* handlePtr));
 
+static int	BlockMode _ANSI_ARGS_((ClientData instanceData,
+				       int mode));
 /*
  * This structure describes the channel type structure for in-memory channels:
  * Fifo are not seekable. They have no writable options, but a readable.
@@ -62,7 +64,7 @@ static int      GetFile      _ANSI_ARGS_((ClientData instanceData,
 
 static Tcl_ChannelType channelType = {
   "memory/fifo",	/* Type name.                                    */
-  NULL,			/* Set blocking/nonblocking behaviour. NULL'able */
+  BlockMode,		/* Set blocking/nonblocking behaviour. */
   Close,		/* Close channel, clean instance data            */
   Input,		/* Handle read request                           */
   Output,		/* Handle write request                          */
@@ -109,6 +111,35 @@ typedef struct ChannelInstance {
 
 #define FIFO_EMPTY(c) (c->length == 0)
 
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * BlockMode --
+ *
+ *	Helper procedure to set blocking and nonblocking modes on a
+ *	memory channel. Invoked by generic IO level code.
+ *
+ * Results:
+ *	0 if successful, errno when failed.
+ *
+ * Side effects:
+ *	Sets the device into blocking or non-blocking mode.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+BlockMode (instanceData, mode)
+     ClientData instanceData;
+     int mode;
+{
+    /* Fail if blocking is tried */
+    if (mode == TCL_MODE_BLOCKING) {
+        return EINVAL;
+    }
+    return 0;
+}
 
 /*
  *------------------------------------------------------*

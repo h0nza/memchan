@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo2.c,v 1.2 2002/04/24 05:42:14 andreas_kupries Exp $
+ * CVS: $Id: fifo2.c,v 1.3 2002/04/25 06:29:48 andreas_kupries Exp $
  */
 
 
@@ -55,6 +55,9 @@ static int      GetFile      _ANSI_ARGS_((ClientData instanceData,
 					  int direction,
 					  ClientData* handlePtr));
 
+static int	BlockMode _ANSI_ARGS_((ClientData instanceData,
+				       int mode));
+
 /*
  * This structure describes the channel type structure for in-memory channels:
  * Fifo are not seekable. They have no writable options, but a readable.
@@ -62,7 +65,7 @@ static int      GetFile      _ANSI_ARGS_((ClientData instanceData,
 
 static Tcl_ChannelType channelType = {
   "memory/fifo2",	/* Type name.                                    */
-  NULL,			/* Set blocking/nonblocking behaviour. NULL'able */
+  BlockMode,		/* Set blocking/nonblocking behaviour. */
   Close,		/* Close channel, clean instance data            */
   Input,		/* Handle read request                           */
   Output,		/* Handle write request                          */
@@ -105,6 +108,14 @@ static Tcl_ChannelType channelType = {
  * to use mutexes for protection. Another alternative would be to use
  * an additional set of queues for signaling.
  *
+ *
+ * -----------------------------------------------------------------
+ * NOTE -- TIP #10 was accepted for Tcl 8.4. This means that the above
+ * information is available for this version of Tcl, and beyond. Now
+ * use it.
+ * -----------------------------------------------------------------
+ *
+ *
  * Whenever one of the channels has to do something it uses the mutex
  * to enforce exclusion of the other side. This enables it to
  * manipulate both sides without fear of inconsistency.
@@ -141,8 +152,7 @@ static Tcl_ChannelType channelType = {
  * structure on the other side it doesn't know about before. A channel
  * already knowing that the other side is dead will do no
  * notifications but proceed immediately to the stage of destroying
- * all structures associated to the fifos.
- */
+ * all structures associated to the fifos.  */
 
 typedef struct ChannelLock {
 #if (GT81)
@@ -205,6 +215,35 @@ typedef struct ChannelInstance {
 #define MUNLK(chan) 
 #define MFIN(chan)  
 #endif
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * BlockMode --
+ *
+ *	Helper procedure to set blocking and nonblocking modes on a
+ *	memory channel. Invoked by generic IO level code.
+ *
+ * Results:
+ *	0 if successful, errno when failed.
+ *
+ * Side effects:
+ *	Sets the device into blocking or non-blocking mode.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+BlockMode (instanceData, mode)
+     ClientData instanceData;
+     int mode;
+{
+    /* Fail if blocking is tried */
+    if (mode == TCL_MODE_BLOCKING) {
+        return EINVAL;
+    }
+    return 0;
+}
 
 /*
  *------------------------------------------------------*
