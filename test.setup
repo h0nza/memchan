@@ -12,3 +12,11 @@ set auto_path [concat [list [file join [pwd] ..]] $auto_path] ; # top dir of mem
 package require Memchan
 
 #load [glob [file join [pwd] .. tea lib*.so]]
+
+# Some tests require a threaded interpreter (and the thread package).
+
+if {[info exists tcl_platform(threads)]} {
+    if {![catch {package require Thread}]} {
+	set ::tcltest::testConstraints(threading) 1
+    }
+}
