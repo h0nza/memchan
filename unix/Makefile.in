@@ -7,7 +7,7 @@
 #
 # Distribution as of @mDate@
 #
-# $Id: Makefile.in,v 1.14 1999/09/14 19:36:50 aku Exp $
+# $Id: Makefile.in,v 1.15 2000/09/26 20:53:04 aku Exp $
 
 EXTENSION	=	Memchan
 VERSION		=	@mFullVersion@
@@ -165,7 +165,7 @@ SOURCES		=	$(GENERIC_DIR)/memchan.c	\
 			$(GENERIC_DIR)/null.c		\
 			$(GENERIC_DIR)/buf.c		\
 			$(GENERIC_DIR)/bufRange.c	\
-			$(GENERIC_DIR)/bufFixed.c	\
+			$(GENERIC_DIR)/bufFix.c		\
 			$(GENERIC_DIR)/bufExt.c		\
 			$(GENERIC_DIR)/bufQueue.c	\
 			$(GENERIC_DIR)/counter.c
@@ -175,7 +175,7 @@ OBJECTS		=	init.o counter.o	\
 			fifo2.o null.o		\
 			buf.o bufQueue.o	\
 			bufRange.o bufExt.o	\
-			bufFixed.o
+			bufFix.o
 
 #-------------------------------------------------------#
 
@@ -255,8 +255,8 @@ buf.o: $(GENERIC_DIR)/buf.c
 bufQueue.o: $(GENERIC_DIR)/bufQueue.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/bufQueue.c -o $@
 
-bufFixed.o: $(GENERIC_DIR)/bufFixed.c
-	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/bufFixed.c -o $@
+bufFix.o: $(GENERIC_DIR)/bufFix.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/bufFix.c -o $@
 
 bufExt.o: $(GENERIC_DIR)/bufExt.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/bufExt.c -o $@
