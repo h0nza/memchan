@@ -185,12 +185,12 @@ install-lib: $(MEMCHAN_LIB_FILE)
 test:
 	LD_LIBRARY_PATH="$(srcdir):$(TCL_LIB_DIR)";	export LD_LIBRARY_PATH; \
 	SHLIB_PATH="$LD_LIBRARY_PATH";			export SHLIB_PATH; \
-	wish ../testlib/tester -auto -delay 1
+	wish $(TOP_DIR)/testlib/tester -auto -delay 1
 
 ctest:
 	LD_LIBRARY_PATH="$(srcdir):$(TCL_LIB_DIR)"; \
 	echo lappend auto_path [pwd] \; package require Memchan \; \
-	cd $(srcdir)/tests \; source all | tclsh
+	cd $(TOP_DIR)/tests \; source all | tclsh
 
 #-------------------------------------------------------#
 
