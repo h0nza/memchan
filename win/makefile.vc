@@ -3,7 +3,7 @@
 # See the file "doc/license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# CVS:	$Id: makefile.vc,v 1.6 1998/06/19 22:22:27 aku Exp $
+# CVS:	$Id: makefile.vc,v 1.1 1999/03/23 10:15:21 aku Exp $
 # 
 
 # Does not depend on the presence of any environment variables in
@@ -27,26 +27,28 @@
 # PKZIP	  =	name and path to pkzip archiver application
 #		(required for generation of binary distribution only)
 #
-# TCLSH / TCLLIB	Choose the set appropriate for your system.
+# TCLSH/TCLLIB
+#	choose the definitions matching your version of tcl.
+#
 
-ROOT		= .
+ROOT		= ..
 TMPDIR		= .
 TOOLS32		= c:\msdev
 TCL		= c:\tcl
+TCLSH		= $(TCL)\bin\tclsh80.exe
+TCLLIB		= $(TCL)\bin\tcl80.lib
+#	TCLSH		= $(TCL)\bin\tclsh81.exe
+#	TCLLIB		= $(TCL)\bin\tcl81.lib
 PKZIP		= pkzip.exe
+MSVCRT		= msvcrt.dll
+MSVCRT_SYS	= c:\windows\system\msvcrt.dll
+
 
 # Set this to the appropriate value of /MACHINE: for your platform
 MACHINE	= IX86
 
 # Comment the following line to compile with symbols
 NODEBUG=1
-
-
-TCLSH		=	$(TCL)\bin\tclsh80.exe
-TCLLIB		=	$(TCL)\bin\tcl80.lib
-
-#TCLSH		=	$(TCL)\bin\tclsh81.exe
-#TCLLIB		=	$(TCL)\bin\tcl81.lib
 
 
 ######################################################################
@@ -70,8 +72,14 @@ include32	= -I$(TOOLS32)\include
 CP      	= copy
 RM      	= del
 
-MC_INCLUDES	= -I$(ROOT) -I$(TCL)\include
-MC_DEFINES	= -nologo -D__WIN32__ -DHAVE_STDLIB_H -DMEMCHAN_VERSION=\"@mFullVersion@\"
+WINDIR          = $(ROOT)\win
+GENERICDIR	= $(ROOT)\generic
+
+MC_INCLUDES	= -I$(WINDIR) -I$(GENERICDIR) -I$(ROOT) -I$(TCL)\include
+MC_DEFINES	= -nologo -D__WIN32__ -DHAVE_STDLIB_H -DMEMCHAN_VERSION=\"@mFullVersion@\" -DBUILD_memchan
+
+#!include <ntwin32.mak> # what is this for?
+
 
 MC_CFLAGS	=	$(cdebug) $(cflags) $(cvarsdll) $(include32) \
 			$(MC_INCLUDES) $(MC_DEFINES)
@@ -169,7 +177,13 @@ test:	    $(MCDLL)
 install:	$(MCDLL)
 	-@md	$(INSTALLDIR)
 	-@$(CP) $(MCDLL)		$(INSTALLDIR)
-	-@$(CP) $(ROOT)\pkgIndex.win	$(INSTALLDIR)\pkgIndex.tcl
+	-@$(CP) $(WINDIR)\pkgIndex.tcl	$(INSTALLDIR)\pkgIndex.tcl
+
+
+$(MCDLL): $(MCOBJS)
+	$(link32) $(ldebug) $(dlllflags) $(TCLLIB) \
+		$(guilibsdll) -out:$(MCDLL) $(MCOBJS)
+
 
 bindist:	$(MCDLL)
 	-@md	$(MC)
@@ -181,22 +195,28 @@ bindist:	$(MCDLL)
 	-@rd	$(MC)
 
 
-$(MCDLL): $(MCOBJS)
-	$(link32) $(ldebug) $(dlllflags) $(TCLLIB) \
-		$(guilibsdll) -out:$(MCDLL) $(MCOBJS)
-
-
 #
 # Implicit rules
 #
 
-{$(ROOT)}.c{$(TMPDIR)}.obj:
+{$(WINDIR)}.c{$(TMPDIR)}.obj:
     $(cc32) $(MC_CFLAGS) -Fo$(TMPDIR)\ $<
+
+{$(GENERICDIR)}.c{$(TMPDIR)}.obj:
+    $(cc32) $(MC_CFLAGS) -Fo$(TMPDIR)\ $<
+
+{$(ROOT)\compat}.c{$(TMPDIR)}.obj:
+    $(cc32) $(MC_CFLAGS) -Fo$(TMPDIR)\ $<
+
+{$(WINDIR)}.rc{$(TMPDIR)}.res:
+	$(rc32) -fo $@ -r -i $(GENERICDIR) -i $(WINDIR) -D__WIN32__ \
+		$(MC_DEFINES) $<
+
 
 
 clean:
         -@del *.exp 
 	-@del *.lib 
 	-@del *.dll 
-        -@del $(TMPDIR)\*.obj
 	-@del *.pch
+        -@del $(TMPDIR)\*.obj
