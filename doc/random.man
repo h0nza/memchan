@@ -6,8 +6,6 @@
 [require Tcl]
 [require memchan]
 [description]
-[para]
-The command described here is in the planning stages and not available yet.
 
 [list_begin definitions]
 

@@ -25,7 +25,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: init.c,v 1.7 2000/09/26 20:52:50 aku Exp $
+ * CVS: $Id: init.c,v 1.8 2002/04/25 06:29:48 andreas_kupries Exp $
  */
 
 /*#include <stdlib.h>*/
@@ -83,6 +83,11 @@ Tcl_Interp* interp;
 
   Tcl_CreateObjCommand (interp, "null",
 			&MemchanNullCmd,
+			(ClientData) NULL,
+			(Tcl_CmdDeleteProc*) NULL);
+
+  Tcl_CreateObjCommand (interp, "random",
+			&MemchanRandomCmd,
 			(ClientData) NULL,
 			(Tcl_CmdDeleteProc*) NULL);
 

@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.14 2002/08/23 18:04:40 andreas_kupries Exp $
+ * CVS: $Id: memchanInt.h,v 1.15 2003/05/15 23:25:25 andreas_kupries Exp $
  */
 
 
@@ -154,6 +154,10 @@ MemchanNullCmd _ANSI_ARGS_ ((ClientData notUsed,
 			     Tcl_Interp* interp,
 			     int objc, Tcl_Obj*CONST objv[]));
 
+extern int
+MemchanRandomCmd _ANSI_ARGS_ ((ClientData notUsed,
+                  Tcl_Interp* interp,
+			      int objc, Tcl_Obj*CONST objv[]));
 
 /* Generator procedure for handles. Handles mutex issues for a thread
  * enabled version of tcl.

@@ -1,5 +1,16 @@
 2004-05-22  Pat Thoyts  <patthoyts@users.sourceforge.net>
 
+	* Makefile.in:         Added random channel.
+	* generic/random.c:
+	* tests/random.test:
+	* doc/random.man:
+	* generic/init.c:
+	* generic/memchanInt.h:
+	* isaac/rand.h:
+	* isaac/randport.c:
+	* isaac/standard.h:
+	
+
 	* win/makefile.vc:   Updated the MSVC build system for use with
 	* win/mc.rc:         MSVC++ 6 or 7.
 	* win/rules.vc:
