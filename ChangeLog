@@ -1,5 +1,9 @@
 2001-09-06 Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
+	* tools/htdocs_setup: Fixed typos.
+
+2001-09-06 Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
 	* tools/htdocs_setup: Added generation of manpages and
 	  documentation bundles for the website.
 
