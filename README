@@ -1,6 +1,6 @@
 
 		Memory Channels in Tcl
-		(Version 1.1 / January 13, 1997)
+		(Version @VERSION@ / @DATE@)
 
 		Andreas Kupries	(a.kupries@westend.com)
 
@@ -25,7 +25,8 @@ Memchan should be available by anonymous ftp from ftp.neosoft.com in
 the /tcl/extension directory (at least after their reorganization).
 
 Primary ftp-site will be
-		<ftp://ftp.kisters.de/pub/lang/tcl/memchan1.1.tar.gz>
+		<ftp://ftp.kisters.de/pub/lang/tcl/memchan@VERSION@.tar.gz>
+		<ftp://ftp.kisters.de/pub/lang/tcl/memchan@VERSION@.readme>
 
 
 COMPILING/USING Memchan

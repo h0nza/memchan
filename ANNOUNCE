@@ -1,6 +1,6 @@
 Hello world,
 
-This is release 1.1 of the simple extension providing "Memory channels".
+This is release @VERSION@ of the simple extension providing "Memory channels".
 
 Changes from 1.0:
 
@@ -11,8 +11,8 @@ Changes from 1.0:
 *	No, no changes in functionality :-)
 
 The package can be found at
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan1.1.tar.gz>
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan1.1.readme>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.tar.gz>
+        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.readme>
 
 Enjoy,
 	Andreas Kupries <a.kupries@westend.com>	(private)

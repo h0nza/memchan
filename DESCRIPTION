@@ -1,12 +1,21 @@
 # -*- tcl -*-
 extension memchan {
+    author       {Andreas Kupries (a.kupries@westend.com)}
+    maintenance  {Andreas Kupries (a.kupries@westend.com)}
+
+    version	   1.2
+    copying-policy {BSD-Style, see 'tcl'-license}
+    date           {@DATE@}
+
     comment {
 	Implements memory channels, i.e. channels
 	storing their contents in memory, not on disk.
     }
 
-    author {Andreas Kupries (a.kupries@westend.com)}
+    primary-urls {
+	ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.tar.gz
+	ftp.kisters.de/pub/lang/tcl/ext/memchan@VERSION@.readme
+    }
 
-    version	1.1
-    requires	{tcl7.6 or higher}
+    dependencies {tcl7.6 or higher}
 }
