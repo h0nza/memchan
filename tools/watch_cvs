@@ -13,7 +13,7 @@ then
 	out=$HOME/logs/memchan
 	mkdir -p `dirname $out`
 
-	cvs co memchan > $out 2>&1
+	cvs co memchan >$out 2>&1
 	mkdir -p memchan/htdocs/state
 
 	./tools/htdocs_setup

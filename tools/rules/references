@@ -42,9 +42,13 @@ url mem/clog     "ChangeLog"     changelog.html
 
 url tcl/foundry  "Tcl Foundry" http://sourceforge.net/foundry/tcl-foundry/
 
+
 url me                   "Andreas Kupries"  http://www.purl.org/net/akupries/
+
+## Future ## Try to make this automatic ...
+
 url andreas_kupries/home "Andreas Kupries"  http://www.purl.org/net/akupries/
-url stevel/home          "Steve Landers"    http://unknown.unknown/unknown
+url stevel/home          "Steve Landers"    http://www.digital-smarties.com/
 
 
 url jo      "John Ousterhout"     http://www.scriptics.com/people/john.ousterhout
