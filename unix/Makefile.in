@@ -273,6 +273,12 @@ init.o: $(GENERIC_DIR)/init.c
 counter.o: $(GENERIC_DIR)/counter.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/counter.c -o $@
 
+bufStubInit.o: $(GENERIC_DIR)/bufStubInit.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/bufStubInit.c -o $@
+
+bufStubLib.o: $(GENERIC_DIR)/bufStubLib.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/bufStubLib.c -o $@
+
 #-------------------------------------------------------#
 
 $(MEMCHAN_LIB_FILE):	$(OBJECTS)
