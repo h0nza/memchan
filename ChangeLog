@@ -1,5 +1,11 @@
 Wed May 26 00:17:18 1999  Andreas Kupries  <a.kupries@westend.com>
 
+	* tests/fifo.test: Added test suite for 'fifo's.
+
+	* unix/pkgIndex.tcl: Added new command to the index.
+
+	* doc/nodes/cmds.node: Added documentation for 'fifo'.
+
 	* generic/fifo.c: New file, new channel type. Like memchan in
 	  memory, but access is done fifo-like (first in/first
 	  out). Seeking is not possible. Like a socket or a pipe, but in

@@ -8,7 +8,7 @@ node memchan_cmds {
     parent      memchan_home
 
     contents {
-	p "This extension provides one new command and influences the
+	p "This extension provides two new commands and influences the
 	kernel command [cmd fconfigure].
 	"
 
@@ -19,8 +19,15 @@ node memchan_cmds {
 		no options. Returns the handle of the created channel.
 		"
 	    }
+	    cmdrow  fifo {} {
+		p "
+		Command to create a new memory channel with fifo
+		characteristics. No arguments, no options. Returns the
+		handle of the created channel.
+		"
+	    }
 	    cmdrow fconfigure {... -length ...} {
-		p "Memory channels support a single read-only option,
+		p "Memory and fifo channels support a single read-only option,
 		[opt -length]. Reading it via [cmd fconfigure] retrieves
 		the number of bytes currently stored in the channel.
 		"

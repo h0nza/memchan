@@ -355,15 +355,17 @@ int*       errorCodePtr;	/* Location of error flag. */
   cbuf->nextAdded   = toWrite;
   cbuf->nextRemoved = 0;
   cbuf->bufLength   = toWrite;
-  cbuf->nextPtr     = chan->last;
+  cbuf->nextPtr     = (ChannelBuffer*) NULL;
 
   memcpy ((VOID*) cbuf->buf, (VOID*) buf, toWrite);
 
   if (chan->first == (ChannelBuffer*) NULL) {
     chan->first = cbuf;
+  } else {
+    chan->last->nextPtr = cbuf;
   }
 
-  chan->last   = cbuf;
+  chan->last    = cbuf;
   chan->length += toWrite;
 
   return toWrite;
