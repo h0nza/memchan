@@ -41,10 +41,11 @@ node memchan_where {
 	}
 
 	hr
-	p "[strong Upcoming:] Version 2.0. Changes:"
+	p "[strong [cem Upcoming:]] Version 2.0."
+	p "Changes to expect:"
 	bullet_list {
-	    li "Drops support for Tcl 7.x. / Tk 4.x."
-	    li "Allows compilation with its own stub table."
+	    li "Support for Tcl 7.x. / Tk 4.x. will be dropped."
+	    li "Will allow compilation with its own stub table."
 	}
     }
 }
