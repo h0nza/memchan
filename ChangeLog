@@ -1,5 +1,10 @@
 2004-06-04  Pat Thoyts  <patthoyts@users.sourceforge.net>
 
+	* configure:        Updated and regenerated the TEA configure script
+	* tclconfig/tcl.m4: This now works with Msys on Windows (gcc & cl)
+
+2004-06-04  Pat Thoyts  <patthoyts@users.sourceforge.net>
+
 	* generic/zero.c:   Make the interval between fileevent
 	* generic/null.c:   notifications configurable (FR #470415).
 	* generic/random.c:
