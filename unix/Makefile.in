@@ -7,7 +7,7 @@
 #
 # Distribution as of @mDate@
 #
-# $Id: Makefile.in,v 1.8 1999/05/11 20:28:55 aku Exp $
+# $Id: Makefile.in,v 1.9 1999/05/25 18:10:56 aku Exp $
 
 EXTENSION	=	Memchan
 VERSION		=	@mFullVersion@
@@ -161,6 +161,7 @@ HEADER		=
 SOURCES		=	$(GENERIC_DIR)/memchan.c	\
 			$(GENERIC_DIR)/init.c		\
 			$(GENERIC_DIR)/counter.c
+
 OBJECTS		=	memchan.o init.o counter.o
 
 

@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.5 1999/04/12 15:33:34 aku Exp $
+ * CVS: $Id: counter.c,v 1.1 1999/05/25 18:10:55 aku Exp $
  */
 
 
@@ -57,7 +57,7 @@ CONST char* prefix;
    */
 
 #if GT81
-  TCL_DECLARE_MUTEX (memchanCounterMutex);
+  TCL_DECLARE_MUTEX (memchanCounterMutex)
   static unsigned long memCounter = 0;
 
   char     channelName [50];
