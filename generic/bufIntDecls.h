@@ -49,4 +49,31 @@ extern BufIntStubs *bufIntStubsPtr;
 
 /* !END!: Do not edit above this line. */
 
+/* Detect Tcl 8.4 and beyond => API CONSTification
+ */
+
+#define GT84 ((TCL_MAJOR_VERSION > 8) || \
+((TCL_MAJOR_VERSION == 8) && \
+ (TCL_MINOR_VERSION >= 4)))
+
+/* There are currently two cases to consider
+ *
+ * 1. An API function called with a const string, which was non-const
+ *    in the relevant argument before 8.4 and is now const in that
+ *    argument. This meanst that before 8.4 the actual parameter
+ *    required a cast to unconst the value and doesn't require the
+ *    cast for 8.4 and beyond.
+ *
+ *    This is solved by the macro MC_UNCONSTB84
+ *    = MemChan unCONST Before 8.4
+ *
+ * 2. ... Not yet.
+ */
+
+#if GT84
+#define MC_UNCONSTB84
+#else
+#define MC_UNCONSTB84   (char*)
+#endif
+
 #endif /* _BUFINTDECLS */

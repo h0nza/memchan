@@ -12,7 +12,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.10 2001/11/13 01:36:37 andreas_kupries Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.11 2001/11/16 06:34:32 andreas_kupries Exp $
 
 #========================================================================
 # Additional variables defined here for convenient access to some
@@ -146,7 +146,7 @@ oldincludedir	= /usr/include
 DESTDIR =
 
 pkgdatadir	= $(datadir)/@PACKAGE@
-pkglibdir	= $(libdir)/@PACKAGE@
+pkglibdir	= $(libdir)/@PACKAGE@@MEMCHAN_VERSION@
 pkgincludedir	= $(includedir)/@PACKAGE@
 
 top_builddir	= .
@@ -492,19 +492,19 @@ install-lib-binaries: installdirs
 	        $(INSTALL_DATA) $$p $(DESTDIR)$(bindir)/$$p; \
 		lib=`basename $$p|sed -e 's/.[^.]*$$//'`.lib; \
 		if test -f $$lib; then \
-		    echo " $(INSTALL_DATA) $$lib $(DESTDIR)$(libdir)/$$lib"; \
-	            $(INSTALL_DATA) $$lib $(DESTDIR)$(libdir)/$$lib; \
+		    echo " $(INSTALL_DATA) $$lib $(DESTDIR)$(pkglibdir)/$$lib"; \
+	            $(INSTALL_DATA) $$lib $(DESTDIR)$(pkglibdir)/$$lib; \
 		fi; \
 	    else \
-		echo " $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/$$p"; \
-	        $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/$$p; \
+		echo " $(INSTALL_DATA) $$p $(DESTDIR)$(pkglibdir)/$$p"; \
+	        $(INSTALL_DATA) $$p $(DESTDIR)$(pkglibdir)/$$p; \
 	    fi; \
 	  else :; fi; \
 	done
 	@list='$(lib_BINARIES)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    echo " $(RANLIB) $(DESTDIR)$(libdir)/$$p"; \
-	    $(RANLIB) $(DESTDIR)$(libdir)/$$p; \
+	    echo " $(RANLIB) $(DESTDIR)$(pkglibdir)/$$p"; \
+	    $(RANLIB) $(DESTDIR)$(pkglibdir)/$$p; \
 	  else :; fi; \
 	done
 	if test "x$(MAKE_LIB)" = "x$(MAKE_SHARED_LIB)"; then \

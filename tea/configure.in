@@ -1,7 +1,7 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.5 2000/09/26 21:40:05 aku Exp $)
+AC_REVISION($Id: configure.in,v 1.6 2001/11/13 01:36:37 andreas_kupries Exp $)
 
 #--------------------------------------------------------------------
 # Configure script for package '@mName@', as distributed at @mDate@.
@@ -280,7 +280,7 @@ AC_SUBST(SHLIB_LD_LIBS)
 #--------------------------------------------------------------------
 
 AC_PATH_PROGS(TCLSH_PROG,
-	tclsh8.2${EXEEXT} tclsh82${EXEEXT} tclsh${EXEEXT},
+	tclsh8.4${EXEEXT} tclsh84${EXEEXT} tclsh8.3${EXEEXT} tclsh83${EXEEXT} tclsh8.2${EXEEXT} tclsh82${EXEEXT} tclsh${EXEEXT},
 	:,
 	${exec_prefix}/bin:${prefix}/bin:${PATH})
 

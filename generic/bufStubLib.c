@@ -66,13 +66,13 @@ Buf_InitStubs(interp, version, exact)
     CONST char *version;
     int exact;
 {
-    char *actualVersion;
+    CONST char *actualVersion;
 
     /* ** NOTE ** the speciality:
      * The interface 'Buf' is provided by the package 'Memchan'.
      */
 
-    actualVersion = Tcl_PkgRequireEx(interp, "Memchan", (char *) version, exact,
+    actualVersion = Tcl_PkgRequireEx(interp, "Memchan", MC_UNCONSTB84 version, exact,
 		(ClientData *) &bufStubsPtr);
 
     if (!actualVersion) {
@@ -88,5 +88,5 @@ Buf_InitStubs(interp, version, exact)
     
     bufIntStubsPtr = bufStubsPtr->hooks->bufIntStubs;
     
-    return actualVersion;
+    return (char*) actualVersion;
 }

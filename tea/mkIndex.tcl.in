@@ -83,13 +83,13 @@ set exec_prefix "@exec_prefix@"
 set exec_prefix [Nativepath $exec_prefix] 
 
 set libdir @libdir@
-set package @PACKAGE@
+set package @PACKAGE@@MEMCHAN_VERSION@
 
 cd $libdir
 puts "Making pkgIndex.tcl in [file join [pwd] $package]"
 
 if {$tcl_platform(platform) == "unix"} {
-    pkg_mkIndex $package [file join .. lib${package}*[info sharedlibextension]] *.tcl
+    pkg_mkIndex $package [file join lib${package}*[info sharedlibextension]] *.tcl
 } else {
     pkg_mkIndex $package [file join .. .. bin *[info sharedlibextension]]
 }
