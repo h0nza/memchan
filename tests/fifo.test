@@ -67,7 +67,6 @@ test fifo-readwrite-1.1 {Write and read} {
     set m [fifo]
     puts -nonewline $m {hello world!}
     set res [list [fconfigure $m -length]]
-    seek $m 0
     lappend res [read $m]
     close $m
     set res
