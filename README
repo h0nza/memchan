@@ -29,13 +29,6 @@ Primary Urls are:
         <ftp://ftp.westend.com/pub/aku/memchan@mFullVersion@.README>
         <ftp://ftp.westend.com/pub/aku/mchan@mDosVersion@b.zip>
 
-Secondary Urls:
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mFullVersion@.tar.gz>
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mDosVersion@.zip>
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/memchan@mFullVersion@.readme>
-        <ftp://ftp.kisters.de/pub/lang/tcl/ext/mchan@mDosVersion@b.zip>
-
-
 COMPILING/USING Memchan
 
 To compile Memchan follow the instructions of the INSTALL file.
