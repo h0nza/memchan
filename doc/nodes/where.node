@@ -39,5 +39,12 @@ node memchan_where {
 		}
 	    }
 	}
+
+	hr
+	p "[strong Upcoming:] Version 2.0. Changes:"
+	bullet_list {
+	    li "Drops support for Tcl 7.x. / Tk 4.x."
+	    li "Allows compilation with its own stub table."
+	}
     }
 }

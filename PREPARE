@@ -1,6 +1,6 @@
 # -*- tcl -*-
 # prepare module MEMCHAN for distribution
-# CVS:	$Id: PREPARE,v 1.15 1999/05/30 11:48:22 aku Exp $
+# CVS:	$Id: PREPARE,v 1.16 1999/05/31 15:41:04 aku Exp $
 
 
 # O. insert various information into some files
@@ -12,7 +12,7 @@ eval mInsertInfo \
 	DESCRIPTION doc/manual \
 	README win/README win/README.VC mac/README \
 	unix/configure.in unix/Makefile.in \
-	win/makefile.vc win/mc.rc \
+	[glob win/makefile.vc*] win/Makefile.gnu win/mc.rc \
 	[glob doc/nodes/*.node] [glob doc/nodes/*.def]
 
 mGetDescription
@@ -30,8 +30,8 @@ file delete AMAIL
 set mInfo(@configure_input@)  "Distributed at $mDate"
 set mInfo(@MEMCHAN_VERSION@)  $mVersion
 #set mInfo(@MC_USING_STUBS@)   1 ; # implicit usage on Win*
-set mInfo(@MEMCHAN_LIB_FILE@) mchan${mShortDosVersion} ; # .dll added by index file itself
-#                             ~~~~~ coordinate with win/makefile.vc
+set mInfo(@MEMCHAN_LIB_FILE@) memchan${mShortDosVersion} ; # .dll added by index file itself
+#                             ~~~~~ coordinate with win/makefile.*
 mInsertInfo win/pkgIndex.tcl
 
 # remove internal directories
@@ -54,6 +54,8 @@ eval file rename [glob tg*] testlib
 
 # Now generate documentation for linkage into my
 # site and standalone distribution
+
+mHandleBinaryDistributions
 
 # -up-man assumes that the document is part of the
 # hierarchy at http://www.oche.de/~akupries

@@ -3,7 +3,7 @@
 # See the file "doc/license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# CVS:	$Id: makefile.vc,v 1.4 1999/05/25 18:10:56 aku Exp $
+# CVS:	$Id: makefile.vc,v 1.5 1999/05/25 22:26:48 aku Exp $
 # 
 
 # Does not depend on the presence of any environment variables in
@@ -55,7 +55,7 @@ NODEBUG=1
 # Do not modify below this line
 ######################################################################
 
-MC		=	mchan@mShortDosVersion@
+MC		=	memchan@mShortDosVersion@
 MCLIB		=	$(MC).lib
 MCDLL		=	$(MC).dll
 INSTALLDIR	=	$(TCL)\lib\$(MC)
