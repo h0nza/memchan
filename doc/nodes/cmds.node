@@ -15,8 +15,10 @@ node memchan_cmds {
 	cmdtable {::} {
 	    cmdrow  memchan {} {
 		p "
-		Command to create a new memory channel. No arguments,
-		no options. Returns the handle of the created channel.
+		Command to create a new memory channel. Returns the handle
+		of the created channel. Accepts a single option, '-initial-size'.
+		The argument to the option is a number, it specifies the number
+		of bytes to pre-allocate for the internal buffers.
 		"
 	    }
 	    cmdrow  fifo {} {
@@ -42,10 +44,14 @@ node memchan_cmds {
 		this interface, they don't replace it.
 		"
 	    }
-	    cmdrow fconfigure {... -length ...} {
-		p "Memory and fifo channels support a single read-only option,
-		[opt -length]. Reading it via [cmd fconfigure] retrieves
-		the number of bytes currently stored in the channel.
+	    cmdrow fconfigure {... -length -allocated ...} {
+		p "Memory and fifo channels support a two read-only options,
+		[opt -length] and [opt -allocated]. Reading the first via
+		[cmd fconfigure] retrieves the number of bytes currently stored
+		in the channel. Reading the second retrieves the number of bytes
+		currently allocated by the internal buffers. This number is
+		usually greater than the one reported by [opt -length], but
+		never smaller.
 		"
 	    }
 	}
