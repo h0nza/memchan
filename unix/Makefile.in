@@ -7,7 +7,7 @@
 #
 # Distribution as of @mDate@
 #
-# $Id: Makefile.in,v 1.6 1999/05/11 19:57:57 aku Exp $
+# $Id: Makefile.in,v 1.7 1999/05/11 20:27:22 aku Exp $
 
 EXTENSION	=	Memchan
 VERSION		=	@mFullVersion@
@@ -193,7 +193,7 @@ test:
 
 ctest:
 	LD_LIBRARY_PATH="$(srcdir):$(TCL_LIB_DIR)"; \
-	echo set auto_path [concat [pwd] \$auto_path] \; package require Memchan \; \
+	echo set auto_path [concat [pwd] $$auto_path] \; package require Memchan \; \
 	cd $(TOP_DIR)/tests \; source all | tclsh
 
 #	echo lappend auto_path [pwd] \; package require Memchan \; \
