@@ -1,3 +1,8 @@
+Changes from 2.2.0 to 2.2.1
+
+*	Enhanced stubs API to permit Memchan channels to be created by
+	third party extensions. See memchanapi(n).
+
 Changes from 2.2a4 to 2.2.0
 
 *	New channels types random and zero.
