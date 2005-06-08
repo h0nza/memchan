@@ -10,7 +10,7 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * $Id$
+ * $Id: memchanStubLib.c,v 1.1 2004/11/09 23:11:00 patthoyts Exp $
  */
 
 #ifndef USE_TCL_STUBS
@@ -23,7 +23,7 @@
 #undef  TCL_STORAGE_CLASS
 #define TCL_STORAGE_CLASS DLLEXPORT
 
-BufStubs *bufStubsPtr;
+extern BufStubs *bufStubsPtr;
 MemchanStubs *memchanStubsPtr;
 
 /*

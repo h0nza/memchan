@@ -1,67 +1,18 @@
 dnl
 dnl Process this file with autoconf to produce a configure script.
 dnl
-AC_REVISION($Id: configure.in,v 1.14 2004/06/03 23:39:13 patthoyts Exp $)
+AC_REVISION($Id: configure.in,v 1.15 2004/11/09 23:10:58 patthoyts Exp $)
 
-#--------------------------------------------------------------------
-# Configure script for package 'memchan', as distributed at November 20, 2001.
-# TEA compliant.
-#--------------------------------------------------------------------
+AC_INIT([Memchan],[2.2.1])
 
-#--------------------------------------------------------------------
-# This very first macro is used to verify that the configure script can 
-# find the sources.  The argument to AC_INIT is a unique filename for
-# this package.
-#--------------------------------------------------------------------
-
-AC_INIT(./generic/memchan.c)
+TEA_INIT([3.2])
 
 AC_CONFIG_AUX_DIR(tclconfig)
-CONFIGDIR=${srcdir}/tclconfig
-AC_SUBST(CONFIGDIR)
 
 #--------------------------------------------------------------------
-# Setting our package name and version numbers.  The NODOT_VERSION is
-# required for constructing the library name on systems that don't like
-# dots in library names (Windows).  The VERSION variable is used on the
-# other systems.
+# Configure script for package 'Memchan', as distributed at March 18, 2005.
+# TEA compliant.
 #--------------------------------------------------------------------
-
-PACKAGE=Memchan
-
-MAJOR_VERSION=2
-MINOR_VERSION=2
-#MAJOR_VERSION=10
-#MINOR_VERSION=0
-PATCHLEVEL=1
-
-VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${PATCHLEVEL}
-NODOT_VERSION=${MAJOR_VERSION}${MINOR_VERSION}
-MEMCHAN_VERSION=${VERSION}
-
-AC_SUBST(PACKAGE)
-AC_SUBST(VERSION)
-AC_SUBST(MEMCHAN_VERSION)
-
-# This package name must be replaced statically for AC_SUBST to work
-AC_SUBST(Memchan_LIB_FILE)
-# Substitute stub_LIB_FILE if your package creates a stub library too.
-AC_SUBST(Memchanstub_LIB_FILE)
-
-#--------------------------------------------------------------------
-# This was placed here so that we can compile with -DVERSION="1.2" to
-# encode the package version directly into the source files.
-#--------------------------------------------------------------------
-
-eval AC_DEFINE_UNQUOTED(VERSION, "${VERSION}")
-eval AC_DEFINE_UNQUOTED(MEMCHAN_VERSION, "${MEMCHAN_VERSION}")
-
-#--------------------------------------------------------------------
-# Call TEA_INIT as the first TEA_ macro to set up initial vars.
-# This will define a ${TEA_PLATFORM} variable == "unix" or "windows".
-#--------------------------------------------------------------------
-
-TEA_INIT
 
 #--------------------------------------------------------------------
 # Load the tclConfig.sh file
@@ -86,17 +37,28 @@ TEA_PREFIX
 
 TEA_SETUP_COMPILER
 
-#--------------------------------------------------------------------
-# __CHANGE__
-# Choose which headers you need.  Extension authors should try very
-# hard to only rely on the Tcl public header files.  Internal headers
-# contain private data structures and are subject to change without
-# notice.
-# This MUST be called after TEA_LOAD_TCLCONFIG / TEA_LOAD_TKCONFIG
-#--------------------------------------------------------------------
+#-----------------------------------------------------------------------
+# Specify the C source files to compile in TEA_ADD_SOURCES,
+# public headers that need to be installed in TEA_ADD_HEADERS,
+# stub library C source files to compile in TEA_ADD_STUB_SOURCES,
+# and runtime Tcl library files in TEA_ADD_TCL_SOURCES.
+# This defines PKG(_STUB)_SOURCES, PKG(_STUB)_OBJECTS, PKG_HEADERS
+# and PKG_TCL_SOURCES.
+#-----------------------------------------------------------------------
 
-TEA_PUBLIC_TCL_HEADERS
-#TEA_PRIVATE_TCL_HEADERS
+TEA_ADD_SOURCES([memchan.c init.c counter.c])
+TEA_ADD_SOURCES([fifo.c fifo2.c null.c zero.c random.c])
+TEA_ADD_SOURCES([isaac/randport.c])
+TEA_ADD_SOURCES([buf.c bufFix.c bufExt.c bufRange.c bufQueue.c])
+TEA_ADD_SOURCES([bufStubInit.c memchanStubInit.c ])
+TEA_ADD_HEADERS([generic/memchan.h generic/memchanDecls.h])
+TEA_ADD_HEADERS([generic/buf.h generic/bufDecls.h generic/bufIntDecls.h])
+TEA_ADD_INCLUDES([-I\"`\${CYGPATH} \${srcdir}/isaac`\"])
+TEA_ADD_LIBS([])
+TEA_ADD_CFLAGS([])
+TEA_ADD_STUB_SOURCES([bufStubLib.c memchanStubLib.c])
+TEA_ADD_SOURCES([bufStubLib.c memchanStubLib.c])
+TEA_ADD_TCL_SOURCES([])
 
 #--------------------------------------------------------------------
 # A few miscellaneous platform-specific items:
@@ -116,13 +78,22 @@ TEA_PUBLIC_TCL_HEADERS
 if test "${TEA_PLATFORM}" = "windows" ; then
     AC_DEFINE(BUILD_Memchan)
     CLEANFILES="pkgIndex.tcl *.lib *.dll *.exp *.ilk *.pdb vc*.pch"
-    EXTRA_SOURCES='$(WIN_SOURCES)'
 else
     CLEANFILES="pkgIndex.tcl"
-    EXTRA_SOURCES='$(UNIX_SOURCES)'
 fi
 AC_SUBST(CLEANFILES)
-AC_SUBST(EXTRA_SOURCES)
+
+#--------------------------------------------------------------------
+# __CHANGE__
+# Choose which headers you need.  Extension authors should try very
+# hard to only rely on the Tcl public header files.  Internal headers
+# contain private data structures and are subject to change without
+# notice.
+# This MUST be called after TEA_LOAD_TCLCONFIG / TEA_LOAD_TKCONFIG
+#--------------------------------------------------------------------
+
+TEA_PUBLIC_TCL_HEADERS
+#TEA_PRIVATE_TCL_HEADERS
 
 #--------------------------------------------------------------------
 # Check whether --enable-threads or --disable-threads was given.
@@ -145,6 +116,9 @@ TEA_ENABLE_SHARED
 #--------------------------------------------------------------------
 
 TEA_CONFIG_CFLAGS
+
+# Needed for the chantest library.
+AC_SUBST(SHLIB_SUFFIX)
 
 #--------------------------------------------------------------------
 # Set the default compiler switches based on the --enable-symbols option.

@@ -6,6 +6,7 @@
  *
  *
  * Copyright (c) 1996-1999 Andreas Kupries (a.kupries@westend.com)
+ * Copyright (c) 2000-2005 Andreas Kupries (akupries@shaw.ca)
  * All rights reserved.
  *
  * Permission is hereby granted, without written agreement and without
@@ -25,7 +26,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: init.c,v 1.9 2004/05/21 23:20:20 patthoyts Exp $
+ * CVS: $Id: init.c,v 1.10 2004/06/03 23:39:13 patthoyts Exp $
  */
 
 /*#include <stdlib.h>*/
@@ -36,6 +37,13 @@ extern BufStubs bufStubs;
 
 char *
 Buf_InitStubs _ANSI_ARGS_((Tcl_Interp *interp, CONST char *version, int exact));
+
+#ifndef PACKAGE_VERSION
+#define PACKAGE_VERSION MEMCHAN_VERSION
+#endif
+#ifndef PACKAGE_NAME
+#define PACKAGE_NAME "Memchan"
+#endif
 
 
 /*
@@ -99,14 +107,14 @@ Tcl_Interp* interp;
 #if GT81
     /* register extension and its interfaces as now available package
      */
-    Tcl_PkgProvideEx (interp, "Memchan", MEMCHAN_VERSION, (ClientData) &bufStubs);
+    Tcl_PkgProvideEx (interp, PACKAGE_NAME, PACKAGE_VERSION, (ClientData) &bufStubs);
 
 #ifndef __WIN32__
-    Buf_InitStubs (interp, MEMCHAN_VERSION, 0);
+    Buf_InitStubs (interp, PACKAGE_VERSION, 0);
 #endif
 #else
   /* register memory channels as available package */
-  Tcl_PkgProvide (interp, "Memchan", MEMCHAN_VERSION);
+  Tcl_PkgProvide (interp, PACKAGE_NAME, PACKAGE_VERSION);
 #endif
 
   Buf_Init (interp);
