@@ -1,3 +1,9 @@
+2006-01-24  Andreas Kupries <andreask@activestate.com>
+
+	* tclconfig/tcl.m4: Updated to TEA 3.5
+	* configure.in:     Ditto.
+	* configure:        Regenerated.
+
 2005-06-08  Andreas Kupries <andreask@activestate.com>
 
 	* Makefile.in: Updated the toplevel build system to TEA 3.2.
