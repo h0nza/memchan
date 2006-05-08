@@ -46,6 +46,7 @@ proc manpage_begin {command section version} {
     append  hdr "[ht_comment {}]\n"
     append  hdr "[ht_comment "CVS: \$Id\$ $command.$section"]\n"
     append  hdr "[ht_comment {}]\n"
+    append  hdr "<link rel=\"stylesheet\" href=\"manpage.css\" type=\"text/css\">\n"
     append  hdr [page_begin mem/mp/$command][nav_link [mem/sf/txt]]<br>[site_xref]<br>[mp_xref]
     append  hdr [page_content]
     return $hdr
