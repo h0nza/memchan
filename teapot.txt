@@ -1,0 +1,17 @@
+Package Memchan 2.2.1
+Meta platform    source
+Meta summary     In-memory channels for Tcl.
+Meta description Memchan provides several new channel types for
+Meta description in-memory channels and the appropriate commands
+Meta description for their creation. They are useful to transfer
+Meta description large amounts of data between procedures or
+Meta description interpreters, and additionally provide an easy
+Meta description interface to on-the-fly generation of code or
+Meta description data too. No need to {[set]} or {[append]} to a
+Meta description string, just do a simple {[puts].}
+Meta subject     channel memory fifo thread
+Meta category    Channels
+Meta require     {Tcl -require 8.4}
+Meta as::origin  http://sourceforge.net/projects/memchan
+Meta as::author  {Andreas Kupries}
+Meta license     BSD
