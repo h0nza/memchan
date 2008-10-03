@@ -1,3 +1,9 @@
+2008-10-03  Andreas Kupries  <andreask@activestate.com>
+
+	* generic/memchanInt.h: Fixed [SF Bug 2078168] by Larry Virden
+	  <lvirden@users.sourceforge.net>. Added inclusion of header
+	  <string.h> to get declarations for strcmp, memcpy, and memset.
+
 2007-11-13  Andreas Kupries  <andreask@activestate.com>
 
 	* teapot.txt: New file, basic meta data of the package for TEApot
