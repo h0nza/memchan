@@ -3,14 +3,15 @@
  *
  *	Implementations of an extendable buffer.
  *
- * Copyright (c) 2000 by Andreas Kupries <a.kupries@westend.com>
+ * Copyright (c) 2000-2009 by Andreas Kupries <a.kupries@westend.com>
  *
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: bufExt.c,v 1.1 2000/09/26 21:17:49 aku Exp $
+ * RCS: @(#) $Id: bufExt.c,v 1.2 2002/04/25 06:29:48 andreas_kupries Exp $
  */
 
+#include "memchanInt.h"
 #include "buf.h"
 
 /*
