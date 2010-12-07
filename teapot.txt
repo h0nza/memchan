@@ -1,4 +1,4 @@
-Package Memchan 2.2.1
+Package Memchan 2.3
 Meta platform    source
 Meta summary     In-memory channels for Tcl.
 Meta description Memchan provides several new channel types for

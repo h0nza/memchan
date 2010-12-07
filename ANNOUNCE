@@ -1,11 +1,15 @@
 Hello world,
 
-We hereby announce memchan 2.2.1.
+We hereby announce memchan 2.3.
 
 It is 
 	an extension implementing several new channel-types.
 	Instances store their contents in memory, not on disk.
     
+Changes from 2.2.1 to 2.2.3
+
+*	Updated to TEA 3.9, TEApot metadata added, bug fixes.
+
 Changes from 2.2.0 to 2.2.1
 
 *	Enhanced stubs API to permit Memchan channels to be created by
@@ -24,4 +28,4 @@ The distribution can be found at
 Sincerely
 	Andreas Kupries <andreas_kupries@users.sourceforge.net>
 	Patrick Thoyts <patthoyts@users.sourceforge.net>
-	DEC-03-2004
+	DEC-10-2010

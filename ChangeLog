@@ -1,3 +1,24 @@
+2010-12-06  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* Dropped the old build files under unix/ and win/ in favor of the
+	  toplevel TEA files.
+
+	* configure.in:  Updated to TEA 3.9.
+	* tclconfig/README.txt:
+	* tclconfig/tcl.m4:
+	* configure:
+
+	* ANNOUNCE: Version bumped to 2.3.
+	* ANNOUNCE.MAIL:
+	* ChangeLog:
+	* ChangeLog.short:
+	* DESCRIPTION:
+	* LSM:
+	* README:
+	* teapot.txt:
+
+	* Makefile.in: Updated the dist target.
+
 2009-03-16  Andreas Kupries  <andreask@activestate.com>
 
 	* generic/bugExt.c: Fixed [SF Bug 2687845] by Stuart Cassoff,
