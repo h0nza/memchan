@@ -1,5 +1,10 @@
 2010-12-08  Andreas Kupries  <andreask@activestate.com>
 
+	* generic/memchan.c: Second set of patches by Stuart. Moved
+	* generic/memchanInt.h: string.h inclusion to internal header,
+	* Makefile.in: and moved the .SUFFIXES declaration to a place
+	  where the OpenBSD make can use it.
+
 	* doc/fifo.man: Applied patch supplied by Stuart Cassoff fixing
 	* doc/fifo2.man: various typos in the manpages.
 	* doc/memchan.man:

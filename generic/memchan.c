@@ -23,11 +23,10 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchan.c,v 1.23 2004/11/09 23:11:00 patthoyts Exp $
+ * CVS: $Id: memchan.c,v 1.24 2004/11/10 00:51:00 patthoyts Exp $
  */
 
 
-#include <string.h> /* strncmp */
 #include <stdio.h>  /* SEEK_ constants */
 #include "memchanInt.h"
 

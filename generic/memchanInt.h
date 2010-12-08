@@ -24,12 +24,12 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.19 2004/11/10 00:07:01 patthoyts Exp $
+ * CVS: $Id: memchanInt.h,v 1.20 2008/10/03 21:46:30 andreas_kupries Exp $
  */
 
 
 #include <errno.h>
-#include <string.h>
+#include <string.h> /* strncmp */
 #define USE_NON_CONST
 #include <tcl.h>
 
