@@ -4,7 +4,8 @@
 	
 	* generic/memchanInt.h: Swiped the INT2PTR/PTR2INT macros from
 	* generic/buf.c: Tcl and updated the code handling AssocData to
-	  use them, kill a few warnings on 64bit systems.
+	* configure.in: use them, kill a few warnings on 64bit systems.
+	* configure: Plus related auto-goo.
 
 	* generic/memchan.c: Second set of patches by Stuart. Moved
 	* generic/memchanInt.h: string.h inclusion to internal header,

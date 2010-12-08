@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.21 2010/12/08 18:01:52 andreas_kupries Exp $
+ * CVS: $Id: memchanInt.h,v 1.22 2010/12/08 18:17:36 andreas_kupries Exp $
  */
 
 
@@ -32,6 +32,9 @@
 #include <string.h> /* strncmp */
 #define USE_NON_CONST
 #include <tcl.h>
+#ifdef HAVE_STDINT_H
+#include <stdint.h>
+#endif
 
 /*
  * Make sure that both EAGAIN and EWOULDBLOCK are defined. This does not
