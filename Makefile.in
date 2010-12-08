@@ -14,7 +14,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: Makefile.in,v 1.24 2010/12/08 18:01:52 andreas_kupries Exp $
+# RCS: @(#) $Id: Makefile.in,v 1.25 2010/12/08 18:21:44 andreas_kupries Exp $
 
 MPEXPAND  = $(TCLSH) $(srcdir)/tools/mpexpand.tcl
 DOC_SOURCES = \
@@ -84,6 +84,7 @@ libdir		= @libdir@
 datadir		= @datadir@
 mandir		= @mandir@
 includedir	= @includedir@
+datarootdir	= @datarootdir@
 
 DESTDIR		=
 
