@@ -8,10 +8,11 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: bufDecls.h,v 1.2 1999/09/21 18:48:57 aku Exp $
+ * RCS: @(#) $Id: buf.c,v 1.1 2000/09/26 21:17:49 aku Exp $
  */
 
 #include "buf.h"
+#include "memchanInt.h"
 
 /*
  * Codestring used to associate the
@@ -63,7 +64,7 @@ Buf_IsInitialized (interp)
      Tcl_Interp* interp;
 {
   Tcl_InterpDeleteProc* proc = (Tcl_InterpDeleteProc*) NULL;
-  return (int) Tcl_GetAssocData (interp, ASSOC, &proc);
+  return PTR2INT (Tcl_GetAssocData (interp, ASSOC, &proc));
 }
 
 /*
@@ -102,7 +103,7 @@ Buf_Init (interp)
 
   Tcl_SetAssocData (interp, ASSOC,
 		    (Tcl_InterpDeleteProc*) NULL,
-		    (ClientData) 1);
+		    INT2PTR (1));
 
   return TCL_OK;
 }
