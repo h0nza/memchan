@@ -1,5 +1,7 @@
 2010-12-08  Andreas Kupries  <andreask@activestate.com>
 
+	* Makefile.in: Dropped bogus 'doc' dependency from 'dist' target.
+	
 	* generic/memchanInt.h: Swiped the INT2PTR/PTR2INT macros from
 	* generic/buf.c: Tcl and updated the code handling AssocData to
 	  use them, kill a few warnings on 64bit systems.
