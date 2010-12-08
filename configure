@@ -8972,7 +8972,7 @@ fi
 		# OpenBSD builds and links with -pthread, never -lpthread.
 		LIBS=`echo $LIBS | sed s/-lpthread//`
 		CFLAGS="$CFLAGS -pthread"
-		SHLIB_CFLAGS="$SHLIB_CFLAGS -pthread"
+		#SHLIB_CFLAGS="$SHLIB_CFLAGS -pthread"
 
 fi
 

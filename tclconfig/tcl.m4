@@ -9,7 +9,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 #
-# RCS: @(#) $Id: tcl.m4,v 1.150 2010/09/14 23:26:43 hobbs Exp $
+# RCS: @(#) $Id: tcl.m4,v 1.9 2010/12/07 03:15:19 andreas_kupries Exp $
 
 AC_PREREQ(2.57)
 
@@ -1597,7 +1597,7 @@ dnl AC_CHECK_TOOL(AR, ar)
 		# OpenBSD builds and links with -pthread, never -lpthread.
 		LIBS=`echo $LIBS | sed s/-lpthread//`
 		CFLAGS="$CFLAGS -pthread"
-		SHLIB_CFLAGS="$SHLIB_CFLAGS -pthread"
+		#SHLIB_CFLAGS="$SHLIB_CFLAGS -pthread"
 	    ])
 	    # OpenBSD doesn't do version numbers with dots.
 	    UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
