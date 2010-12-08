@@ -17,7 +17,7 @@ version of the package. Use the CVS to get the sources.
 creates a null channel which absorbs everything written into
 it. Reading from it is not possible, or rather will always return zero
 bytes. These channels are essentially Tcl-specific variants of the
-null device for unixoid operating systems (/dev/null). Transfering the
+null device for unixoid operating systems (/dev/null). Transferring the
 generated channel between interpreters is possible but does not make
 much sense.
 

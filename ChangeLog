@@ -1,3 +1,11 @@
+2010-12-08  Andreas Kupries  <andreask@activestate.com>
+
+	* doc/fifo.man: Applied patch supplied by Stuart Cassoff fixing
+	* doc/fifo2.man: various typos in the manpages.
+	* doc/memchan.man:
+	* doc/null.man:
+	* doc/zero.man:
+
 2010-12-06  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* Dropped the old build files under unix/ and win/ in favor of the

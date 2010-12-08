@@ -17,7 +17,7 @@ version of the package. Use the CVS to get the sources.
 creates a zero channel which absorbs everything written into
 it. Reading from a zero channel will return the requested number of null 
 bytes. These channels are essentially Tcl-specific variants of the
-zero device for unixoid operating systems (/dev/zero). Transfering the
+zero device for unixoid operating systems (/dev/zero). Transferring the
 generated channel between interpreters is possible but does not make
 much sense.
 

@@ -32,9 +32,9 @@ creates a chunk-oriented in-memory channel and returns its handle. If
 an initial size is specified the system will pre-allocate [arg len]
 bytes of buffer space for the contents. This is no restriction on the
 ultimate size of the channel, it will always grow as much as is
-necessary to accomodate the data written into it.
+necessary to accommodate the data written into it.
 [nl]
-The channels created here can be transfered between interpreters in
+The channels created here can be transferred between interpreters in
 the same thread and between threads, but only as a whole. It is not
 possible to use them to create a bi- or unidirectional connection
 between two interpreters.
@@ -69,7 +69,7 @@ conditions a readable [cmd fileevent]-handler will fire continuously.
 
 [para]
 Note that writing to such a channel usually occurs at the end, thus
-supressing readable events. This also means that users have to take
+suppressing readable events. This also means that users have to take
 care to [cmd seek] the channel to a location before the end before
 trying to read data back.
 
