@@ -24,7 +24,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: memchanInt.h,v 1.22 2010/12/08 18:17:36 andreas_kupries Exp $
+ * CVS: $Id: memchanInt.h,v 1.23 2010/12/08 20:54:21 andreas_kupries Exp $
  */
 
 
@@ -34,6 +34,9 @@
 #include <tcl.h>
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
+#endif
+#ifdef HAVE_INTTYPES_H
+#include <inttypes.h>
 #endif
 
 /*
