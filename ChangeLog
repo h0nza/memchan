@@ -1,3 +1,11 @@
+2010-12-10  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
+
+	* *** Version 2.3 tagged and released ***
+
+	* generic/memchanInt.h: Various fixes to unbreak the int2ptr
+	* configure.in: introduction.
+	* configure:
+
 2010-12-08  Andreas Kupries  <andreask@activestate.com>
 
 	* Makefile.in: Dropped bogus 'doc' dependency from 'dist' target.
