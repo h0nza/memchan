@@ -23,7 +23,7 @@
  * I HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- * CVS: $Id: fifo.c,v 1.13 2004/05/21 20:24:43 andreas_kupries Exp $
+ * CVS: $Id: fifo.c,v 1.14 2004/11/09 23:11:00 patthoyts Exp $
  */
 
 
@@ -445,7 +445,7 @@ ClientData instanceData; /* Channel to query */
     return;
   }
 
-  if (! FIFO_EMPTY (chan)) {
+  if (FIFO_EMPTY (chan)) {
     mask &= ~TCL_READABLE;
   }
 

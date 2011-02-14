@@ -1,3 +1,8 @@
+2011-02-14  Andreas Kupries  <andreask@activestate.com>
+
+	* generic/fifo.c (ChannelReady): [Bug 3175754]: Fixed inverted
+	condition killing readable events exactly when they were needed.
+
 2010-12-10  Andreas Kupries  <andreas_kupries@users.sourceforge.net>
 
 	* *** Version 2.3 tagged and released ***
